@@ -1,0 +1,1356 @@
+{
+  "lastUpdate": "2025-10-21T13:49:22.274Z",
+  "euromillions": [
+    {
+      "id": "em-0",
+      "date": "2025-10-31",
+      "day": "Vendredi",
+      "formattedDate": "31 octobre 2025",
+      "numbers": [
+        10,
+        22,
+        27,
+        35,
+        43
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        4,
+        6
+      ]
+    },
+    {
+      "id": "em-1",
+      "date": "2025-10-28",
+      "day": "Mardi",
+      "formattedDate": "28 octobre 2025",
+      "numbers": [
+        7,
+        20,
+        23,
+        39,
+        43
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "em-2",
+      "date": "2025-10-24",
+      "day": "Vendredi",
+      "formattedDate": "24 octobre 2025",
+      "numbers": [
+        20,
+        23,
+        28,
+        36,
+        37
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        3,
+        10
+      ]
+    },
+    {
+      "id": "em-3",
+      "date": "2025-10-21",
+      "day": "Mardi",
+      "formattedDate": "21 octobre 2025",
+      "numbers": [
+        1,
+        17,
+        19,
+        31,
+        45
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        7,
+        12
+      ]
+    },
+    {
+      "id": "em-4",
+      "date": "2025-10-17",
+      "day": "Vendredi",
+      "formattedDate": "17 octobre 2025",
+      "numbers": [
+        13,
+        35,
+        39,
+        44,
+        47
+      ],
+      "jackpot": "39 000 000 €",
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros + 2 étoiles",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "5 numéros + 1 étoile",
+          "winners": "1",
+          "amount": "647 213,60 €"
+        },
+        {
+          "rank": 3,
+          "combination": "5 numéros",
+          "winners": "6",
+          "amount": "25 210,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros + 2 étoiles",
+          "winners": "37",
+          "amount": "1 273,30 €"
+        },
+        {
+          "rank": 5,
+          "combination": "4 numéros + 1 étoile",
+          "winners": "635",
+          "amount": "136,60 €"
+        },
+        {
+          "rank": 6,
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "1 585",
+          "amount": "57,80 €"
+        },
+        {
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "1 242",
+          "amount": "51,90 €"
+        },
+        {
+          "rank": 8,
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "25 880",
+          "amount": "12,40 €"
+        },
+        {
+          "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "30 386",
+          "amount": "11,80 €"
+        },
+        {
+          "rank": 10,
+          "combination": "3 numéros",
+          "winners": "60 552",
+          "amount": "11 €"
+        },
+        {
+          "rank": 11,
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "146 767",
+          "amount": "5,50 €"
+        },
+        {
+          "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "444 580",
+          "amount": "5,70 €"
+        },
+        {
+          "rank": 13,
+          "combination": "2 numéros",
+          "winners": "888 164",
+          "amount": "4,60 €"
+        },
+        {
+          "rank": 14,
+          "combination": "0 numéro + 2 étoiles",
+          "winners": "/",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 15,
+          "combination": "0 numéro + 1 étoile",
+          "winners": "/",
+          "amount": "Non disponible"
+        }
+      ],
+      "stars": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "em-5",
+      "date": "2025-10-14",
+      "day": "Mardi",
+      "formattedDate": "14 octobre 2025",
+      "numbers": [
+        33,
+        37,
+        38,
+        43,
+        50
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        10,
+        12
+      ]
+    },
+    {
+      "id": "em-6",
+      "date": "2025-10-10",
+      "day": "Vendredi",
+      "formattedDate": "10 octobre 2025",
+      "numbers": [
+        9,
+        13,
+        33,
+        36,
+        42
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": "em-7",
+      "date": "2025-10-07",
+      "day": "Mardi",
+      "formattedDate": "7 octobre 2025",
+      "numbers": [
+        4,
+        19,
+        27,
+        44,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        5,
+        6
+      ]
+    },
+    {
+      "id": "em-8",
+      "date": "2025-10-03",
+      "day": "Vendredi",
+      "formattedDate": "3 octobre 2025",
+      "numbers": [
+        6,
+        21,
+        29,
+        37,
+        44
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        10,
+        12
+      ]
+    },
+    {
+      "id": "em-9",
+      "date": "2025-09-30",
+      "day": "Mardi",
+      "formattedDate": "30 septembre 2025",
+      "numbers": [
+        6,
+        7,
+        42,
+        47,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        2,
+        11
+      ]
+    },
+    {
+      "id": "em-10",
+      "date": "2025-09-26",
+      "day": "Vendredi",
+      "formattedDate": "26 septembre 2025",
+      "numbers": [
+        3,
+        20,
+        28,
+        30,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": "em-11",
+      "date": "2025-09-23",
+      "day": "Mardi",
+      "formattedDate": "23 septembre 2025",
+      "numbers": [
+        1,
+        17,
+        23,
+        30,
+        31
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "em-12",
+      "date": "2025-09-19",
+      "day": "Vendredi",
+      "formattedDate": "19 septembre 2025",
+      "numbers": [
+        8,
+        19,
+        21,
+        24,
+        35
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        7,
+        11
+      ]
+    },
+    {
+      "id": "em-13",
+      "date": "2025-09-16",
+      "day": "Mardi",
+      "formattedDate": "16 septembre 2025",
+      "numbers": [
+        6,
+        12,
+        19,
+        24,
+        33
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        5,
+        12
+      ]
+    },
+    {
+      "id": "em-14",
+      "date": "2025-09-12",
+      "day": "Vendredi",
+      "formattedDate": "12 septembre 2025",
+      "numbers": [
+        13,
+        41,
+        42,
+        48,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        6,
+        9
+      ]
+    },
+    {
+      "id": "em-15",
+      "date": "2025-09-09",
+      "day": "Mardi",
+      "formattedDate": "9 septembre 2025",
+      "numbers": [
+        4,
+        13,
+        37,
+        48,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        3,
+        6
+      ]
+    },
+    {
+      "id": "em-16",
+      "date": "2025-09-05",
+      "day": "Vendredi",
+      "formattedDate": "5 septembre 2025",
+      "numbers": [
+        21,
+        23,
+        33,
+        44,
+        50
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        5,
+        6
+      ]
+    },
+    {
+      "id": "em-17",
+      "date": "2025-09-02",
+      "day": "Mardi",
+      "formattedDate": "2 septembre 2025",
+      "numbers": [
+        3,
+        15,
+        20,
+        30,
+        36
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        1,
+        12
+      ]
+    },
+    {
+      "id": "em-18",
+      "date": "2025-08-29",
+      "day": "Vendredi",
+      "formattedDate": "29 août 2025",
+      "numbers": [
+        10,
+        12,
+        18,
+        37,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        5,
+        10
+      ]
+    },
+    {
+      "id": "em-19",
+      "date": "2025-08-26",
+      "day": "Mardi",
+      "formattedDate": "26 août 2025",
+      "numbers": [
+        4,
+        9,
+        29,
+        40,
+        44
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        7,
+        12
+      ]
+    },
+    {
+      "id": "em-20",
+      "date": "2025-08-22",
+      "day": "Vendredi",
+      "formattedDate": "22 août 2025",
+      "numbers": [
+        20,
+        22,
+        23,
+        31,
+        46
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        1,
+        8
+      ]
+    },
+    {
+      "id": "em-21",
+      "date": "2025-08-19",
+      "day": "Mardi",
+      "formattedDate": "19 août 2025",
+      "numbers": [
+        5,
+        18,
+        27,
+        33,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        8,
+        9
+      ]
+    },
+    {
+      "id": "em-22",
+      "date": "2025-08-15",
+      "day": "Vendredi",
+      "formattedDate": "15 août 2025",
+      "numbers": [
+        2,
+        5,
+        24,
+        25,
+        42
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        2,
+        6
+      ]
+    },
+    {
+      "id": "em-23",
+      "date": "2025-08-12",
+      "day": "Mardi",
+      "formattedDate": "12 août 2025",
+      "numbers": [
+        6,
+        12,
+        30,
+        46,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        3,
+        9
+      ]
+    },
+    {
+      "id": "em-24",
+      "date": "2025-08-08",
+      "day": "Vendredi",
+      "formattedDate": "8 août 2025",
+      "numbers": [
+        35,
+        43,
+        45,
+        46,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        2,
+        7
+      ]
+    },
+    {
+      "id": "em-25",
+      "date": "2025-08-05",
+      "day": "Mardi",
+      "formattedDate": "5 août 2025",
+      "numbers": [
+        16,
+        18,
+        23,
+        38,
+        39
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        3,
+        7
+      ]
+    },
+    {
+      "id": "em-26",
+      "date": "2025-08-01",
+      "day": "Vendredi",
+      "formattedDate": "1 août 2025",
+      "numbers": [
+        5,
+        9,
+        11,
+        17,
+        42
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        8,
+        9
+      ]
+    },
+    {
+      "id": "em-27",
+      "date": "2025-07-29",
+      "day": "Mardi",
+      "formattedDate": "29 juillet 2025",
+      "numbers": [
+        12,
+        18,
+        26,
+        44,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        8,
+        11
+      ]
+    },
+    {
+      "id": "em-28",
+      "date": "2025-07-25",
+      "day": "Vendredi",
+      "formattedDate": "25 juillet 2025",
+      "numbers": [
+        16,
+        25,
+        32,
+        45,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        2,
+        12
+      ]
+    },
+    {
+      "id": "em-29",
+      "date": "2025-07-22",
+      "day": "Mardi",
+      "formattedDate": "22 juillet 2025",
+      "numbers": [
+        6,
+        15,
+        28,
+        35,
+        37
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "stars": [
+        1,
+        6
+      ]
+    }
+  ],
+  "loto": [
+    {
+      "id": "loto-0",
+      "date": "2025-10-29",
+      "day": "Mercredi",
+      "formattedDate": "29 octobre 2025",
+      "numbers": [
+        10,
+        12,
+        44,
+        47,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 10
+    },
+    {
+      "id": "loto-1",
+      "date": "2025-10-27",
+      "day": "Lundi",
+      "formattedDate": "27 octobre 2025",
+      "numbers": [
+        4,
+        9,
+        26,
+        40,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 1
+    },
+    {
+      "id": "loto-2",
+      "date": "2025-10-25",
+      "day": "Samedi",
+      "formattedDate": "25 octobre 2025",
+      "numbers": [
+        14,
+        24,
+        31,
+        42,
+        46
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 9
+    },
+    {
+      "id": "loto-3",
+      "date": "2025-10-22",
+      "day": "Mercredi",
+      "formattedDate": "22 octobre 2025",
+      "numbers": [
+        8,
+        14,
+        17,
+        37,
+        38
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 9
+    },
+    {
+      "id": "loto-4",
+      "date": "2025-10-20",
+      "day": "Lundi",
+      "formattedDate": "20 octobre 2025",
+      "numbers": [
+        5,
+        38,
+        43,
+        45,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-5",
+      "date": "2025-10-18",
+      "day": "Samedi",
+      "formattedDate": "18 octobre 2025",
+      "numbers": [
+        9,
+        10,
+        16,
+        24,
+        29
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 8
+    },
+    {
+      "id": "loto-6",
+      "date": "2025-10-15",
+      "day": "Mercredi",
+      "formattedDate": "15 octobre 2025",
+      "numbers": [
+        8,
+        21,
+        31,
+        40,
+        45
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 7
+    },
+    {
+      "id": "loto-7",
+      "date": "2025-10-13",
+      "day": "Lundi",
+      "formattedDate": "13 octobre 2025",
+      "numbers": [
+        2,
+        11,
+        14,
+        16,
+        45
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-8",
+      "date": "2025-10-11",
+      "day": "Samedi",
+      "formattedDate": "11 octobre 2025",
+      "numbers": [
+        15,
+        20,
+        31,
+        44,
+        45
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 6
+    },
+    {
+      "id": "loto-9",
+      "date": "2025-10-08",
+      "day": "Mercredi",
+      "formattedDate": "8 octobre 2025",
+      "numbers": [
+        5,
+        15,
+        33,
+        34,
+        38
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 6
+    },
+    {
+      "id": "loto-10",
+      "date": "2025-10-06",
+      "day": "Lundi",
+      "formattedDate": "6 octobre 2025",
+      "numbers": [
+        10,
+        17,
+        23,
+        42,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 4
+    },
+    {
+      "id": "loto-11",
+      "date": "2025-10-04",
+      "day": "Samedi",
+      "formattedDate": "4 octobre 2025",
+      "numbers": [
+        2,
+        20,
+        31,
+        41,
+        43
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 9
+    },
+    {
+      "id": "loto-12",
+      "date": "2025-10-01",
+      "day": "Mercredi",
+      "formattedDate": "1 octobre 2025",
+      "numbers": [
+        15,
+        17,
+        23,
+        26,
+        29
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 10
+    },
+    {
+      "id": "loto-13",
+      "date": "2025-09-29",
+      "day": "Lundi",
+      "formattedDate": "29 septembre 2025",
+      "numbers": [
+        12,
+        15,
+        22,
+        23,
+        33
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 8
+    },
+    {
+      "id": "loto-14",
+      "date": "2025-09-27",
+      "day": "Samedi",
+      "formattedDate": "27 septembre 2025",
+      "numbers": [
+        4,
+        6,
+        37,
+        39,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 4
+    },
+    {
+      "id": "loto-15",
+      "date": "2025-09-24",
+      "day": "Mercredi",
+      "formattedDate": "24 septembre 2025",
+      "numbers": [
+        8,
+        25,
+        45,
+        47,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 5
+    },
+    {
+      "id": "loto-16",
+      "date": "2025-09-22",
+      "day": "Lundi",
+      "formattedDate": "22 septembre 2025",
+      "numbers": [
+        1,
+        3,
+        18,
+        41,
+        43
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 1
+    },
+    {
+      "id": "loto-17",
+      "date": "2025-09-20",
+      "day": "Samedi",
+      "formattedDate": "20 septembre 2025",
+      "numbers": [
+        12,
+        20,
+        38,
+        43,
+        45
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 4
+    },
+    {
+      "id": "loto-18",
+      "date": "2025-09-17",
+      "day": "Mercredi",
+      "formattedDate": "17 septembre 2025",
+      "numbers": [
+        7,
+        26,
+        27,
+        28,
+        37
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-19",
+      "date": "2025-09-15",
+      "day": "Lundi",
+      "formattedDate": "15 septembre 2025",
+      "numbers": [
+        6,
+        12,
+        19,
+        43,
+        44
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 10
+    },
+    {
+      "id": "loto-20",
+      "date": "2025-09-13",
+      "day": "Samedi",
+      "formattedDate": "13 septembre 2025",
+      "numbers": [
+        1,
+        4,
+        14,
+        15,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 6
+    },
+    {
+      "id": "loto-21",
+      "date": "2025-09-10",
+      "day": "Mercredi",
+      "formattedDate": "10 septembre 2025",
+      "numbers": [
+        10,
+        11,
+        29,
+        39,
+        40
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 10
+    },
+    {
+      "id": "loto-22",
+      "date": "2025-09-08",
+      "day": "Lundi",
+      "formattedDate": "8 septembre 2025",
+      "numbers": [
+        4,
+        5,
+        8,
+        32,
+        45
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 1
+    },
+    {
+      "id": "loto-23",
+      "date": "2025-09-06",
+      "day": "Samedi",
+      "formattedDate": "6 septembre 2025",
+      "numbers": [
+        4,
+        11,
+        15,
+        22,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 4
+    },
+    {
+      "id": "loto-24",
+      "date": "2025-09-03",
+      "day": "Mercredi",
+      "formattedDate": "3 septembre 2025",
+      "numbers": [
+        5,
+        15,
+        32,
+        46,
+        48
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 9
+    },
+    {
+      "id": "loto-25",
+      "date": "2025-09-01",
+      "day": "Lundi",
+      "formattedDate": "1 septembre 2025",
+      "numbers": [
+        11,
+        14,
+        28,
+        33,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-26",
+      "date": "2025-08-30",
+      "day": "Samedi",
+      "formattedDate": "30 août 2025",
+      "numbers": [
+        8,
+        9,
+        29,
+        32,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 9
+    },
+    {
+      "id": "loto-27",
+      "date": "2025-08-27",
+      "day": "Mercredi",
+      "formattedDate": "27 août 2025",
+      "numbers": [
+        9,
+        11,
+        20,
+        31,
+        41
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-28",
+      "date": "2025-08-25",
+      "day": "Lundi",
+      "formattedDate": "25 août 2025",
+      "numbers": [
+        14,
+        23,
+        30,
+        37,
+        47
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 3
+    },
+    {
+      "id": "loto-29",
+      "date": "2025-08-23",
+      "day": "Samedi",
+      "formattedDate": "23 août 2025",
+      "numbers": [
+        2,
+        14,
+        24,
+        31,
+        32
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 4
+    },
+    {
+      "id": "loto-30",
+      "date": "2025-08-20",
+      "day": "Mercredi",
+      "formattedDate": "20 août 2025",
+      "numbers": [
+        3,
+        19,
+        21,
+        28,
+        33
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 7
+    },
+    {
+      "id": "loto-31",
+      "date": "2025-08-18",
+      "day": "Lundi",
+      "formattedDate": "18 août 2025",
+      "numbers": [
+        4,
+        14,
+        16,
+        20,
+        37
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 7
+    },
+    {
+      "id": "loto-32",
+      "date": "2025-08-16",
+      "day": "Samedi",
+      "formattedDate": "16 août 2025",
+      "numbers": [
+        3,
+        10,
+        23,
+        31,
+        37
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-33",
+      "date": "2025-08-13",
+      "day": "Mercredi",
+      "formattedDate": "13 août 2025",
+      "numbers": [
+        5,
+        10,
+        16,
+        40,
+        44
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 1
+    },
+    {
+      "id": "loto-34",
+      "date": "2025-08-11",
+      "day": "Lundi",
+      "formattedDate": "11 août 2025",
+      "numbers": [
+        4,
+        15,
+        42,
+        43,
+        44
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 4
+    },
+    {
+      "id": "loto-35",
+      "date": "2025-08-09",
+      "day": "Samedi",
+      "formattedDate": "9 août 2025",
+      "numbers": [
+        28,
+        32,
+        35,
+        47,
+        49
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 3
+    },
+    {
+      "id": "loto-36",
+      "date": "2025-08-06",
+      "day": "Mercredi",
+      "formattedDate": "6 août 2025",
+      "numbers": [
+        17,
+        30,
+        33,
+        35,
+        41
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 8
+    },
+    {
+      "id": "loto-37",
+      "date": "2025-08-04",
+      "day": "Lundi",
+      "formattedDate": "4 août 2025",
+      "numbers": [
+        4,
+        27,
+        30,
+        33,
+        38
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 7
+    },
+    {
+      "id": "loto-38",
+      "date": "2025-08-02",
+      "day": "Samedi",
+      "formattedDate": "2 août 2025",
+      "numbers": [
+        3,
+        4,
+        7,
+        19,
+        29
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 2
+    },
+    {
+      "id": "loto-39",
+      "date": "2025-07-30",
+      "day": "Mercredi",
+      "formattedDate": "30 juillet 2025",
+      "numbers": [
+        5,
+        29,
+        30,
+        36,
+        46
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 7
+    },
+    {
+      "id": "loto-40",
+      "date": "2025-07-28",
+      "day": "Lundi",
+      "formattedDate": "28 juillet 2025",
+      "numbers": [
+        3,
+        14,
+        26,
+        29,
+        43
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 1
+    },
+    {
+      "id": "loto-41",
+      "date": "2025-07-26",
+      "day": "Samedi",
+      "formattedDate": "26 juillet 2025",
+      "numbers": [
+        3,
+        5,
+        19,
+        33,
+        39
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 9
+    },
+    {
+      "id": "loto-42",
+      "date": "2025-07-23",
+      "day": "Mercredi",
+      "formattedDate": "23 juillet 2025",
+      "numbers": [
+        2,
+        4,
+        12,
+        13,
+        40
+      ],
+      "jackpot": "Non disponible",
+      "winningsDistribution": [],
+      "luckyNumber": 8
+    }
+  ]
+}

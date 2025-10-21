@@ -1,0 +1,440 @@
+/* Overlay de la modale */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Contenu de la modale */
+.modal-content {
+  background: white;
+  border-radius: 25px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: modalAppear 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 30px 90px rgba(0, 82, 204, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes modalAppear {
+  from {
+    transform: translateY(100px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Bouton fermer (X) */
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #6b7280;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+  transform: rotate(90deg);
+}
+
+/* En-tête */
+.modal-header {
+  background: var(--euromillions-gradient);
+  color: white;
+  padding: 40px 30px;
+  border-radius: 25px 25px 0 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  animation: headerGlow 8s linear infinite;
+}
+
+@keyframes headerGlow {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-30px, -30px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.modal-header h2 {
+  margin: 0 0 15px 0;
+  font-size: 2rem;
+}
+
+.modal-date {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal-day {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.modal-date-text {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* Corps de la modale */
+.modal-body {
+  padding: 30px;
+}
+
+.modal-section {
+  margin-bottom: 30px;
+}
+
+.modal-section h3 {
+  color: #1f2937;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Numéros */
+.modal-numbers {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.modal-ball {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 900;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalBallAppear 0.5s ease-out backwards;
+}
+
+@keyframes modalBallAppear {
+  from {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.modal-ball:nth-child(1) { animation-delay: 0.1s; }
+.modal-ball:nth-child(2) { animation-delay: 0.15s; }
+.modal-ball:nth-child(3) { animation-delay: 0.2s; }
+.modal-ball:nth-child(4) { animation-delay: 0.25s; }
+.modal-ball:nth-child(5) { animation-delay: 0.3s; }
+
+.modal-ball::before {
+  content: '';
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 35%;
+  height: 35%;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  filter: blur(4px);
+}
+
+.modal-number-ball {
+  background: var(--euromillions-gradient);
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 82, 204, 0.5);
+}
+
+.modal-star-ball {
+  background: var(--gold-gradient);
+  color: white;
+  box-shadow: 0 8px 25px rgba(255, 184, 0, 0.5);
+}
+
+.modal-lucky-ball {
+  background: var(--loto-gradient);
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 195, 137, 0.5);
+}
+
+/* Jackpot */
+.modal-jackpot {
+  background: var(--gold-gradient);
+  border-radius: 20px;
+  padding: 35px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--glow-shadow);
+  animation: modalJackpotPulse 2s ease-in-out infinite;
+}
+
+@keyframes modalJackpotPulse {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(255, 184, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 70px rgba(255, 184, 0, 0.8);
+  }
+}
+
+.modal-jackpot::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: modalJackpotShine 3s linear infinite;
+}
+
+@keyframes modalJackpotShine {
+  0% {
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(50%) translateY(50%) rotate(45deg);
+  }
+}
+
+.modal-jackpot h3 {
+  justify-content: center;
+  color: #78350f;
+  margin-bottom: 15px;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-jackpot-amount {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ffffff;
+  position: relative;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  letter-spacing: -2px;
+}
+
+/* Tableau des gains */
+.winnings-table {
+  background: #f9fafb;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.winnings-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 150px;
+  gap: 10px;
+  padding: 15px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.winnings-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 120px 150px;
+  gap: 10px;
+  padding: 12px 15px;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.2s ease;
+}
+
+.winnings-row:last-child {
+  border-bottom: none;
+}
+
+.winnings-row:hover {
+  background: #f3f4f6;
+}
+
+.winnings-row.has-winners {
+  background: #fef3c7;
+}
+
+.winnings-row.has-winners:hover {
+  background: #fde68a;
+}
+
+.winnings-rank {
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.winnings-combination {
+  color: #4b5563;
+  font-size: 0.9rem;
+}
+
+.winnings-count {
+  text-align: right;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.winnings-amount {
+  text-align: right;
+  font-weight: 700;
+  color: #059669;
+  font-size: 1.05rem;
+}
+
+/* Informations complémentaires */
+.modal-info {
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.info-value {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* Pied de page */
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-btn-close {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-btn-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 100%;
+    margin: 20px;
+    max-height: calc(100vh - 40px);
+  }
+
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal-jackpot-amount {
+    font-size: 1.8rem;
+  }
+
+  .winnings-header,
+  .winnings-row {
+    grid-template-columns: 60px 1fr 80px 100px;
+    gap: 5px;
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .winnings-amount {
+    font-size: 0.9rem;
+  }
+
+  .modal-ball {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
