@@ -5,7 +5,7 @@ echo    PUSH VERS GITHUB
 echo ============================================
 echo.
 
-echo Repository: https://github.com/samuel-durand/scrapping-fdj
+echo Repository: https://github.com/samuel-durand/loterie-fdj
 echo.
 echo Pushing vers GitHub...
 echo.
@@ -19,7 +19,7 @@ if %ERRORLEVEL% EQU 0 (
     echo ============================================
     echo.
     echo Repository disponible sur :
-    echo https://github.com/samuel-durand/scrapping-fdj
+    echo https://github.com/samuel-durand/loterie-fdj
     echo.
 ) else (
     echo ============================================
