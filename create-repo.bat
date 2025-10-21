@@ -33,7 +33,7 @@ echo ✓ Branche main creee
 
 echo.
 echo [6/6] Ajout du remote GitHub...
-git remote add origin https://github.com/samuel-durand/loterie-fdj.git
+git remote add origin https://github.com/samuel-durand/scrapping-fdj.git
 echo ✓ Remote ajoute
 
 echo.
