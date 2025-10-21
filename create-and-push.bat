@@ -54,7 +54,7 @@ echo ✓ Branche main creee
 
 echo.
 echo [7/8] Ajout du remote GitHub...
-git remote add origin https://github.com/samuel-durand/scrapping-fdj.git
+git remote add origin https://github.com/samuel-durand/test.git
 echo ✓ Remote ajoute
 
 echo.
@@ -68,7 +68,7 @@ if %ERRORLEVEL% EQU 0 (
     echo ============================================
     echo.
     echo Repository PUBLIC disponible sur :
-    echo https://github.com/samuel-durand/scrapping-fdj
+    echo https://github.com/samuel-durand/test
     echo.
 ) else (
     echo ============================================
