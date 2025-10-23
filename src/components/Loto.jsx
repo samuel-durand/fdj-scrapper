@@ -4,13 +4,14 @@ import { getLotoResults } from '../services/lotteryService'
 import Calendar from './Calendar'
 import Pagination from './Pagination'
 import DrawDetailsModal from './DrawDetailsModal'
+import Statistics from './Statistics'
 
 function Loto() {
   const [draws, setDraws] = useState([])
   const [displayedDraws, setDisplayedDraws] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar' ou 'pagination'
+  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar', 'pagination' ou 'statistics'
   const [selectedDraw, setSelectedDraw] = useState(null)
   const [modalDraw, setModalDraw] = useState(null) // Tirage affiché dans la modale
 
@@ -71,6 +72,12 @@ function Loto() {
         >
           📅 Calendrier
         </button>
+        <button
+          className={`toggle-btn ${viewMode === 'statistics' ? 'active' : ''}`}
+          onClick={() => setViewMode('statistics')}
+        >
+          📈 Statistiques
+        </button>
       </div>
     </div>
 
@@ -118,10 +125,12 @@ function Loto() {
                 <span className="day">{draw.day}</span>
                 <span className="date">{draw.date}</span>
               </div>
-              <div className="jackpot">
-                <span className="jackpot-label">Jackpot</span>
-                <span className="jackpot-amount">{draw.jackpot}</span>
-              </div>
+              {draw.jackpot && draw.jackpot !== 'Non disponible' && (
+                <div className="jackpot">
+                  <span className="jackpot-label">Jackpot</span>
+                  <span className="jackpot-amount">{draw.jackpot}</span>
+                </div>
+              )}
               <div className="numbers-section">
                 <div className="numbers-label">Numéros gagnants</div>
                 <div className="numbers">
@@ -134,10 +143,33 @@ function Loto() {
                   <div className="ball lucky-ball">🍀 {draw.luckyNumber}</div>
                 </div>
               </div>
+              
+              {draw.secondDraw && (
+                <div className="second-draw">
+                  <h4>🎲 2ème tirage</h4>
+                  <div className="numbers">
+                    {draw.secondDraw.map((num, index) => (
+                      <div key={index} className="ball">{num}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {draw.jokerPlus && (
+                <div className="joker-plus">
+                  <span className="icon">🎫</span>
+                  <span className="label">Joker+ :</span>
+                  <span className="code">{draw.jokerPlus}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
       </>
+    )}
+
+    {!loading && !error && viewMode === 'statistics' && (
+      <Statistics draws={draws} gameType="loto" />
     )}
 
     {!loading && !error && viewMode === 'list' && (
@@ -155,10 +187,12 @@ function Loto() {
               <span className="date">{draw.date}</span>
             </div>
             
-            <div className="jackpot">
-              <span className="jackpot-label">Jackpot</span>
-              <span className="jackpot-amount">{draw.jackpot}</span>
-            </div>
+            {draw.jackpot && draw.jackpot !== 'Non disponible' && (
+              <div className="jackpot">
+                <span className="jackpot-label">Jackpot</span>
+                <span className="jackpot-amount">{draw.jackpot}</span>
+              </div>
+            )}
 
             <div className="numbers-section">
               <div className="numbers-label">Numéros gagnants</div>
@@ -173,6 +207,25 @@ function Loto() {
                 <div className="ball lucky-ball">🍀 {draw.luckyNumber}</div>
               </div>
             </div>
+            
+            {draw.secondDraw && (
+              <div className="second-draw">
+                <h4>🎲 2ème tirage</h4>
+                <div className="numbers">
+                  {draw.secondDraw.map((num, index) => (
+                    <div key={index} className="ball">{num}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {draw.jokerPlus && (
+              <div className="joker-plus">
+                <span className="icon">🎫</span>
+                <span className="label">Joker+ :</span>
+                <span className="code">{draw.jokerPlus}</span>
+              </div>
+            )}
           </div>
         ))}
         </div>

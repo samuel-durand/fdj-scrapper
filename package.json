@@ -6,7 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "scrape": "node scraper-puppeteer.js",
+    "scrape-eurodreams": "node scraper-eurodreams.js",
+    "scrape-complet": "node scraper-urls-directes.js",
+    "update-cache": "node utils/update-cache-3-mois.js",
+    "nettoyer-cache": "node utils/nettoyer-cache.js",
+    "fix-eurodreams": "node utils/fix-eurodreams-jackpot.js"
   },
   "dependencies": {
     "cheerio": "^1.1.2",
@@ -14,6 +20,7 @@
     "express": "^5.1.0",
     "node-cron": "^4.2.1",
     "node-fetch": "^3.3.2",
+    "puppeteer": "^24.26.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

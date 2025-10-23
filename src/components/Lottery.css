@@ -36,6 +36,7 @@
   gap: 10px;
   justify-content: center;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .toggle-btn {
@@ -96,17 +97,24 @@
 .draws-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.draws-list {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
   margin-bottom: 40px;
 }
 
 .draw-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+  background: var(--card-bg);
   border-radius: 25px;
   padding: 35px;
   box-shadow: var(--card-shadow);
   transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border: 3px solid transparent;
+  border: 3px solid var(--border-color);
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -488,6 +496,352 @@
   transform: translateY(0);
 }
 
+/* Code My Million */
+.my-million-code {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  animation: slideIn 0.5s ease-out;
+}
+
+.my-million-code .icon {
+  font-size: 1.5em;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.my-million-code .label {
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+.my-million-code .code {
+  font-family: 'Courier New', monospace;
+  font-size: 1.4em;
+  font-weight: bold;
+  letter-spacing: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 15px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  flex: 1;
+  text-align: center;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 2ème tirage Loto */
+.second-draw {
+  background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+  border: 2px solid #cbd5e0;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.second-draw h4 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.second-draw .numbers {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.second-draw .ball {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Code Joker+ */
+.joker-plus {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  padding: 12px 18px;
+  border-radius: 10px;
+  border-left: 4px solid #f59e0b;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.2);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.joker-plus .icon {
+  font-size: 1.3em;
+}
+
+.joker-plus .label {
+  font-weight: 600;
+  color: #92400e;
+  font-size: 1.05em;
+}
+
+.joker-plus .code {
+  font-family: 'Courier New', monospace;
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #92400e;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 4px 12px;
+  border-radius: 6px;
+  letter-spacing: 2px;
+}
+
+/* ======================================
+   EURODREAMS SPECIFIC STYLES
+   ====================================== */
+
+.eurodreams-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.eurodreams-header .lottery-icon {
+  font-size: 4rem;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.eurodreams-header .lottery-info h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.eurodreams-header .lottery-description {
+  margin: 10px 0 5px 0;
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.eurodreams-header .game-format {
+  margin: 5px 0 0 0;
+  font-size: 0.95rem;
+  opacity: 0.85;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.eurodreams-card {
+  border-left: 5px solid #667eea;
+  background: linear-gradient(135deg, #fdfbfb 0%, #f5f3ff 100%);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .eurodreams-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.eurodreams-card:hover {
+  border-left-color: #764ba2;
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+  transform: translateY(-3px);
+}
+
+[data-theme="dark"] .eurodreams-card:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.eurodreams-ball {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Enlever l'effet blanc sur les boules EuroDreams */
+.eurodreams-card .eurodreams-ball::before {
+  display: none;
+}
+
+/* Enlever l'effet de dégradé blanc tournant sur les cartes EuroDreams */
+.eurodreams-card::before {
+  display: none !important;
+}
+
+.eurodreams-card:hover::before {
+  display: none !important;
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* Style pour la section des numéros EuroDreams */
+.eurodreams-card .numbers-section {
+  background: rgba(102, 126, 234, 0.05);
+  padding: 15px;
+  border-radius: 12px;
+  border: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+[data-theme="dark"] .eurodreams-card .numbers-section {
+  background: rgba(102, 126, 234, 0.15);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.eurodreams-card .numbers-label {
+  color: #667eea;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .eurodreams-card .numbers-label {
+  color: #a5b4fc;
+}
+
+.dream-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px dashed rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+  padding: 15px;
+  border-radius: 12px;
+}
+
+[data-theme="dark"] .dream-section {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
+  border-top-color: rgba(102, 126, 234, 0.5);
+}
+
+.dream-label {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #667eea;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .dream-label {
+  color: #a5b4fc;
+}
+
+.dream-number {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.5);
+  animation: pulse 2s infinite;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.eurodreams-jackpot {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid rgba(253, 230, 138, 0.3);
+}
+
+.eurodreams-jackpot .jackpot-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.eurodreams-jackpot .jackpot-amount {
+  color: #fde68a;
+  font-weight: 800;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  font-size: 1.5rem;
+}
+
+/* Bouton de détails pour EuroDreams */
+.eurodreams-card .details-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  margin-top: 20px;
+  width: 100%;
+}
+
+.eurodreams-card .details-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.eurodreams-card .details-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Enlever aussi l'effet blanc sur le Dream Number */
+.dream-number::before {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .draws-grid {
     grid-template-columns: 1fr;
@@ -495,6 +849,15 @@
   
   .lottery-header h2 {
     font-size: 2rem;
+  }
+
+  .view-toggle {
+    gap: 8px;
+  }
+
+  .toggle-btn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
   }
   
   .draw-card {
@@ -509,6 +872,36 @@
   
   .jackpot-amount {
     font-size: 1.5rem;
+  }
+  
+  /* EuroDreams responsive */
+  .eurodreams-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px;
+  }
+  
+  .eurodreams-header .lottery-icon {
+    font-size: 3rem;
+  }
+  
+  .eurodreams-header .lottery-info h1 {
+    font-size: 2rem;
+  }
+  
+  .eurodreams-header .game-format {
+    font-size: 0.85rem;
+  }
+  
+  .dream-number {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
+  
+  .eurodreams-card .details-button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
   }
 }
 

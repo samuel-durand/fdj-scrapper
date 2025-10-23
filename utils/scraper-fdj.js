@@ -283,43 +283,115 @@ function parseLotoResultsPage($) {
       console.log(`📅 Date extraite: ${dateText}`);
     }
     
-    // Extraire les numéros
+    // Extraire les numéros - Nouvelle méthode plus flexible
     const numbers = [];
     let luckyNumber = null;
-    let foundNumbers = false;
     
-    // Les numéros sont dans des éléments avec class "heading4" ou "heading5"
-    $('.heading4, .heading5').each((i, elem) => {
-      const text = $(elem).text().trim();
-      const num = parseInt(text);
+    // Chercher dans plusieurs types de sélecteurs
+    const selectors = [
+      'h3:contains("Résultats Loto") + * li', // Liste sous "Résultats Loto"
+      '.result-numbers li',
+      '.ball, .number-ball',
+      '[class*="ball"]',
+      'h3 + ul li',
+      'li',
+      '.heading4',
+      '.heading5'
+    ];
+    
+    for (const selector of selectors) {
+      if (numbers.length === 5 && luckyNumber !== null) break;
       
-      if (!isNaN(num)) {
-        // Les 5 premiers sont les numéros principaux (1-49)
-        if (!foundNumbers && num >= 1 && num <= 49 && numbers.length < 5) {
-          numbers.push(num);
-          console.log(`  Numéro: ${num}`);
-          if (numbers.length === 5) foundNumbers = true;
+      $(selector).each((i, elem) => {
+        const text = $(elem).text().trim();
+        const num = parseInt(text);
+        
+        if (!isNaN(num) && num > 0) {
+          // Les 5 premiers numéros principaux (1-49)
+          if (numbers.length < 5 && num >= 1 && num <= 49) {
+            if (!numbers.includes(num)) {
+              numbers.push(num);
+              console.log(`  Numéro ${numbers.length}: ${num}`);
+            }
+          }
+          // Le numéro chance (1-10)
+          else if (numbers.length === 5 && luckyNumber === null && num >= 1 && num <= 10) {
+            luckyNumber = num;
+            console.log(`  🍀 Numéro Chance: ${num}`);
+          }
         }
-        // Le suivant est le numéro chance (1-10)
-        else if (foundNumbers && num >= 1 && num <= 10 && luckyNumber === null) {
-          luckyNumber = num;
-          console.log(`  🍀 Numéro Chance: ${num}`);
+      });
+    }
+    
+    // Si on n'a toujours pas trouvé les numéros, chercher dans tout le texte
+    if (numbers.length < 5) {
+      console.log('⚠️ Tentative extraction depuis le texte brut...');
+      const bodyText = $('body').text();
+      // Chercher "Résultats Loto" suivi de numéros
+      const lotoSection = bodyText.match(/Résultats\s+Loto[\s\S]{0,500}/i);
+      if (lotoSection) {
+        const nums = lotoSection[0].match(/\b([1-4]?[0-9])\b/g);
+        if (nums) {
+          nums.forEach(n => {
+            const num = parseInt(n);
+            if (numbers.length < 5 && num >= 1 && num <= 49 && !numbers.includes(num)) {
+              numbers.push(num);
+              console.log(`  Numéro (texte): ${num}`);
+            } else if (numbers.length === 5 && luckyNumber === null && num >= 1 && num <= 10) {
+              luckyNumber = num;
+              console.log(`  🍀 Numéro Chance (texte): ${num}`);
+            }
+          });
         }
       }
-    });
-    
-    // Extraire le jackpot
-    let jackpot = 'Non disponible';
-    const jackpotText = $('*:contains("million")').filter((i, el) => {
-      const text = $(el).text();
-      return text.includes('€') && text.length < 200;
-    }).first().text();
-    
-    const jackpotMatch = jackpotText.match(/(\d+)\s*millions?\s*€/i);
-    if (jackpotMatch) {
-      jackpot = `${jackpotMatch[1]} 000 000 €`;
-      console.log(`💰 Jackpot: ${jackpot}`);
     }
+    
+    // Extraire le prochain jackpot (pas celui du tirage passé)
+    let jackpot = 'Non disponible';
+    
+    // Chercher le prochain jackpot dans différentes sections
+    const jackpotSelectors = [
+      '*:contains("Minimum")',  // "Minimum X millions €"
+      '*:contains("prochain")',  // "prochain tirage"
+      '*:contains("Samedi")',    // Date du prochain tirage
+      '*:contains("Lundi")',
+      '*:contains("Mercredi")'
+    ];
+    
+    for (const selector of jackpotSelectors) {
+      if (jackpot !== 'Non disponible') break;
+      
+      $(selector).each((i, el) => {
+        if (jackpot !== 'Non disponible') return;
+        
+        const text = $(el).text();
+        // Chercher un montant en millions d'euros
+        const match = text.match(/(\d+)\s*millions?\s*€/i);
+        if (match && text.length < 300) {
+          const amount = parseInt(match[1]);
+          // Ignorer les gros montants qui seraient des totaux de gains distribués
+          if (amount >= 1 && amount <= 200) {
+            jackpot = `${amount} 000 000 €`;
+            console.log(`💰 Prochain Jackpot trouvé: ${jackpot}`);
+          }
+        }
+      });
+    }
+    
+    // Si toujours pas trouvé, chercher dans le texte brut
+    if (jackpot === 'Non disponible') {
+      const bodyText = $('body').text();
+      const nextDrawSection = bodyText.match(/(Samedi|Lundi|Mercredi)[\s\S]{0,200}(\d+)\s*millions?\s*€/i);
+      if (nextDrawSection) {
+        const amount = parseInt(nextDrawSection[2]);
+        if (amount >= 1 && amount <= 200) {
+          jackpot = `${amount} 000 000 €`;
+          console.log(`💰 Prochain Jackpot (texte): ${jackpot}`);
+        }
+      }
+    }
+    
+    console.log(`💰 Jackpot final: ${jackpot}`);
     
     // Extraire la répartition des gains
     console.log('📊 Extraction répartition des gains...');

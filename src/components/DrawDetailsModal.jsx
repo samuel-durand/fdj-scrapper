@@ -40,7 +40,11 @@ function DrawDetailsModal({ draw, gameType, onClose }) {
         <button className="modal-close" onClick={onClose}>✕</button>
         
         <div className="modal-header">
-          <h2>{gameType === 'euromillions' ? '⭐ EuroMillions' : '🎲 Loto'}</h2>
+          <h2>
+            {gameType === 'euromillions' && '⭐ EuroMillions'}
+            {gameType === 'loto' && '🎲 Loto'}
+            {gameType === 'eurodreams' && '💤 EuroDreams'}
+          </h2>
           <div className="modal-date">
             <span className="modal-day">{draw.day}</span>
             <span className="modal-date-text">{draw.date}</span>
@@ -66,6 +70,21 @@ function DrawDetailsModal({ draw, gameType, onClose }) {
                 </div>
               </>
             )}
+            {gameType === 'euromillions' && draw.myMillionCode && (
+              <div className="my-million-code" style={{ marginTop: '20px' }}>
+                <span className="icon">🎫</span>
+                <span className="label">Code My Million :</span>
+                <span className="code">{draw.myMillionCode}</span>
+              </div>
+            )}
+            {gameType === 'eurodreams' && draw.dreamNumber !== undefined && (
+              <>
+                <h3>💤 Dream Number</h3>
+                <div className="modal-numbers">
+                  <div className="modal-ball modal-dream-ball">{draw.dreamNumber}</div>
+                </div>
+              </>
+            )}
             {gameType === 'loto' && draw.luckyNumber !== undefined && (
               <>
                 <h3>🍀 Numéro Chance</h3>
@@ -74,11 +93,28 @@ function DrawDetailsModal({ draw, gameType, onClose }) {
                 </div>
               </>
             )}
+            {gameType === 'loto' && draw.secondDraw && (
+              <div className="second-draw" style={{ marginTop: '20px' }}>
+                <h4>🎲 2ème tirage</h4>
+                <div className="numbers">
+                  {draw.secondDraw.map((num, index) => (
+                    <div key={index} className="ball">{num}</div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {gameType === 'loto' && draw.jokerPlus && (
+              <div className="joker-plus" style={{ marginTop: '15px' }}>
+                <span className="icon">🎫</span>
+                <span className="label">Joker+ :</span>
+                <span className="code">{draw.jokerPlus}</span>
+              </div>
+            )}
           </div>
 
           {/* Jackpot */}
           <div className="modal-section modal-jackpot">
-            <h3>💰 Jackpot</h3>
+            <h3>💰 {gameType === 'eurodreams' ? 'Rente mensuelle' : 'Jackpot'}</h3>
             <div className="modal-jackpot-amount">{draw.jackpot}</div>
           </div>
 

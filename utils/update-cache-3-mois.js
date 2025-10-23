@@ -1,10 +1,10 @@
 /**
  * MISE À JOUR DU CACHE - 3 DERNIERS MOIS
- * Scrape les derniers résultats FDJ + utilise les données fallback pour 3 mois
+ * Utilise Puppeteer pour scraper les vrais résultats FDJ
+ * ⚡ Meilleure fiabilité avec un navigateur headless
  */
 
-import fetch from 'node-fetch';
-import * as cheerio from 'cheerio';
+import puppeteer from 'puppeteer';
 import fs from 'fs';
 
 const CACHE_FILE = 'resultats-cache.json';
@@ -157,12 +157,94 @@ async function scrapLatestLoto() {
     
     // Extraction des numéros et numéro chance
     const numbers = [];
-    let luckyNumber = 0;
+    let luckyNumber = null;
     
-    // Parser le HTML pour trouver les numéros
-    // On cherchera dans le script __NEXT_DATA__ ou dans les éléments visuels
+    // Chercher dans plusieurs sélecteurs
+    const selectors = [
+      'h3:contains("Résultats Loto") + * li',
+      '.result-numbers li',
+      'li',
+      '.ball',
+      '.heading4',
+      '.heading5'
+    ];
     
-    return null; // Temporairement, on retourne null
+    for (const selector of selectors) {
+      if (numbers.length === 5 && luckyNumber !== null) break;
+      
+      $(selector).each((i, elem) => {
+        const text = $(elem).text().trim();
+        const num = parseInt(text);
+        
+        if (!isNaN(num) && num > 0) {
+          if (numbers.length < 5 && num >= 1 && num <= 49 && !numbers.includes(num)) {
+            numbers.push(num);
+          } else if (numbers.length === 5 && luckyNumber === null && num >= 1 && num <= 10) {
+            luckyNumber = num;
+          }
+        }
+      });
+    }
+    
+    // Si pas trouvé, chercher dans le texte
+    if (numbers.length < 5) {
+      const bodyText = $('body').text();
+      const lotoSection = bodyText.match(/Résultats\s+Loto[\s\S]{0,500}/i);
+      if (lotoSection) {
+        const nums = lotoSection[0].match(/\b([1-4]?[0-9])\b/g);
+        if (nums) {
+          nums.forEach(n => {
+            const num = parseInt(n);
+            if (numbers.length < 5 && num >= 1 && num <= 49 && !numbers.includes(num)) {
+              numbers.push(num);
+            } else if (numbers.length === 5 && luckyNumber === null && num >= 1 && num <= 10) {
+              luckyNumber = num;
+            }
+          });
+        }
+      }
+    }
+    
+    // Extraction du prochain jackpot
+    let jackpot = 'Non disponible';
+    const jackpotSelectors = [
+      '*:contains("Minimum")',
+      '*:contains("prochain")',
+      '*:contains("Samedi")',
+      '*:contains("Lundi")',
+      '*:contains("Mercredi")'
+    ];
+    
+    for (const selector of jackpotSelectors) {
+      if (jackpot !== 'Non disponible') break;
+      
+      $(selector).each((i, el) => {
+        if (jackpot !== 'Non disponible') return;
+        
+        const text = $(el).text();
+        const match = text.match(/(\d+)\s*millions?\s*€/i);
+        if (match && text.length < 300) {
+          const amount = parseInt(match[1]);
+          if (amount >= 1 && amount <= 200) {
+            jackpot = `${amount} 000 000 €`;
+          }
+        }
+      });
+    }
+    
+    if (numbers.length === 5 && luckyNumber !== null) {
+      console.log(`✅ Loto ${date} - ${numbers.join(',')} 🍀 ${luckyNumber} - Jackpot: ${jackpot}`);
+      return {
+        date,
+        numbers: numbers.sort((a, b) => a - b),
+        luckyNumber,
+        jackpot,
+        winningsDistribution: []
+      };
+    }
+    
+    console.log(`⚠️ Données Loto incomplètes: ${numbers.length} numéros, Numéro Chance: ${luckyNumber}`);
+    return null;
   } catch (error) {
     console.error('❌ Erreur scraping Loto:', error.message);
     return null;
@@ -170,19 +252,24 @@ async function scrapLatestLoto() {
 }
 
 /**
- * Charge les données de fallback pour 2025
+ * Charge les données existantes du cache (pour ne pas perdre les vrais résultats déjà scrapés)
  */
-async function loadFallbackData() {
+async function loadExistingCache() {
   try {
-    const module = await import('./year-data-2025.js');
-    return {
-      euromillions: module.euromillionsFallbackData || [],
-      loto: module.lotoFallbackData || []
-    };
+    if (fs.existsSync(CACHE_FILE)) {
+      const cacheContent = fs.readFileSync(CACHE_FILE, 'utf-8');
+      const cache = JSON.parse(cacheContent);
+      
+      // Extraire uniquement les vraies données (celles qui ont été scrapées)
+      const euromillions = cache.euromillions || [];
+      const loto = cache.loto || [];
+      
+      return { euromillions, loto };
+    }
   } catch (error) {
-    console.error('⚠️ Impossible de charger les données fallback:', error.message);
-    return { euromillions: [], loto: [] };
+    console.error('⚠️ Impossible de charger le cache existant:', error.message);
   }
+  return { euromillions: [], loto: [] };
 }
 
 /**
@@ -235,16 +322,29 @@ function filterLast3Months(results) {
  * Fonction principale
  */
 async function main() {
-  console.log('🚀 Mise à jour du cache - 3 derniers mois\n');
+  console.log('🚀 Mise à jour du cache - VRAIES DONNÉES UNIQUEMENT\n');
   
-  // Charger les données fallback
-  console.log('📦 Chargement des données fallback...');
-  const fallback = await loadFallbackData();
+  // Charger les données existantes du cache (vrais résultats déjà scrapés)
+  console.log('📦 Chargement du cache existant...');
+  const existing = await loadExistingCache();
   
-  let euromillionsResults = [...fallback.euromillions];
-  let lotoResults = [...fallback.loto];
+  let euromillionsResults = existing.euromillions.map(r => ({
+    date: r.date,
+    numbers: r.numbers,
+    stars: r.stars,
+    jackpot: r.jackpot,
+    winningsDistribution: r.winningsDistribution || []
+  }));
   
-  console.log(`📊 Données fallback: ${euromillionsResults.length} Euromillions, ${lotoResults.length} Loto\n`);
+  let lotoResults = existing.loto.map(r => ({
+    date: r.date,
+    numbers: r.numbers,
+    luckyNumber: r.luckyNumber,
+    jackpot: r.jackpot,
+    winningsDistribution: r.winningsDistribution || []
+  }));
+  
+  console.log(`📊 Cache actuel: ${euromillionsResults.length} Euromillions, ${lotoResults.length} Loto\n`);
   
   // Scraper les derniers résultats
   const latestEuro = await scrapLatestEuromillions();

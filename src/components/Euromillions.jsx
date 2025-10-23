@@ -4,13 +4,14 @@ import { getEuromillionsResults } from '../services/lotteryService'
 import Calendar from './Calendar'
 import Pagination from './Pagination'
 import DrawDetailsModal from './DrawDetailsModal'
+import Statistics from './Statistics'
 
 function Euromillions() {
   const [draws, setDraws] = useState([])
   const [displayedDraws, setDisplayedDraws] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar' ou 'pagination'
+  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar', 'pagination' ou 'statistics'
   const [selectedDraw, setSelectedDraw] = useState(null)
   const [modalDraw, setModalDraw] = useState(null) // Tirage affiché dans la modale
 
@@ -73,6 +74,12 @@ function Euromillions() {
         >
           📅 Calendrier
         </button>
+        <button
+          className={`toggle-btn ${viewMode === 'statistics' ? 'active' : ''}`}
+          onClick={() => setViewMode('statistics')}
+        >
+          📈 Statistiques
+        </button>
       </div>
     </div>
 
@@ -120,10 +127,12 @@ function Euromillions() {
                 <span className="day">{draw.day}</span>
                 <span className="date">{draw.date}</span>
               </div>
-              <div className="jackpot">
-                <span className="jackpot-label">Jackpot</span>
-                <span className="jackpot-amount">{draw.jackpot}</span>
-              </div>
+              {draw.jackpot && draw.jackpot !== 'Non disponible' && (
+                <div className="jackpot">
+                  <span className="jackpot-label">Jackpot</span>
+                  <span className="jackpot-amount">{draw.jackpot}</span>
+                </div>
+              )}
               <div className="numbers-section">
                 <div className="numbers-label">Numéros gagnants</div>
                 <div className="numbers">
@@ -138,10 +147,22 @@ function Euromillions() {
                   ))}
                 </div>
               </div>
+              
+              {draw.myMillionCode && (
+                <div className="my-million-code">
+                  <span className="icon">🎫</span>
+                  <span className="label">My Million :</span>
+                  <span className="code">{draw.myMillionCode}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
       </>
+    )}
+
+    {!loading && !error && viewMode === 'statistics' && (
+      <Statistics draws={draws} gameType="euromillions" />
     )}
 
     {!loading && !error && viewMode === 'list' && (
@@ -159,10 +180,12 @@ function Euromillions() {
               <span className="date">{draw.date}</span>
             </div>
             
-            <div className="jackpot">
-              <span className="jackpot-label">Jackpot</span>
-              <span className="jackpot-amount">{draw.jackpot}</span>
-            </div>
+            {draw.jackpot && draw.jackpot !== 'Non disponible' && (
+              <div className="jackpot">
+                <span className="jackpot-label">Jackpot</span>
+                <span className="jackpot-amount">{draw.jackpot}</span>
+              </div>
+            )}
 
             <div className="numbers-section">
               <div className="numbers-label">Numéros gagnants</div>
@@ -179,6 +202,14 @@ function Euromillions() {
                 ))}
               </div>
             </div>
+            
+            {draw.myMillionCode && (
+              <div className="my-million-code">
+                <span className="icon">🎫</span>
+                <span className="label">My Million :</span>
+                <span className="code">{draw.myMillionCode}</span>
+              </div>
+            )}
           </div>
         ))}
         </div>

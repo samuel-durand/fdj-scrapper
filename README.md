@@ -1,19 +1,20 @@
 # 🎰 Résultats des Loteries
 
-Application React moderne pour afficher les résultats des loteries françaises (Euromillions et Loto).
+Application React moderne pour afficher les résultats des loteries françaises (EuroMillions, Loto et EuroDreams).
 
 ## ✨ Fonctionnalités
 
-- 🎲 Affichage des résultats de l'Euromillions
-- 🍀 Affichage des résultats du Loto
-- 📅 **NOUVEAU** : Calendrier interactif pour naviguer entre les résultats
-- 📡 Récupération automatique des résultats en temps réel
-- 🔄 Système de fallback avec données de secours
+- ⭐ Affichage des résultats de l'**EuroMillions** avec My Million
+- 🍀 Affichage des résultats du **Loto** avec 2ème tirage et Joker+
+- 💤 **NOUVEAU** : Affichage des résultats d'**EuroDreams**
+- 📅 Calendrier interactif pour naviguer entre les résultats
+- 📡 Récupération automatique des résultats avec Puppeteer
+- 🔄 Historique complet via URLs directes FDJ
 - ⚡ Indicateurs de chargement et gestion des erreurs
-- 🎨 Double vue : Liste et Calendrier
 - 📱 Interface responsive et moderne
-- 🎨 Design élégant avec animations
-- 🔄 Navigation par onglets entre les différentes loteries
+- 🎨 Design unique pour chaque jeu avec animations
+- 🔄 Navigation par onglets entre les 3 loteries
+- 📊 Répartition complète des gains pour chaque tirage
 
 ## 🚀 Installation
 
@@ -40,26 +41,55 @@ npm run dev
 
 ## 📦 Scripts disponibles
 
+### Application
 - `npm run dev` - Lance le serveur de développement
 - `npm run build` - Compile l'application pour la production
 - `npm run preview` - Prévisualise la version de production
 
+### Scraping
+- `npm run scrape-complet` - Scrape les 3 jeux (EuroMillions, Loto, EuroDreams)
+- `npm run scrape` - Scrape les derniers résultats (Puppeteer)
+- `npm run scrape-eurodreams` - Scrape uniquement EuroDreams
+- `npm run update-cache` - Met à jour le cache des 3 derniers mois
+- `npm run nettoyer-cache` - Nettoie le cache des données invalides
+
 ## 🎯 Utilisation
 
-1. L'application s'ouvre sur l'onglet Euromillions par défaut
-2. Cliquez sur les onglets pour basculer entre Euromillions et Loto
-3. **Deux modes d'affichage** :
-   - **📋 Vue Liste** : Affichage classique des derniers résultats
-   - **📅 Vue Calendrier** : Navigation mensuelle interactive
-4. Dans le calendrier :
+### Démarrage rapide
+
+1. **Récupérer les résultats** (première utilisation) :
+   ```bash
+   node scraper-urls-directes.js 1  # Récupère 1 mois de résultats
+   ```
+
+2. **Lancer l'application** :
+   ```bash
+   npm run dev
+   ```
+
+3. **Ouvrir dans le navigateur** : `http://localhost:5173`
+
+### Navigation
+
+1. **3 onglets disponibles** :
+   - ⭐ **EuroMillions - My Million** (Mardi & Vendredi)
+   - 🍀 **Loto®** (Lundi, Mercredi & Samedi)
+   - 💤 **EuroDreams** (Lundi & Jeudi)
+
+2. **Calendrier interactif** :
    - 🔵 Jours bleus = Jours de tirage
-   - 🟢 Jours verts = Résultats disponibles (cliquez pour voir !)
+   - 🟢 Jours verts = Résultats disponibles (cliquez !)
    - Naviguez entre les mois avec ◀ ▶
-5. Chaque tirage affiche :
-   - La date du tirage
-   - Le montant du jackpot
-   - Les numéros gagnants
-   - Les étoiles (Euromillions) ou le numéro chance (Loto)
+
+3. **Affichage par jeu** :
+   - **EuroMillions** : 5 nums + 2 étoiles + Code My Million
+   - **Loto** : 5 nums + N° Chance + 2ème tirage + Joker+
+   - **EuroDreams** : 6 nums + Dream Number
+
+4. **Modal de détails** :
+   - Cliquez sur "Voir les détails complets"
+   - Répartition complète des gains
+   - Tous les codes gagnants
 
 ## 🔧 Configuration API
 
@@ -120,71 +150,190 @@ Les couleurs principales sont définies dans `src/index.css` avec les variables 
 - `--primary-green` : Couleur verte
 - etc.
 
+## 🎮 Jeux disponibles
+
+| Jeu | Tirages | Format | Caractéristiques |
+|-----|---------|--------|------------------|
+| ⭐ **EuroMillions** | Mar & Ven 20h30 | 5 nums (1-50) + 2 étoiles (1-12) | Code My Million inclus |
+| 🍀 **Loto** | Lun, Mer & Sam 20h30 | 5 nums (1-49) + N° Chance (1-10) | 2ème tirage + Joker+ |
+| 💤 **EuroDreams** | Lun & Jeu 21h00 | 6 nums (1-40) + Dream (1-5) | Rente 20 000€/mois |
+
+**📊 Total : 7 tirages par semaine** (~30 tirages/mois)
+
+Consultez **`JEUX_DISPONIBLES.md`** pour plus de détails sur chaque jeu.
+
 ## 📁 Structure du projet
 
 ```
 loterie/
-├── src/
-│   ├── components/
-│   │   ├── Euromillions.jsx      # Composant Euromillions
-│   │   ├── Loto.jsx               # Composant Loto
-│   │   └── Lottery.css            # Styles des composants loterie
-│   ├── services/
-│   │   └── lotteryService.js      # Service API pour récupérer les résultats
-│   ├── App.jsx                    # Composant principal
-│   ├── App.css                    # Styles de l'application
-│   ├── main.jsx                   # Point d'entrée
-│   └── index.css                  # Styles globaux
-├── server-proxy-example.js        # Serveur proxy pour contourner CORS
-├── package-proxy.json             # Dépendances du proxy
-├── INTEGRATION_API.md             # Documentation API complète
-├── index.html                     # Template HTML
-├── package.json                   # Dépendances
-└── vite.config.js                # Configuration Vite
+├── 📂 src/                        # Code source React
+│   ├── components/                # Composants React
+│   │   ├── Euromillions.jsx      # Composant EuroMillions
+│   │   ├── Loto.jsx              # Composant Loto
+│   │   ├── Eurodreams.jsx        # Composant EuroDreams
+│   │   ├── Calendar.jsx          # Calendrier interactif
+│   │   ├── Pagination.jsx        # Navigation entre pages
+│   │   ├── DrawDetailsModal.jsx  # Modal détails complets
+│   │   └── Lottery.css           # Styles des composants
+│   ├── services/                 # Services API
+│   │   └── lotteryService.js     # Récupération des résultats
+│   ├── App.jsx                   # Composant principal
+│   ├── App.css                   # Styles globaux
+│   ├── main.jsx                  # Point d'entrée
+│   └── index.css                 # Styles de base
+│
+├── 📂 docs/                       # Documentation (28 fichiers)
+│   ├── README.md                 # Index de la documentation
+│   ├── DEMARRAGE_RAPIDE.md      # Guide de démarrage
+│   ├── JEUX_DISPONIBLES.md      # Les 3 jeux
+│   ├── STRUCTURE_PROJET.md      # Architecture
+│   └── ... (24 autres guides)
+│
+├── 📂 scripts/                    # Scripts batch Windows (16 fichiers)
+│   ├── README.md                 # Guide des scripts
+│   ├── start-app.bat            # Lancer l'application
+│   ├── scrape-eurodreams.bat    # Scraper EuroDreams
+│   ├── push-to-github.bat       # Push vers GitHub
+│   └── ... (12 autres scripts)
+│
+├── 📂 utils/                      # Scripts utilitaires (7 fichiers)
+│   ├── README.md                 # Guide des utilitaires
+│   ├── fix-eurodreams-jackpot.js # Correction jackpots
+│   ├── nettoyer-cache.js        # Nettoyage cache
+│   ├── update-cache-3-mois.js   # Mise à jour cache
+│   └── ... (anciens scrapers)
+│
+├── 📄 scraper-urls-directes.js   # ⭐ Scraper principal (3 jeux)
+├── 📄 scraper-eurodreams.js      # Scraper EuroDreams
+├── 📄 scraper-puppeteer.js       # Scraper récents
+├── 📄 server-proxy-example.js    # Serveur proxy (optionnel)
+├── 📄 resultats-cache.json       # Cache des résultats
+├── 📄 package.json               # Dépendances npm
+├── 📄 vite.config.js             # Configuration Vite
+├── 📄 .gitignore                 # Fichiers à ignorer
+└── 📄 README.md                  # Ce fichier
 ```
 
 ## 🌐 Récupération des Résultats
 
-### État Actuel
+### Système de Scraping
 
-L'application utilise `src/services/lotteryService.js` qui :
-1. Tente de récupérer les résultats depuis l'API FDJ
-2. En cas d'échec, affiche des données de secours
-3. Gère automatiquement les états de chargement et d'erreur
+L'application utilise **Puppeteer** pour scraper les résultats officiels FDJ :
 
-### Options disponibles
+1. **Scraper principal** (`scraper-urls-directes.js`) :
+   - Génère les URLs directes pour chaque tirage
+   - Scrape EuroMillions, Loto et EuroDreams
+   - Stocke dans `resultats-cache.json`
 
-- **Mode Direct** : Tente d'accéder directement à l'API FDJ (peut être bloqué par CORS)
-- **Mode Proxy** : Utilise `server-proxy-example.js` pour contourner CORS
-- **Mode Fallback** : Affiche des données d'exemple si l'API n'est pas disponible
+2. **Données extraites** :
+   - Numéros gagnants complets
+   - Codes spéciaux (My Million, Joker+, Dream Number)
+   - Jackpots/Rentes
+   - Répartition complète des gains
 
-Consultez `INTEGRATION_API.md` pour plus de détails.
+3. **Utilisation** :
+   ```bash
+   # Récupérer 3 mois de tous les jeux
+   node scraper-urls-directes.js 3
+   
+   # Seulement EuroDreams
+   npm run scrape-eurodreams
+   
+   # Avec fichier batch Windows
+   recuperer-historique-complet.bat
+   ```
+
+### Cache des résultats
+
+- **Fichier** : `resultats-cache.json`
+- **Format** : JSON structuré par jeu
+- **Mise à jour** : Manuelle via les scrapers
+- **Nettoyage** : `npm run nettoyer-cache`
 
 ## 🎨 Technologies utilisées
 
-- **React 18** - Framework JavaScript
-- **Vite** - Build tool rapide
-- **Fetch API** - Récupération des données
-- **CSS3** - Styles modernes avec gradients et animations
-- **Express** (optionnel) - Serveur proxy pour contourner CORS
+- **React 18** - Framework UI moderne
+- **Vite** - Build tool ultra-rapide
+- **Puppeteer** - Scraping headless browser
+- **CSS3** - Animations et gradients
+- **Fetch API** - Chargement du cache JSON
+- **Node.js** - Exécution des scrapers
 
 ## 📝 Notes
 
-- L'application tente de récupérer les résultats réels, mais peut afficher des données d'exemple en cas d'erreur
-- Pour un usage en production, consultez toujours les sources officielles (fdj.fr)
-- L'application est optimisée pour une utilisation mobile et desktop
-- Les données sont fournies à titre indicatif uniquement
-- Respectez les conditions d'utilisation du site FDJ
+- ✅ L'application scrape les résultats **réels et officiels** depuis fdj.fr
+- 🎯 **3 jeux disponibles** : EuroMillions, Loto, EuroDreams
+- 📱 Interface **100% responsive** (mobile, tablette, desktop)
+- 🎨 **Design unique** pour chaque jeu avec animations
+- 📊 **Historique complet** disponible via scraping
+- ⚠️ Les données sont à titre **indicatif uniquement**
+- 🔞 Pour un usage en production, consultez les sources officielles
+- ✅ Respectez les conditions d'utilisation du site FDJ
 
 ## ⚠️ Limitations
 
-- Les API de la FDJ peuvent nécessiter un proxy pour fonctionner (CORS)
-- Les endpoints utilisés ne sont pas officiellement documentés
+- Le scraping nécessite Puppeteer (navigateur headless)
+- Les tirages du jour peuvent ne pas être disponibles avant 21h30
+- Le scraping de longues périodes peut prendre du temps
 - Pour un usage commercial, contactez la FDJ pour un accès officiel
+
+## 📚 Documentation complète
+
+Pour plus de détails, consultez le dossier **`docs/`** :
+
+- **[DEMARRAGE_RAPIDE.md](docs/DEMARRAGE_RAPIDE.md)** - Guide de démarrage rapide
+- **[JEUX_DISPONIBLES.md](docs/JEUX_DISPONIBLES.md)** - Détails sur les 3 jeux
+- **[AJOUT_EURODREAMS.md](docs/AJOUT_EURODREAMS.md)** - Guide complet EuroDreams
+- **[STRUCTURE_PROJET.md](docs/STRUCTURE_PROJET.md)** - Architecture détaillée
+- **[CHANGELOG_EURODREAMS.md](docs/CHANGELOG_EURODREAMS.md)** - Historique v2.0
+- **[GUIDE_UTILISATION.md](docs/GUIDE_UTILISATION.md)** - Guide d'utilisation
+- **[COMMENT_CA_MARCHE.md](docs/COMMENT_CA_MARCHE.md)** - Fonctionnement technique
+
+<details>
+<summary>📖 Voir toute la documentation disponible</summary>
+
+### Guides de démarrage
+- [DEMARRAGE_RAPIDE.md](docs/DEMARRAGE_RAPIDE.md) - Démarrage en 5 minutes
+- [GUIDE_UTILISATION.md](docs/GUIDE_UTILISATION.md) - Utilisation complète
+- [START_ICI.md](docs/START_ICI.md) - Point de départ
+
+### Jeux et fonctionnalités
+- [JEUX_DISPONIBLES.md](docs/JEUX_DISPONIBLES.md) - EuroMillions, Loto, EuroDreams
+- [AJOUT_EURODREAMS.md](docs/AJOUT_EURODREAMS.md) - Ajout d'EuroDreams
+- [INTERFACE_MISE_A_JOUR.md](docs/INTERFACE_MISE_A_JOUR.md) - Mises à jour UI
+
+### Technique
+- [STRUCTURE_PROJET.md](docs/STRUCTURE_PROJET.md) - Architecture du projet
+- [COMMENT_CA_MARCHE.md](docs/COMMENT_CA_MARCHE.md) - Fonctionnement du scraping
+- [GUIDE_PUPPETEER.md](docs/GUIDE_PUPPETEER.md) - Utilisation de Puppeteer
+- [COMPARAISON_SCRAPERS.md](docs/COMPARAISON_SCRAPERS.md) - Comparaison des solutions
+
+### Git et déploiement
+- [GUIDE_GIT_COMPLET.md](docs/GUIDE_GIT_COMPLET.md) - Guide Git complet
+- [SECURITE_GITHUB.md](docs/SECURITE_GITHUB.md) - Sécurité et bonnes pratiques
+
+### Historique et changelog
+- [CHANGELOG_EURODREAMS.md](docs/CHANGELOG_EURODREAMS.md) - Version 2.0
+- [CORRECTIONS_APPLIQUEES.md](docs/CORRECTIONS_APPLIQUEES.md) - Corrections
+
+</details>
 
 ## 📄 Licence
 
 Ce projet est libre d'utilisation pour un usage personnel ou éducatif.
+
+---
+
+## 🎉 Version 2.0 - EuroDreams
+
+**Nouveauté** : EuroDreams est maintenant disponible ! 💤
+
+L'application propose désormais **3 jeux complets** :
+- ⭐ EuroMillions avec My Million
+- 🍀 Loto avec 2ème tirage et Joker+
+- 💤 EuroDreams avec rente mensuelle
+
+**7 tirages par semaine** pour ne rien manquer ! 🎰
 
 ---
 
