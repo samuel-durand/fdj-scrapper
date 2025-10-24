@@ -1,0 +1,75 @@
+name: 🎰 Mise à jour automatique FDJ → o2switch
+
+on:
+  # Tous les jours à 22h30 (après les tirages)
+  schedule:
+    - cron: '30 22 * * *'  # 22h30 UTC (ajustez selon votre fuseau)
+  
+  # Permet l'exécution manuelle depuis GitHub
+  workflow_dispatch:
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Récupération du code
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 📦 Installation des dépendances
+        run: |
+          npm install puppeteer
+          npm ci --ignore-scripts || npm install
+      
+      - name: 🎯 Scraping des résultats FDJ
+        run: |
+          echo "🎲 Scraping des résultats..."
+          node scraper-urls-directes.js 0.5
+          echo "✅ Scraping terminé !"
+          
+          # Afficher la taille du fichier généré
+          ls -lh resultats-cache.json
+      
+      - name: 🌐 Upload vers o2switch via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./
+          server-dir: /www/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**
+            **/docs/**
+            **/scripts/**
+            **/utils/**
+            **/src/**
+            **/*.md
+            **/*.txt
+            **/*.bat
+            **/*.js
+            **/*.json
+            !**/resultats-cache.json
+      
+      - name: 📊 Résumé
+        run: |
+          echo "════════════════════════════════════════"
+          echo "✅ Mise à jour réussie !"
+          echo "════════════════════════════════════════"
+          echo "📅 Date : $(date)"
+          echo "📁 Fichier uploadé : resultats-cache.json"
+          echo "🌐 Votre site o2switch est à jour !"
+          echo "════════════════════════════════════════"
+
