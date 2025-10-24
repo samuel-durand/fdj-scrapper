@@ -29,24 +29,31 @@ jobs:
           npm install puppeteer
           npm ci --ignore-scripts || npm install
       
-      - name: 🎯 Scraping des résultats FDJ
+      - name: 🎯 Scraping des derniers résultats FDJ
         run: |
-          echo "🎲 Scraping des résultats..."
-          node scraper-urls-directes.js 0.5
+          echo "🎲 Scraping des derniers tirages uniquement..."
+          echo "📅 Période : 7 derniers jours (pour être sûr de ne rien manquer)"
+          
+          # Scraper seulement les 7 derniers jours au lieu de 15 jours
+          # 7 jours = ~0.23 mois (assez pour couvrir tous les jeux)
+          node scraper-urls-directes.js 0.25
+          
           echo "✅ Scraping terminé !"
           
           # Afficher la taille du fichier généré
           ls -lh resultats-cache.json
           
-          # Compter les tirages
+          # Compter les tirages dans le fichier complet
           EM_COUNT=$(grep -o '"id": "em-' resultats-cache.json | wc -l)
           LOTO_COUNT=$(grep -o '"id": "loto-' resultats-cache.json | wc -l)
           ED_COUNT=$(grep -o '"id": "ed-' resultats-cache.json | wc -l)
           
-          echo "🎰 Tirages récupérés :"
+          echo ""
+          echo "🎰 Total de tirages dans le cache :"
           echo "   • EuroMillions : $EM_COUNT"
           echo "   • Loto : $LOTO_COUNT"
           echo "   • EuroDreams : $ED_COUNT"
+          echo "   • TOTAL : $((EM_COUNT + LOTO_COUNT + ED_COUNT)) tirages"
       
       - name: 📁 Copie vers dist/
         run: |
