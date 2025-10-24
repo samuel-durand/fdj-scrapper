@@ -2,6 +2,13 @@
 
 Application React moderne pour afficher les résultats des loteries françaises (EuroMillions, Loto et EuroDreams).
 
+## 🌐 Démo en ligne
+
+> **🎉 Prévisualisez l'application en direct !**  
+> 👉 **[http://resultat-fdj.soqe8286.odns.fr/](http://resultat-fdj.soqe8286.odns.fr/)**
+
+L'application est hébergée sur **o2switch** avec mise à jour automatique quotidienne via **GitHub Actions** ! 🚀
+
 ## ✨ Fonctionnalités
 
 - ⭐ Affichage des résultats de l'**EuroMillions** avec My Million
@@ -249,6 +256,67 @@ L'application utilise **Puppeteer** pour scraper les résultats officiels FDJ :
 - **Format** : JSON structuré par jeu
 - **Mise à jour** : Manuelle via les scrapers
 - **Nettoyage** : `npm run nettoyer-cache`
+
+## 🌐 Déploiement
+
+### Déploiement sur o2switch
+
+> 🚀 **Tu as déjà un serveur o2switch ?** → Suis le guide rapide : [`docs/DEPLOIEMENT-IMMEDIAT-O2SWITCH.md`](docs/DEPLOIEMENT-IMMEDIAT-O2SWITCH.md)
+
+Pour héberger ton application sur **o2switch** :
+
+#### 1. Build de production
+
+```bash
+npm run build
+```
+
+Cela crée un dossier `dist/` avec tous les fichiers optimisés.
+
+#### 2. Upload vers o2switch
+
+**Via FTP/SFTP** (FileZilla ou WinSCP) :
+- Connecte-toi à o2switch
+- Upload le contenu de `dist/` vers `/home/ton-user/www/`
+- Ton site est en ligne ! 🎉
+
+#### 3. Mise à jour des résultats
+
+**Option A - Manuelle** (recommandée) :
+```bash
+# Depuis ton PC Windows
+.\scripts\update-et-upload.bat
+```
+- Scrape les résultats
+- Upload `resultats-cache.json` via FTP
+
+**Option B - Automatique** (avec WinSCP configuré) :
+```bash
+# Mise à jour et upload automatique
+.\scripts\auto-update-o2switch.bat
+```
+
+**Option C - Tâche planifiée Windows** :
+- Configure le Planificateur de tâches
+- Exécute `auto-update-o2switch.bat` tous les jours à 22h
+- Les résultats se mettent à jour automatiquement !
+
+#### 4. Configuration o2switch
+
+- **SSL gratuit** : Active Let's Encrypt dans cPanel
+- **Compression** : Déjà configurée via `.htaccess`
+- **Cache** : Configuré pour CSS/JS (1 an)
+
+> 📖 **Guide complet** : Voir [`docs/DEPLOIEMENT-O2SWITCH.md`](docs/DEPLOIEMENT-O2SWITCH.md)
+
+### Autres hébergeurs
+
+L'application est **100% statique** après le build :
+- ✅ Netlify, Vercel, GitHub Pages
+- ✅ Apache, Nginx
+- ✅ Tout hébergeur supportant HTML/CSS/JS
+
+**Note** : Les scrapers Puppeteer doivent tourner sur ton PC ou un serveur dédié (pas sur hébergement mutualisé).
 
 ## 🎨 Technologies utilisées
 
