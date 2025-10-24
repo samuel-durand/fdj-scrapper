@@ -1,29 +1,19 @@
 import { useState, useEffect } from 'react';
-import Calendar from './Calendar';
 import Pagination from './Pagination';
 import DrawDetailsModal from './DrawDetailsModal';
 import './Lottery.css';
 
 const Eurodreams = () => {
   const [draws, setDraws] = useState([]);
-  const [filteredDraws, setFilteredDraws] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [displayedDraws, setDisplayedDraws] = useState([]);
   const [selectedDraw, setSelectedDraw] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showCalendar, setShowCalendar] = useState(false);
-  
-  const drawsPerPage = 10;
 
   useEffect(() => {
     loadResults();
   }, []);
-
-  useEffect(() => {
-    filterByDate();
-  }, [selectedDate, draws]);
 
   const loadResults = async () => {
     try {
@@ -39,43 +29,19 @@ const Eurodreams = () => {
       
       if (data.eurodreams && Array.isArray(data.eurodreams)) {
         setDraws(data.eurodreams);
-        setFilteredDraws(data.eurodreams);
+        setDisplayedDraws(data.eurodreams.slice(0, 5));
       } else {
         setDraws([]);
-        setFilteredDraws([]);
+        setDisplayedDraws([]);
       }
     } catch (err) {
       console.error('Erreur chargement:', err);
       setError('Impossible de charger les résultats Eurodreams');
       setDraws([]);
-      setFilteredDraws([]);
+      setDisplayedDraws([]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const filterByDate = () => {
-    if (!selectedDate) {
-      setFilteredDraws(draws);
-      setCurrentPage(1);
-      return;
-    }
-
-    const filtered = draws.filter(draw => {
-      const drawDate = new Date(draw.date);
-      return drawDate.toDateString() === selectedDate.toDateString();
-    });
-
-    setFilteredDraws(filtered);
-    setCurrentPage(1);
-  };
-
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
-  };
-
-  const handleResetFilter = () => {
-    setSelectedDate(null);
   };
 
   const openModal = (draw) => {
@@ -87,11 +53,6 @@ const Eurodreams = () => {
     setIsModalOpen(false);
     setSelectedDraw(null);
   };
-
-  const indexOfLastDraw = currentPage * drawsPerPage;
-  const indexOfFirstDraw = indexOfLastDraw - drawsPerPage;
-  const currentDraws = filteredDraws.slice(indexOfFirstDraw, indexOfLastDraw);
-  const totalPages = Math.ceil(filteredDraws.length / drawsPerPage);
 
   if (isLoading) {
     return (
@@ -131,58 +92,23 @@ const Eurodreams = () => {
         </div>
       </div>
 
-      <div className="view-toggle">
-        <button 
-          className={`toggle-btn ${!showCalendar ? 'active' : ''}`}
-          onClick={() => setShowCalendar(false)}
-        >
-          📋 Liste des résultats
-        </button>
-        <button 
-          className={`toggle-btn ${showCalendar ? 'active' : ''}`}
-          onClick={() => setShowCalendar(true)}
-        >
-          📅 Calendrier
-        </button>
-      </div>
-
-      {showCalendar && (
-        <div className="calendar-section">
-          <Calendar 
-            draws={draws}
-            onDateSelect={handleDateSelect}
-            selectedDate={selectedDate}
-          />
-          {selectedDate && (
-            <button className="reset-filter" onClick={handleResetFilter}>
-              ✕ Réinitialiser le filtre
-            </button>
-          )}
-        </div>
-      )}
-
-      {filteredDraws.length === 0 ? (
+      {draws.length === 0 ? (
         <div className="no-results">
-          <p>Aucun résultat disponible pour cette date</p>
-          <button onClick={handleResetFilter} className="retry-button">
-            Voir tous les résultats
+          <p>Aucun résultat disponible</p>
+          <button onClick={loadResults} className="retry-button">
+            Réessayer
           </button>
         </div>
       ) : (
         <>
-          <div className="results-info">
-            <span className="results-count">
-              {filteredDraws.length} tirage{filteredDraws.length > 1 ? 's' : ''} trouvé{filteredDraws.length > 1 ? 's' : ''}
-            </span>
-            {selectedDate && (
-              <span className="filter-info">
-                📅 Filtre actif : {selectedDate.toLocaleDateString('fr-FR')}
-              </span>
-            )}
-          </div>
-
+          <Pagination
+            draws={draws}
+            itemsPerPage={5}
+            onPageChange={setDisplayedDraws}
+          />
+          
           <div className="draws-list">
-            {currentDraws.map((draw, index) => (
+            {displayedDraws.map((draw, index) => (
               <div key={draw.id || index} className="draw-card eurodreams-card">
                 <div className="draw-header">
                   <div className="draw-date">
@@ -220,14 +146,6 @@ const Eurodreams = () => {
               </div>
             ))}
           </div>
-
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          )}
         </>
       )}
 
