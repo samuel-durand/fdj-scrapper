@@ -62,46 +62,6 @@ jobs:
           cp resultats-cache.json dist/
           echo "✅ Fichier copié dans dist/"
       
-      - name: 🔍 Vérification des modifications
-        id: check_changes
-        run: |
-          git diff --quiet resultats-cache.json && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
-      
-      - name: 💾 Commit et Push vers GitHub
-        if: steps.check_changes.outputs.changed == 'true'
-        run: |
-          echo "💾 Commit des nouveaux résultats..."
-          
-          # Configuration Git
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          
-          # Ajouter les fichiers modifiés
-          git add resultats-cache.json dist/resultats-cache.json
-          
-          # Commit avec message détaillé
-          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S UTC')
-          git commit -m "data: mise à jour automatique des résultats FDJ
-
-          🤖 Automatique : GitHub Actions
-          ⏰ Date : $TIMESTAMP
-          
-          Fichiers mis à jour :
-          - resultats-cache.json
-          - dist/resultats-cache.json"
-          
-          # Push vers GitHub
-          echo "🚀 Push vers GitHub..."
-          git push
-          
-          echo "✅ Résultats commitées et pushées avec succès !"
-      
-      - name: ℹ️ Aucune modification
-        if: steps.check_changes.outputs.changed == 'false'
-        run: |
-          echo "ℹ️  Aucun nouveau résultat détecté"
-          echo "Les données sont déjà à jour !"
-      
       - name: 🌐 Upload vers o2switch via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -137,7 +97,6 @@ jobs:
           echo "════════════════════════════════════════"
           echo "📅 Date : $(date)"
           echo "✅ Scraping terminé"
-          echo "✅ Résultats commitées sur GitHub"
           echo "✅ Fichier uploadé vers o2switch"
           echo ""
           echo "🌐 Site à jour : http://resultat-fdj.soqe8286.odns.fr/"
