@@ -71,7 +71,7 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./
-          server-dir: /www/
+          server-dir: /resultat-fdj.soqe8286.odns.fr/
           dangerous-clean-slate: false
           exclude: |
             **/.git*
