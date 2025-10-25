@@ -22,12 +22,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
       
-      - name: 📦 Installation des dépendances
-        run: |
-          npm install puppeteer
-          npm ci --ignore-scripts || npm install
+      - name: 📦 Installation de Puppeteer
+        run: npm install puppeteer
       
       - name: 🎯 Scraping des derniers résultats FDJ
         run: |
@@ -55,7 +52,7 @@ jobs:
           echo "   • EuroDreams : $ED_COUNT"
           echo "   • TOTAL : $((EM_COUNT + LOTO_COUNT + ED_COUNT)) tirages"
       
-      - name: 🌐 Upload vers o2switch via FTP
+      - name: 🌐 Upload du JSON vers o2switch via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -67,20 +64,8 @@ jobs:
           server-dir: /resultat-fdj.soqe8286.odns.fr/
           dangerous-clean-slate: false
           exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.github/**
-            **/docs/**
-            **/scripts/**
-            **/utils/**
-            **/src/**
-            **/*.md
-            **/*.txt
-            **/*.bat
-            **/*.js
-            **/*.json
-            !**/resultats-cache.json
+            **/*
+            !resultats-cache.json
       
       - name: 📊 Résumé
         run: |
@@ -90,8 +75,8 @@ jobs:
           echo "════════════════════════════════════════"
           echo "📅 Date : $(date)"
           echo "✅ Scraping terminé"
-          echo "✅ Fichier uploadé vers o2switch"
+          echo "✅ resultats-cache.json uploadé vers o2switch"
           echo ""
-          echo "🌐 Site à jour : http://resultat-fdj.soqe8286.odns.fr/"
+          echo "🌐 Fichier à jour : http://resultat-fdj.soqe8286.odns.fr/resultats-cache.json"
           echo "════════════════════════════════════════"
 
