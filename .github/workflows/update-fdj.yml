@@ -55,13 +55,6 @@ jobs:
           echo "   • EuroDreams : $ED_COUNT"
           echo "   • TOTAL : $((EM_COUNT + LOTO_COUNT + ED_COUNT)) tirages"
       
-      - name: 📁 Copie vers dist/
-        run: |
-          echo "📦 Copie du cache dans dist/..."
-          mkdir -p dist
-          cp resultats-cache.json dist/
-          echo "✅ Fichier copié dans dist/"
-      
       - name: 🌐 Upload vers o2switch via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
