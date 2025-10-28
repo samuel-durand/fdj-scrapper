@@ -26,15 +26,16 @@ jobs:
       - name: 📦 Installation de Puppeteer
         run: npm install puppeteer
       
-      - name: 🎯 Scraping des derniers résultats FDJ
+      - name: 🎯 Scraping INTELLIGENT du tirage du jour
         run: |
-          echo "🎲 Scraping des derniers tirages uniquement..."
-          echo "📅 Période : 7 derniers jours (pour être sûr de ne rien manquer)"
+          echo "🎲 Scraping UNIQUEMENT du tirage du jour..."
+          echo "⚡ Mode optimisé : scrape seulement les jeux qui ont un tirage aujourd'hui"
+          echo ""
           
-          # Scraper seulement les 7 derniers jours au lieu de 15 jours
-          # 7 jours = ~0.23 mois (assez pour couvrir tous les jeux)
-          node scraper-urls-directes.js 0.25
+          # Utiliser le scraper intelligent qui ne scrape que les tirages du jour
+          node scraper-tirage-du-jour.js
           
+          echo ""
           echo "✅ Scraping terminé !"
           
           # Afficher la taille du fichier généré

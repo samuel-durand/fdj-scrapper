@@ -1,0 +1,145 @@
+╔════════════════════════════════════════════════════════════════╗
+║   🤖 AUTOMATISATION COMPLÈTE - Résumé Simple                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+Tu as 3 OPTIONS pour automatiser complètement :
+
+┌────────────────────────────────────────────────────────────────┐
+│  OPTION 1 : Tâche planifiée Windows (⭐ RECOMMANDÉ)           │
+└────────────────────────────────────────────────────────────────┘
+
+✅ Le plus simple et fiable
+✅ Déjà tout configuré (scripts .bat + WinSCP)
+✅ Ton PC peut être en veille (se réveille tout seul)
+❌ Ton PC ne doit pas être éteint
+
+📋 Configuration (3 clics) :
+
+  1. Clique droit sur :
+     scripts\configurer-tache-planifiee.bat
+
+  2. "Exécuter en tant qu'administrateur"
+
+  3. Suis les instructions
+
+  ✅ FINI ! Automatique tous les soirs à 22h !
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  OPTION 2 : Cron job o2switch (PHP)                           │
+└────────────────────────────────────────────────────────────────┘
+
+⚠️  Très limité et fragile
+✅ Fonctionne même si ton PC est éteint
+❌ Pas de Puppeteer (scraping difficile)
+❌ Complexe à configurer
+❌ Peu fiable (FDJ change souvent la structure)
+
+📋 Configuration (complexe) :
+
+  Voir : docs\CRON-O2SWITCH.md (Solution 2)
+
+  ⚠️  PAS RECOMMANDÉ
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  OPTION 3 : GitHub Actions (⭐ SI PC ÉTEINT)                  │
+└────────────────────────────────────────────────────────────────┘
+
+✅ Fonctionne même si ton PC est éteint
+✅ Puppeteer fonctionne
+✅ Gratuit (2000 min/mois)
+✅ Fiable
+⚠️  Configuration moyenne
+
+📋 Configuration :
+
+  Voir : docs\CRON-O2SWITCH.md (Solution 3)
+
+  Bon compromis si ton PC est souvent éteint
+
+
+═══════════════════════════════════════════════════════════════
+
+🎯 MA RECOMMANDATION POUR TOI :
+
+OPTION 1 : Tâche planifiée Windows
+
+Pourquoi ?
+  • Tu as déjà tout configuré
+  • Le plus simple (3 clics)
+  • Le plus fiable
+  • Ton PC en veille = OK
+
+Comment faire ?
+  1. Clique droit sur : scripts\configurer-tache-planifiee.bat
+  2. "Exécuter en tant qu'administrateur"
+  3. C'est tout !
+
+═══════════════════════════════════════════════════════════════
+
+📊 COMPARAISON RAPIDE :
+
+┌──────────────┬──────────┬──────────┬─────────┬────────────┐
+│ Solution     │ Fiabilité│ Facilité │ PC requis│ Puppeteer │
+├──────────────┼──────────┼──────────┼─────────┼────────────┤
+│ Windows Task │  ⭐⭐⭐⭐⭐│  ⭐⭐⭐⭐⭐│ Veille OK│     ✅     │
+│ Cron o2switch│  ⭐⭐     │  ⭐       │    Non   │     ❌     │
+│ GitHub Actions│ ⭐⭐⭐⭐⭐│  ⭐⭐⭐    │    Non   │     ✅     │
+└──────────────┴──────────┴──────────┴─────────┴────────────┘
+
+═══════════════════════════════════════════════════════════════
+
+🚀 LANCE MAINTENANT :
+
+Pour configurer la tâche planifiée Windows :
+
+  1. Clique droit sur :
+     📂 scripts\configurer-tache-planifiee.bat
+
+  2. "Exécuter en tant qu'administrateur"
+
+  3. Suis les étapes à l'écran
+
+  ✅ En 2 minutes, c'est automatisé !
+
+═══════════════════════════════════════════════════════════════
+
+❓ QUESTIONS FRÉQUENTES :
+
+Q: Mon PC doit être allumé ?
+R: Il peut être en VEILLE (se réveillera automatiquement)
+   Mais pas complètement éteint
+
+Q: Et si j'oublie ?
+R: La tâche s'exécutera au prochain démarrage
+   (option "exécuter dès que possible si manqué")
+
+Q: Je peux tester avant ?
+R: Oui ! Le script te propose de tester immédiatement
+
+Q: Je peux modifier l'heure ?
+R: Oui, dans le Planificateur de tâches Windows
+   Par défaut : 22h (après tous les tirages)
+
+Q: Si mon PC est souvent éteint ?
+R: Utilise GitHub Actions (Option 3)
+   Voir : docs\CRON-O2SWITCH.md
+
+═══════════════════════════════════════════════════════════════
+
+🎉 RÉSUMÉ ULTRA-SIMPLE :
+
+1️⃣  Clique droit → scripts\configurer-tache-planifiee.bat
+2️⃣  "Exécuter en tant qu'administrateur"
+3️⃣  Suis les instructions
+4️⃣  ✅ AUTOMATIQUE À VIE !
+
+Tous les soirs à 22h :
+  → Scraping FDJ
+  → Upload o2switch
+  → Site à jour
+  → SANS RIEN FAIRE !
+
+═══════════════════════════════════════════════════════════════
+

@@ -201,6 +201,11 @@
   color: white;
 }
 
+.result-ball.eurodreams {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: white;
+}
+
 .result-ball.star {
   background: var(--gold-gradient);
   color: white;
@@ -212,6 +217,116 @@
   color: white;
   width: 60px;
   height: 60px;
+}
+
+/* Section de sauvegarde */
+.save-combination-section {
+  margin-top: 30px;
+  padding: 25px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-radius: 15px;
+  border: 2px solid #22c55e;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
+}
+
+.save-combination-section h5 {
+  font-size: 1.2rem;
+  color: #166534;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.save-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.combination-name-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  border: 2px solid #86efac;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.combination-name-input:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.favorite-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #166534;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.favorite-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #22c55e;
+}
+
+.save-combination-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.save-combination-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+}
+
+.save-combination-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.save-combination-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-prompt {
+  margin-top: 20px;
+  padding: 15px;
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 10px;
+  text-align: center;
+  color: #856404;
+  font-weight: 600;
+}
+
+.login-prompt a {
+  color: #0ea5e9;
+  text-decoration: underline;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.login-prompt a:hover {
+  color: #0284c7;
 }
 
 /* Statistiques */

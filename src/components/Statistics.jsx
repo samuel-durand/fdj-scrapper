@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react'
 import './Statistics.css'
+import { useAuth } from '../contexts/AuthContext'
+import { saveCombination } from '../services/combinationService'
 
 function Statistics({ draws, gameType }) {
+  const { user } = useAuth()
   const [numberStats, setNumberStats] = useState([])
   const [starStats, setStarStats] = useState([])
   const [luckyStats, setLuckyStats] = useState([])
   const [generatedNumbers, setGeneratedNumbers] = useState(null)
   const [generationMode, setGenerationMode] = useState('hot') // 'hot', 'cold', 'balanced', 'random'
+  const [combinationName, setCombinationName] = useState('')
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     if (!draws || draws.length === 0) return
@@ -102,31 +109,39 @@ function Statistics({ draws, gameType }) {
     let selectedNumbers = []
     let selectedBonus = null
 
+    // Déterminer le nombre de numéros et la plage selon le jeu
+    const numbersCount = gameType === 'eurodreams' ? 6 : 5
+    let maxNumber = 50
+    if (gameType === 'loto') maxNumber = 49
+    if (gameType === 'eurodreams') maxNumber = 40
+
     if (generationMode === 'hot') {
       // Utiliser les numéros les plus sortis
       const hotNumbers = numberStats.slice(0, 15).map(s => s.number)
-      selectedNumbers = getRandomFromArray(hotNumbers, 5)
+      selectedNumbers = getRandomFromArray(hotNumbers, numbersCount)
     } else if (generationMode === 'cold') {
       // Utiliser les numéros les moins sortis
       const coldNumbers = numberStats.slice(-15).map(s => s.number)
-      selectedNumbers = getRandomFromArray(coldNumbers, 5)
+      selectedNumbers = getRandomFromArray(coldNumbers, numbersCount)
     } else if (generationMode === 'balanced') {
-      // Mélange: 3 chauds, 2 froids
+      // Mélange: 3 chauds, 2 froids (ou 4/2 pour eurodreams)
       const hotNumbers = numberStats.slice(0, 10).map(s => s.number)
       const coldNumbers = numberStats.slice(-10).map(s => s.number)
-      const hot = getRandomFromArray(hotNumbers, 3)
-      const cold = getRandomFromArray(coldNumbers, 2)
+      const hotCount = gameType === 'eurodreams' ? 4 : 3
+      const coldCount = gameType === 'eurodreams' ? 2 : 2
+      const hot = getRandomFromArray(hotNumbers, hotCount)
+      const cold = getRandomFromArray(coldNumbers, coldCount)
       selectedNumbers = [...hot, ...cold]
     } else {
       // Complètement aléatoire
-      const maxNumber = gameType === 'loto' ? 49 : 50
-      selectedNumbers = getRandomNumbers(1, maxNumber, 5)
+      selectedNumbers = getRandomNumbers(1, maxNumber, numbersCount)
     }
 
     selectedNumbers.sort((a, b) => a - b)
 
-    // Générer le bonus (étoiles ou numéro chance)
+    // Générer le bonus selon le type de jeu
     if (gameType === 'euromillions') {
+      // Euromillions: 2 étoiles (1-12)
       let stars = []
       if (generationMode === 'hot') {
         const hotStars = starStats.slice(0, 6).map(s => s.number)
@@ -139,8 +154,8 @@ function Statistics({ draws, gameType }) {
       }
       stars.sort((a, b) => a - b)
       selectedBonus = stars
-    } else {
-      // Loto
+    } else if (gameType === 'loto') {
+      // Loto: 1 numéro chance (1-10)
       if (generationMode === 'hot' && luckyStats.length > 0) {
         const hotLucky = luckyStats.slice(0, 5).map(s => s.number)
         selectedBonus = hotLucky[Math.floor(Math.random() * hotLucky.length)]
@@ -150,6 +165,9 @@ function Statistics({ draws, gameType }) {
       } else {
         selectedBonus = Math.floor(Math.random() * 10) + 1
       }
+    } else if (gameType === 'eurodreams') {
+      // EuroDreams: 1 numéro Dream (1-5)
+      selectedBonus = Math.floor(Math.random() * 5) + 1
     }
 
     setGeneratedNumbers({
@@ -172,6 +190,53 @@ function Statistics({ draws, gameType }) {
       }
     }
     return numbers
+  }
+
+  const handleSaveCombination = async () => {
+    if (!user || !generatedNumbers) return
+
+    setSaving(true)
+    setSaved(false)
+
+    try {
+      // Préparer les données selon le format attendu par le backend
+      const combinationData = {
+        game: gameType,
+        numbers: generatedNumbers.numbers,
+        name: combinationName || `${gameType.toUpperCase()} - ${new Date().toLocaleDateString()}`,
+        isFavorite
+      }
+
+      // Ajouter les numéros bonus selon le type de jeu
+      if (gameType === 'euromillions' && generatedNumbers.bonus) {
+        // Euromillions: tableau d'étoiles
+        combinationData.stars = generatedNumbers.bonus
+      } else if (gameType === 'loto' && generatedNumbers.bonus !== undefined) {
+        // Loto: un seul numéro
+        combinationData.luckyNumber = generatedNumbers.bonus
+      } else if (gameType === 'eurodreams' && generatedNumbers.bonus !== undefined) {
+        // EuroDreams: un seul numéro
+        combinationData.dreamNumber = generatedNumbers.bonus
+      }
+
+      console.log('Sauvegarde de la combinaison:', combinationData)
+
+      const result = await saveCombination(combinationData)
+
+      if (result.success) {
+        setSaved(true)
+        setCombinationName('')
+        setIsFavorite(false)
+        setTimeout(() => setSaved(false), 3000)
+      } else {
+        alert('Erreur lors de la sauvegarde : ' + result.error)
+      }
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde:', error)
+      alert('Erreur lors de la sauvegarde de la combinaison')
+    } finally {
+      setSaving(false)
+    }
   }
 
   if (!draws || draws.length === 0) {
@@ -237,20 +302,64 @@ function Statistics({ draws, gameType }) {
             </div>
             <div className="generated-bonus">
               <span className="result-label">
-                {gameType === 'loto' ? 'Numéro Chance :' : 'Étoiles :'}
+                {gameType === 'loto' ? 'Numéro Chance :' : 
+                 gameType === 'eurodreams' ? 'Numéro Dream :' : 
+                 'Étoiles :'}
               </span>
               <div className="result-balls">
-                {gameType === 'loto' ? (
-                  <div className="result-ball lucky">{generatedNumbers.bonus}</div>
-                ) : (
+                {gameType === 'euromillions' ? (
+                  // Euromillions: tableau d'étoiles
                   generatedNumbers.bonus.map((star, idx) => (
                     <div key={idx} className="result-ball star">
                       ⭐ {star}
                     </div>
                   ))
-                )}
+                ) : gameType === 'loto' ? (
+                  // Loto: un seul numéro chance
+                  <div className="result-ball lucky">{generatedNumbers.bonus}</div>
+                ) : gameType === 'eurodreams' ? (
+                  // EuroDreams: un seul numéro Dream
+                  <div className="result-ball eurodreams">{generatedNumbers.bonus}</div>
+                ) : null}
               </div>
             </div>
+
+            {/* Section de sauvegarde */}
+            {user && (
+              <div className="save-combination-section">
+                <h5>💾 Sauvegarder cette combinaison</h5>
+                <div className="save-form">
+                  <input
+                    type="text"
+                    placeholder="Nom de la combinaison (optionnel)"
+                    value={combinationName}
+                    onChange={(e) => setCombinationName(e.target.value)}
+                    className="combination-name-input"
+                  />
+                  <label className="favorite-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={isFavorite}
+                      onChange={(e) => setIsFavorite(e.target.checked)}
+                    />
+                    ⭐ Marquer comme favori
+                  </label>
+                  <button
+                    className="save-combination-btn"
+                    onClick={handleSaveCombination}
+                    disabled={saving}
+                  >
+                    {saving ? '💾 Sauvegarde...' : saved ? '✅ Sauvegardé !' : '💾 Sauvegarder'}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {!user && (
+              <p className="login-prompt">
+                🔒 <a href="#" onClick={(e) => { e.preventDefault(); alert('Veuillez vous connecter pour sauvegarder vos combinaisons') }}>Connectez-vous</a> pour sauvegarder vos combinaisons
+              </p>
+            )}
           </div>
         )}
       </div>

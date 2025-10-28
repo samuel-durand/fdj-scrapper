@@ -24,6 +24,14 @@ Ce dossier contient tous les scripts `.bat` pour faciliter l'utilisation de l'ap
 - **`nettoyer-et-recuperer.bat`** - Nettoie le cache et récupère de nouvelles données
 - **`fix-eurodreams.bat`** - Corrige les jackpots EuroDreams erronés
 
+## 🌐 Scripts o2switch
+
+### Déploiement et mise à jour
+- **`update-et-upload.bat`** - Scrape les données et prépare l'upload vers o2switch (manuel)
+- **`auto-update-o2switch.bat`** - Scrape et upload automatique vers o2switch (nécessite WinSCP)
+
+> 💡 Voir [DEPLOIEMENT-O2SWITCH.md](../docs/DEPLOIEMENT-O2SWITCH.md) pour la configuration complète
+
 ## 🔄 Scripts Git
 
 ### GitHub

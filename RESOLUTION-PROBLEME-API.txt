@@ -1,0 +1,153 @@
+╔════════════════════════════════════════════════════════════════╗
+║   🔧 RÉSOLUTION DU PROBLÈME "L'API NE PEUT SE CONNECTER"       ║
+╚════════════════════════════════════════════════════════════════╝
+
+✅ PROBLÈME RÉSOLU ! Voici ce qui a été corrigé :
+
+┌────────────────────────────────────────────────────────────────┐
+│  1. lotteryService.js recréé                                   │
+└────────────────────────────────────────────────────────────────┘
+
+Le fichier src/services/lotteryService.js était vide !
+✅ Il a été recréé avec le bon code pour charger resultats-cache.json
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  2. .htaccess recréé                                           │
+└────────────────────────────────────────────────────────────────┘
+
+Le fichier .htaccess manquait dans dist/ !
+✅ Il a été recréé avec la config Apache pour o2switch
+✅ Il sera automatiquement copié lors des prochains builds
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  3. Scripts corrigés                                           │
+└────────────────────────────────────────────────────────────────┘
+
+L'ordre des étapes était incorrect (copie AVANT le build)
+✅ Maintenant : Build → PUIS copie du cache
+
+
+═══════════════════════════════════════════════════════════════
+
+🚀 MAINTENANT, POUR DÉPLOYER SUR O2SWITCH :
+
+┌────────────────────────────────────────────────────────────────┐
+│  OPTION A - Test local d'abord (RECOMMANDÉ)                   │
+└────────────────────────────────────────────────────────────────┘
+
+1️⃣  Lance le script de test :
+    📂 scripts\TESTER-AVANT-UPLOAD.bat
+
+    Ça va :
+    • Scraper les résultats
+    • Builder l'application
+    • Vérifier que tous les fichiers sont présents
+    • Lancer un serveur de prévisualisation
+
+2️⃣  Teste ton site en local :
+    • Vérifie que les onglets fonctionnent
+    • Vérifie que les résultats s'affichent
+    • Vérifie le thème sombre/clair
+    • Vérifie le calendrier
+
+3️⃣  Si tout fonctionne :
+    → Upload dist\ sur o2switch
+    → ✅ Ça fonctionnera pareil !
+
+
+┌────────────────────────────────────────────────────────────────┐
+│  OPTION B - Déploiement direct                                 │
+└────────────────────────────────────────────────────────────────┘
+
+1️⃣  Lance le script de déploiement :
+    📂 scripts\PREMIER-DEPLOIEMENT.bat
+
+2️⃣  Upload dist\ sur o2switch via FileZilla
+
+3️⃣  Teste ton site : http://ton-domaine.com
+
+
+═══════════════════════════════════════════════════════════════
+
+📋 CHECKLIST - Fichiers dans dist/ (à vérifier) :
+
+✓ index.html               → Page principale
+✓ resultats-cache.json     → Données des résultats
+✓ .htaccess                → Configuration Apache
+✓ assets/                  → CSS et JavaScript compilés
+  ├── index-[hash].css
+  └── index-[hash].js
+
+
+═══════════════════════════════════════════════════════════════
+
+🔍 VÉRIFICATION SUR O2SWITCH :
+
+Après l'upload, vérifie ces URLs :
+
+1. http://ton-domaine.com
+   → La page principale doit s'afficher
+
+2. http://ton-domaine.com/resultats-cache.json
+   → Tu dois voir le JSON des résultats
+
+Si l'URL 2 ne fonctionne pas :
+   • Vérifie que resultats-cache.json est bien uploadé
+   • Vérifie que .htaccess est bien uploadé
+   • Vérifie les permissions (644 pour les fichiers)
+
+
+═══════════════════════════════════════════════════════════════
+
+❌ SI ÇA NE FONCTIONNE TOUJOURS PAS :
+
+1️⃣  Ouvre la console du navigateur (F12)
+    → Regarde les erreurs
+
+2️⃣  Vérifie le fichier .htaccess sur o2switch
+    → Il doit être à la racine de /www/
+
+3️⃣  Teste en local d'abord avec :
+    scripts\TESTER-AVANT-UPLOAD.bat
+
+
+═══════════════════════════════════════════════════════════════
+
+💡 EXPLICATIONS TECHNIQUES :
+
+Pourquoi ça ne fonctionnait pas avant ?
+───────────────────────────────────────
+
+1. lotteryService.js était vide
+   → L'app ne savait pas comment charger les données
+
+2. .htaccess manquait
+   → Apache ne savait pas comment servir le JSON
+
+3. resultats-cache.json copié AVANT le build
+   → Le build écrasait dist/, donc le fichier disparaissait
+
+
+Comment ça fonctionne maintenant ?
+──────────────────────────────────
+
+1. lotteryService.js charge /resultats-cache.json
+   → Chemin relatif qui fonctionne partout
+
+2. .htaccess configure Apache
+   → CORS, compression, cache
+
+3. Build → PUIS copie du cache
+   → Le fichier reste dans dist/
+
+
+═══════════════════════════════════════════════════════════════
+
+🎉 C'EST RÉPARÉ !
+
+Tu peux maintenant déployer sur o2switch sans problème !
+
+═══════════════════════════════════════════════════════════════
+

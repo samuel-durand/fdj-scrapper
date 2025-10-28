@@ -44,6 +44,10 @@ Cette documentation vous guidera à travers toutes les fonctionnalités, l'insta
 
 - **[GUIDE_GIT_COMPLET.md](GUIDE_GIT_COMPLET.md)** - Guide Git complet 📝
 - **[SECURITE_GITHUB.md](SECURITE_GITHUB.md)** - Sécurité et bonnes pratiques 🔒
+- **[DEPLOIEMENT.md](DEPLOIEMENT.md)** - Guide de déploiement général 🚀
+- **[DEPLOIEMENT-O2SWITCH.md](DEPLOIEMENT-O2SWITCH.md)** - Déploiement complet o2switch 🌐
+- **[DEPLOIEMENT-IMMEDIAT-O2SWITCH.md](DEPLOIEMENT-IMMEDIAT-O2SWITCH.md)** - 🚀 Guide rapide o2switch (10 min)
+- **[DEPLOIEMENT-RAPIDE.txt](DEPLOIEMENT-RAPIDE.txt)** - Instructions rapides de déploiement ⚡
 
 ## 📝 Historique et changelog
 
@@ -65,12 +69,14 @@ Cette documentation vous guidera à travers toutes les fonctionnalités, l'insta
 2. **Vous voulez comprendre comment ça marche ?** → Lisez [COMMENT_CA_MARCHE.md](COMMENT_CA_MARCHE.md)
 3. **Vous voulez développer ?** → Consultez [STRUCTURE_PROJET.md](STRUCTURE_PROJET.md)
 4. **Vous voulez déployer sur GitHub ?** → Suivez [GUIDE_GIT_COMPLET.md](GUIDE_GIT_COMPLET.md)
+5. **Vous voulez déployer sur o2switch ?** → Suivez [DEPLOIEMENT-O2SWITCH.md](DEPLOIEMENT-O2SWITCH.md)
 
 ## 💡 Besoin d'aide ?
 
 - Pour une question générale → [GUIDE_UTILISATION.md](GUIDE_UTILISATION.md)
 - Pour un problème de scraping → [GUIDE_PUPPETEER.md](GUIDE_PUPPETEER.md)
 - Pour comprendre la structure → [STRUCTURE_PROJET.md](STRUCTURE_PROJET.md)
+- Pour déployer sur o2switch → [DEPLOIEMENT-O2SWITCH.md](DEPLOIEMENT-O2SWITCH.md)
 
 ---
 

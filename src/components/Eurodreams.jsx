@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Pagination from './Pagination';
 import DrawDetailsModal from './DrawDetailsModal';
+import Statistics from './Statistics';
 import './Lottery.css';
 
 const Eurodreams = () => {
@@ -10,6 +11,7 @@ const Eurodreams = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeView, setActiveView] = useState('draws'); // 'draws' ou 'stats'
 
   useEffect(() => {
     loadResults();
@@ -92,61 +94,87 @@ const Eurodreams = () => {
         </div>
       </div>
 
-      {draws.length === 0 ? (
-        <div className="no-results">
-          <p>Aucun résultat disponible</p>
-          <button onClick={loadResults} className="retry-button">
-            Réessayer
-          </button>
-        </div>
-      ) : (
+      {/* Onglets de navigation */}
+      <div className="view-tabs">
+        <button
+          className={`view-tab ${activeView === 'draws' ? 'active' : ''}`}
+          onClick={() => setActiveView('draws')}
+        >
+          🎯 Derniers Tirages
+        </button>
+        <button
+          className={`view-tab ${activeView === 'stats' ? 'active' : ''}`}
+          onClick={() => setActiveView('stats')}
+        >
+          📊 Statistiques & Générateur
+        </button>
+      </div>
+
+      {/* Vue Tirages */}
+      {activeView === 'draws' && (
         <>
-          <Pagination
-            draws={draws}
-            itemsPerPage={5}
-            onPageChange={setDisplayedDraws}
-          />
-          
-          <div className="draws-list">
-            {displayedDraws.map((draw, index) => (
-              <div key={draw.id || index} className="draw-card eurodreams-card">
-                <div className="draw-header">
-                  <div className="draw-date">
-                    <span className="day">{draw.day}</span>
-                    <span className="date">{draw.formattedDate}</span>
-                  </div>
-                  <div className="draw-jackpot eurodreams-jackpot">
-                    <span className="jackpot-label">💰 Rente</span>
-                    <span className="jackpot-amount">{draw.jackpot}</span>
-                  </div>
-                </div>
-
-                <div className="draw-numbers">
-                  <div className="numbers-section">
-                    <span className="numbers-label">Numéros :</span>
-                    <div className="numbers">
-                      {draw.numbers && draw.numbers.map((num, idx) => (
-                        <div key={idx} className="ball eurodreams-ball">{num}</div>
-                      ))}
+          {draws.length === 0 ? (
+            <div className="no-results">
+              <p>Aucun résultat disponible</p>
+              <button onClick={loadResults} className="retry-button">
+                Réessayer
+              </button>
+            </div>
+          ) : (
+            <>
+              <Pagination
+                draws={draws}
+                itemsPerPage={5}
+                onPageChange={setDisplayedDraws}
+              />
+              
+              <div className="draws-list">
+                {displayedDraws.map((draw, index) => (
+                  <div key={draw.id || index} className="draw-card eurodreams-card">
+                    <div className="draw-header">
+                      <div className="draw-date">
+                        <span className="day">{draw.day}</span>
+                        <span className="date">{draw.formattedDate}</span>
+                      </div>
+                      <div className="draw-jackpot eurodreams-jackpot">
+                        <span className="jackpot-label">💰 Rente</span>
+                        <span className="jackpot-amount">{draw.jackpot}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="dream-section">
-                    <span className="dream-label">💤 Dream :</span>
-                    <div className="dream-number">{draw.dreamNumber}</div>
-                  </div>
-                </div>
+                    <div className="draw-numbers">
+                      <div className="numbers-section">
+                        <span className="numbers-label">Numéros :</span>
+                        <div className="numbers">
+                          {draw.numbers && draw.numbers.map((num, idx) => (
+                            <div key={idx} className="ball eurodreams-ball">{num}</div>
+                          ))}
+                        </div>
+                      </div>
 
-                <button 
-                  className="details-button"
-                  onClick={() => openModal(draw)}
-                >
-                  Voir les détails complets
-                </button>
+                      <div className="dream-section">
+                        <span className="dream-label">💤 Dream :</span>
+                        <div className="dream-number">{draw.dreamNumber}</div>
+                      </div>
+                    </div>
+
+                    <button 
+                      className="details-button"
+                      onClick={() => openModal(draw)}
+                    >
+                      Voir les détails complets
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </>
+      )}
+
+      {/* Vue Statistiques */}
+      {activeView === 'stats' && draws.length > 0 && (
+        <Statistics draws={draws} gameType="eurodreams" />
       )}
 
       {isModalOpen && selectedDraw && (

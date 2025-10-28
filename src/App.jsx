@@ -3,7 +3,15 @@ import './App.css'
 import Euromillions from './components/Euromillions'
 import Loto from './components/Loto'
 import Eurodreams from './components/Eurodreams'
+import Login from './components/Auth/Login'
+import Register from './components/Auth/Register'
+import UserProfile from './components/Auth/UserProfile'
+import NotificationCenter from './components/Alerts/NotificationCenter'
+import AdminPanel from './components/Admin/AdminPanel'
 import { getEuromillionsResults, getLotoResults } from './services/lotteryService'
+import { getEurodreamsResults } from './services/lotteryService'
+import { useAuth } from './contexts/AuthContext'
+import { checkNewDraws, getUnreadCount } from './services/alertService'
 
 // Fonction pour calculer le prochain jour de tirage
 function getNextDrawDate(gameType) {
@@ -97,6 +105,7 @@ function getNextDrawDate(gameType) {
 }
 
 function App() {
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('euromillions')
   const [euromillionsData, setEuromillionsData] = useState(null)
   const [lotoData, setLotoData] = useState(null)
@@ -106,6 +115,12 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light'
   })
+  const [showLogin, setShowLogin] = useState(false)
+  const [showRegister, setShowRegister] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -116,13 +131,28 @@ function App() {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
   }
 
+  // Appliquer l'onglet par défaut de l'utilisateur
+  useEffect(() => {
+    if (user?.preferences?.defaultTab) {
+      setActiveTab(user.preferences.defaultTab)
+    }
+  }, [user])
+
+  // Appliquer le thème de l'utilisateur
+  useEffect(() => {
+    if (user?.preferences?.theme) {
+      setTheme(user.preferences.theme)
+    }
+  }, [user])
+
   useEffect(() => {
     async function fetchJackpots() {
       try {
         setLoading(true)
-        const [euroResults, lotoResults] = await Promise.all([
+        const [euroResults, lotoResults, edResults] = await Promise.all([
           getEuromillionsResults(10),
-          getLotoResults(10)
+          getLotoResults(10),
+          getEurodreamsResults(10).catch(() => [])
         ])
         
         // Trouver le premier tirage avec un jackpot disponible pour Euromillions
@@ -140,6 +170,17 @@ function App() {
         // Calculer les vraies dates des prochains tirages
         setNextEuroDrawDate(getNextDrawDate('euromillions'))
         setNextLotoDrawDate(getNextDrawDate('loto'))
+
+        // Vérifier les alertes pour l'utilisateur connecté
+        if (user?.id) {
+          const allDraws = {
+            euromillions: euroResults,
+            loto: lotoResults,
+            eurodreams: edResults
+          }
+          checkNewDraws(user.id, allDraws)
+          updateUnreadCount()
+        }
       } catch (error) {
         console.error('Erreur lors du chargement des jackpots:', error)
       } finally {
@@ -147,7 +188,25 @@ function App() {
       }
     }
     fetchJackpots()
-  }, [])
+  }, [user])
+
+  // Mettre à jour le compteur de notifications non lues
+  const updateUnreadCount = () => {
+    if (user?.id) {
+      setUnreadCount(getUnreadCount(user.id))
+    }
+  }
+
+  // Rafraîchir les notifications toutes les 5 minutes
+  useEffect(() => {
+    if (!user?.id) return
+
+    const interval = setInterval(() => {
+      updateUnreadCount()
+    }, 5 * 60 * 1000) // 5 minutes
+
+    return () => clearInterval(interval)
+  }, [user])
 
   return (
     <div className="app">
@@ -157,9 +216,51 @@ function App() {
             <h1>🎰 Résultats Loterie FDJ</h1>
             <p className="subtitle">Consultez les derniers tirages de l'Euromillions et du Loto en temps réel</p>
           </div>
-          <button className="theme-toggle" onClick={toggleTheme} title={`Passer au thème ${theme === 'light' ? 'sombre' : 'clair'}`}>
-            {theme === 'light' ? '🌙' : '☀️'}
-          </button>
+          <div className="header-actions">
+            <button className="theme-toggle" onClick={toggleTheme} title={`Passer au thème ${theme === 'light' ? 'sombre' : 'clair'}`}>
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+            
+            {user ? (
+              <>
+                <button 
+                  className="notification-btn" 
+                  onClick={() => {
+                    setShowNotifications(true)
+                    updateUnreadCount()
+                  }}
+                  title="Notifications"
+                >
+                  🔔
+                  {unreadCount > 0 && (
+                    <span className="notification-badge">{unreadCount}</span>
+                  )}
+                </button>
+                {user.role === 'admin' && (
+                  <button 
+                    className="admin-btn" 
+                    onClick={() => setShowAdminPanel(true)}
+                    title="Panel Administrateur"
+                  >
+                    🔐
+                  </button>
+                )}
+                <button className="user-menu-btn" onClick={() => setShowProfile(true)}>
+                  <span>👤</span>
+                  <span>{user.name}</span>
+                </button>
+              </>
+            ) : (
+              <div className="auth-buttons">
+                <button className="login-btn" onClick={() => setShowLogin(true)}>
+                  Connexion
+                </button>
+                <button className="register-btn" onClick={() => setShowRegister(true)}>
+                  Inscription
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -225,6 +326,47 @@ function App() {
           🔞 Interdit aux mineurs · ♠️ Jouer comporte des risques : endettement, isolement, dépendance
         </p>
       </footer>
+
+      {showLogin && (
+        <Login
+          onClose={() => setShowLogin(false)}
+          onSwitchToRegister={() => {
+            setShowLogin(false)
+            setShowRegister(true)
+          }}
+        />
+      )}
+
+      {showRegister && (
+        <Register
+          onClose={() => setShowRegister(false)}
+          onSwitchToLogin={() => {
+            setShowRegister(false)
+            setShowLogin(true)
+          }}
+        />
+      )}
+
+      {showProfile && (
+        <UserProfile onClose={() => {
+          setShowProfile(false)
+          updateUnreadCount()
+        }} />
+      )}
+
+      {showNotifications && (
+        <NotificationCenter 
+          userId={user?.id}
+          onClose={() => {
+            setShowNotifications(false)
+            updateUnreadCount()
+          }}
+        />
+      )}
+
+      {showAdminPanel && (
+        <AdminPanel onClose={() => setShowAdminPanel(false)} />
+      )}
     </div>
   )
 }
