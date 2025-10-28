@@ -11,17 +11,43 @@ L'application est hébergée sur **o2switch** avec mise à jour automatique quot
 
 ## ✨ Fonctionnalités
 
+### 🎰 Résultats des Loteries
 - ⭐ Affichage des résultats de l'**EuroMillions** avec My Million
 - 🍀 Affichage des résultats du **Loto** avec 2ème tirage et Joker+
-- 💤 **NOUVEAU** : Affichage des résultats d'**EuroDreams**
+- 💤 Affichage des résultats d'**EuroDreams** (avec fond blanc élégant)
 - 📅 Calendrier interactif pour naviguer entre les résultats
-- 📡 Récupération automatique des résultats avec Puppeteer
-- 🔄 Historique complet via URLs directes FDJ
-- ⚡ Indicateurs de chargement et gestion des erreurs
+- 📊 **Répartition complète des gains** pour chaque tirage
+- 🔄 Navigation par onglets entre les 3 loteries
+
+### 📊 Statistiques & Générateur (NOUVEAU!)
+- 📈 **Statistiques avancées** : Top 10 numéros chauds/froids pour chaque jeu
+- 🎲 **Générateur de numéros intelligent** avec 4 modes :
+  - 🔥 Numéros Chauds (les plus sortis)
+  - ❄️ Numéros Froids (les moins sortis)
+  - ⚖️ Équilibré (mix chauds/froids)
+  - 🎰 Aléatoire (pur hasard)
+- 💾 **Sauvegarde des combinaisons** dans votre compte
+- 📜 **Historique des combinaisons** avec vérification des gains
+
+### 👤 Espace Utilisateur (NOUVEAU!)
+- 🔐 **Authentification sécurisée** (JWT + mots de passe hashés)
+- 👤 **Profil personnalisé** avec préférences de jeux
+- 🔔 **Alertes personnalisées** pour les tirages (jackpot, jeu favori, etc.)
+- 📬 **Centre de notifications** pour suivre les nouveaux tirages
+- 🎲 **Gestion des combinaisons** sauvegardées
+
+### 🔐 Panel Administrateur (NOUVEAU!)
+- 👥 **Gestion des utilisateurs** (activation, rôles, suppression)
+- 📊 **Statistiques globales** de la plateforme
+- 🎲 **Consultation des combinaisons** de tous les utilisateurs
+- 🔔 **Gestion des alertes** système
+
+### ⚡ Scraping Intelligent
+- 🚀 **Scraper ultra-rapide** : ne scrape que les tirages du jour (95% plus rapide!)
+- 📡 **Récupération automatique** via GitHub Actions à 22h30
+- 🔄 **Mise à jour quotidienne** automatique sur o2switch
 - 📱 Interface responsive et moderne
 - 🎨 Design unique pour chaque jeu avec animations
-- 🔄 Navigation par onglets entre les 3 loteries
-- 📊 Répartition complète des gains pour chaque tirage
 
 ## 🚀 Installation
 
@@ -48,13 +74,18 @@ npm run dev
 
 ## 📦 Scripts disponibles
 
-### Application
-- `npm run dev` - Lance le serveur de développement
+### Application Frontend
+- `npm run dev` - Lance le serveur de développement React
 - `npm run build` - Compile l'application pour la production
 - `npm run preview` - Prévisualise la version de production
 
+### Backend (dans le dossier backend/)
+- `npm run dev` - Lance le serveur backend (port 5000)
+- `npm run create-admin` - Crée un utilisateur administrateur
+
 ### Scraping
-- `npm run scrape-complet` - Scrape les 3 jeux (EuroMillions, Loto, EuroDreams)
+- `npm run scrape-today` - 🆕 **Scraper intelligent** (tirage du jour uniquement - ULTRA RAPIDE!)
+- `npm run scrape-complet` - Scrape les 3 jeux sur plusieurs mois
 - `npm run scrape` - Scrape les derniers résultats (Puppeteer)
 - `npm run scrape-eurodreams` - Scrape uniquement EuroDreams
 - `npm run update-cache` - Met à jour le cache des 3 derniers mois
@@ -62,11 +93,11 @@ npm run dev
 
 ## 🎯 Utilisation
 
-### Démarrage rapide
+### Démarrage rapide (Frontend uniquement)
 
 1. **Récupérer les résultats** (première utilisation) :
    ```bash
-   node scraper-urls-directes.js 1  # Récupère 1 mois de résultats
+   npm run scrape-today  # Scrape les tirages du jour (rapide!)
    ```
 
 2. **Lancer l'application** :
@@ -75,6 +106,50 @@ npm run dev
    ```
 
 3. **Ouvrir dans le navigateur** : `http://localhost:5173`
+
+### Démarrage complet (avec Backend)
+
+1. **Installer les dépendances** :
+   ```bash
+   # Frontend
+   npm install
+   
+   # Backend
+   cd backend
+   npm install
+   ```
+
+2. **Configurer MongoDB** :
+   - Installer MongoDB localement OU utiliser MongoDB Atlas (gratuit)
+   - Créer le fichier `backend/.env` :
+   ```env
+   MONGODB_URI=mongodb://localhost:27017/loterie-fdj
+   JWT_SECRET=votre_secret_super_securise
+   PORT=5000
+   FRONTEND_URL=http://localhost:5173
+   ```
+
+3. **Créer un utilisateur admin** :
+   ```bash
+   cd backend
+   npm run create-admin
+   ```
+
+4. **Démarrer le backend** :
+   ```bash
+   cd backend
+   npm run dev  # Démarre sur http://localhost:5000
+   ```
+
+5. **Démarrer le frontend** (dans un autre terminal) :
+   ```bash
+   npm run dev  # Démarre sur http://localhost:5173
+   ```
+
+6. **Accéder à l'application** :
+   - Frontend : `http://localhost:5173`
+   - Backend API : `http://localhost:5000`
+   - Panel Admin : Se connecter avec le compte admin → Cliquer sur 🔐
 
 ### Navigation
 
@@ -320,12 +395,26 @@ L'application est **100% statique** après le build :
 
 ## 🎨 Technologies utilisées
 
+### Frontend
 - **React 18** - Framework UI moderne
 - **Vite** - Build tool ultra-rapide
-- **Puppeteer** - Scraping headless browser
 - **CSS3** - Animations et gradients
-- **Fetch API** - Chargement du cache JSON
-- **Node.js** - Exécution des scrapers
+- **Context API** - Gestion d'état global
+- **Fetch API** - Communication avec l'API
+
+### Backend (Optionnel)
+- **Node.js** - Runtime JavaScript
+- **Express** - Framework web
+- **MongoDB** - Base de données NoSQL
+- **Mongoose** - ODM pour MongoDB
+- **JWT** - Authentification sécurisée
+- **Bcrypt** - Hashage des mots de passe
+- **CORS** - Gestion des origines croisées
+
+### Scraping
+- **Puppeteer** - Scraping headless browser
+- **GitHub Actions** - Automatisation CI/CD
+- **FTP Deploy** - Déploiement automatique
 
 ## 📝 Notes
 
