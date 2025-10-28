@@ -1,9 +1,9 @@
 name: 🎰 Mise à jour automatique FDJ → o2switch
 
 on:
-  # Tous les jours à 22h30 (après les tirages)
+  # Tous les jours à 22h30 heure française (après les tirages)
   schedule:
-    - cron: '30 22 * * *'  # 22h30 UTC (ajustez selon votre fuseau)
+    - cron: '30 21 * * *'  # 21h30 UTC = 22h30 CET (heure d'hiver France)
   
   # Permet l'exécution manuelle depuis GitHub
   workflow_dispatch:
