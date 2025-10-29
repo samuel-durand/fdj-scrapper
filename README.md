@@ -1,68 +1,62 @@
 # Backend API - Loterie FDJ
 
-Backend Node.js/Express pour l'application Loterie FDJ avec système d'authentification, alertes et gestion des combinaisons.
+Backend Node.js/Express pour l'application Loterie FDJ avec système d'authentification JWT, alertes et gestion des combinaisons.
 
 ## 🚀 Déploiement sur Render
 
-Cette branche est spécifiquement conçue pour le déploiement du backend sur Render.
+Cette branche contient **uniquement le backend** pour un déploiement facile sur Render.
 
-### Configuration sur Render
+### Configuration automatique
 
-Un fichier `render.yaml` est inclus dans ce repository. Render le détectera automatiquement lors du déploiement.
+Le fichier `render.yaml` configure automatiquement :
+- **Build Command** : `npm install`
+- **Start Command** : `node server.js`
+- **Runtime** : Node
 
-**Configuration manuelle** (si render.yaml n'est pas détecté) :
-1. **Build Command** : `npm install`
-2. **Start Command** : `node server.js`
-3. **Environment** : Node
+### Variables d'environnement sur Render
 
-⚠️ **Important** : NE PAS utiliser `npm run build` comme Build Command. Le backend n'a pas besoin de build.
+Configurez ces variables dans **Dashboard Render** → **Environment** :
 
-### Variables d'environnement requises
+| Variable | Exemple | Description |
+|----------|---------|-------------|
+| `NODE_ENV` | `production` | Mode production |
+| `MONGODB_URI` | `mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj` | URI MongoDB Atlas |
+| `JWT_SECRET` | `(générer une clé)` | Secret JWT (32+ caractères) |
+| `FRONTEND_URL` | `https://votre-domaine.o2switch.com` | URL frontend pour CORS |
 
-| Variable | Description |
-|----------|-------------|
-| `NODE_ENV` | `production` |
-| `PORT` | `10000` (ou laissez Render l'assigner automatiquement) |
-| `MONGODB_URI` | URI de connexion MongoDB Atlas |
-| `JWT_SECRET` | Clé secrète pour JWT (minimum 32 caractères) |
-| `FRONTEND_URL` | URL du frontend sur O2Switch |
+**Générer un JWT Secret** :
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-Voir `ENV-CONFIG-RENDER.md` pour plus de détails.
+### MongoDB Atlas
 
-## 📦 Installation locale
+1. Créez un cluster gratuit sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Créez un utilisateur de base de données
+3. Network Access : Ajoutez `0.0.0.0/0` (autoriser Render)
+4. Copiez l'URI de connexion
+
+## 📦 Développement local
+
+### Installation
 
 ```bash
 npm install
 ```
 
-## 🔧 Configuration
+### Configuration
 
-### Étape 1 : Copiez le fichier de configuration
-
-```bash
-# Copiez le template
-cp env.example .env
-```
-
-Puis éditez le fichier `.env` avec vos vraies valeurs. Voir **`CONFIG.md`** pour le guide complet.
-
-**Exemple de .env** :
+Créez un fichier `.env` à la racine :
 
 ```env
 NODE_ENV=development
 PORT=5000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/loterie-fdj?retryWrites=true&w=majority
-JWT_SECRET=votre_secret_jwt_securise_32_caracteres_minimum
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj
+JWT_SECRET=votre_secret_jwt_32_caracteres_minimum
 FRONTEND_URL=http://localhost:5173
 ```
 
-📖 **Guide détaillé** : Consultez `CONFIG.md` pour :
-- Obtenir votre URI MongoDB Atlas
-- Générer un JWT Secret sécurisé
-- Configurer Network Access sur MongoDB
-- Résoudre les problèmes de connexion
-
-## 🚀 Démarrage
+### Démarrage
 
 ```bash
 # Mode développement
@@ -75,11 +69,13 @@ npm start
 ## 📁 Structure
 
 ```
-├── middleware/       # Middlewares (authentification, etc.)
-├── models/          # Modèles MongoDB (User, Alert, Combination, etc.)
-├── routes/          # Routes API
-├── scripts/         # Scripts utilitaires (création admin, etc.)
-└── server.js        # Point d'entrée de l'application
+├── middleware/       # Middlewares (authentification)
+├── models/          # Modèles MongoDB (User, Alert, Combination, Notification)
+├── routes/          # Routes API (auth, alerts, combinations, users, admin)
+├── scripts/         # Scripts utilitaires (create-admin.js)
+├── server.js        # Point d'entrée de l'application
+├── package.json     # Dépendances backend
+└── render.yaml      # Configuration Render
 ```
 
 ## 🔐 Routes API
@@ -96,7 +92,7 @@ npm start
 - `DELETE /api/alerts/:id` - Supprimer une alerte
 
 ### Combinaisons
-- `GET /api/combinations` - Liste des combinaisons
+- `GET /api/combinations` - Liste des combinaisons sauvegardées
 - `POST /api/combinations` - Sauvegarder une combinaison
 - `PUT /api/combinations/:id` - Modifier une combinaison
 - `DELETE /api/combinations/:id` - Supprimer une combinaison
@@ -109,7 +105,7 @@ npm start
 ### Health Check
 - `GET /api/health` - Vérification du statut du serveur
 
-## 👤 Création d'un compte administrateur
+## 👤 Créer un compte administrateur
 
 ```bash
 node scripts/create-admin.js
@@ -117,35 +113,38 @@ node scripts/create-admin.js
 
 ## 🔄 Workflow de mise à jour
 
-Pour mettre à jour le backend déployé sur Render :
+Pour mettre à jour le backend sur Render :
 
 ```bash
-# Depuis la branche main (après vos modifications)
+# 1. Faites vos modifications sur la branche main
+git checkout main
+# ... vos modifications du code backend ...
+git add backend/
+git commit -m "Update backend"
+git push origin main
+
+# 2. Synchronisez avec la branche backend
 git checkout backend
 git merge main
 git push origin backend
 ```
 
-Render redéploiera automatiquement le backend.
-
-## 📊 MongoDB
-
-Le backend utilise MongoDB pour stocker :
-- Utilisateurs (avec authentification JWT)
-- Alertes personnalisées
-- Combinaisons sauvegardées
-- Notifications
-
-Utilisez MongoDB Atlas (gratuit) pour la production sur Render.
+Render redéploie automatiquement après le push.
 
 ## 🛡️ Sécurité
 
-- Authentification JWT
-- Hachage des mots de passe avec bcrypt
-- CORS configuré pour le frontend
-- Variables d'environnement pour les secrets
+- ✅ Authentification JWT
+- ✅ Hachage des mots de passe avec bcrypt
+- ✅ CORS configuré pour le frontend
+- ✅ Variables d'environnement pour les secrets (jamais dans le code)
 
-## 📝 Licence
+## 📝 Notes
+
+- Le fichier `.env` n'est **jamais committé** (dans `.gitignore`)
+- En production, utilisez les variables d'environnement de Render
+- Render (plan gratuit) met le service en veille après 15 min d'inactivité
+- Premier appel après veille : ~30-60 secondes
+
+## 📄 Licence
 
 MIT
-
