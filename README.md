@@ -46,7 +46,13 @@ npm install
 
 ### Configuration
 
-Créez un fichier `.env` à la racine :
+Copiez le fichier exemple et remplissez vos valeurs :
+
+```bash
+cp env.example .env
+```
+
+Puis éditez `.env` avec vos vraies valeurs :
 
 ```env
 NODE_ENV=development
@@ -54,6 +60,11 @@ PORT=5000
 MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj
 JWT_SECRET=votre_secret_jwt_32_caracteres_minimum
 FRONTEND_URL=http://localhost:5173
+```
+
+**Générer JWT_SECRET** :
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 ### Démarrage
