@@ -2,6 +2,42 @@
   "lastUpdate": "2025-10-23T16:57:43.804Z",
   "euromillions": [
     {
+      "id": "em-2025-10-24",
+      "date": "2025-10-24",
+      "formattedDate": "vendredi 24 octobre 2025",
+      "day": "vendredi",
+      "numbers": [
+        7,
+        8,
+        25,
+        31,
+        45
+      ],
+      "stars": [
+        7,
+        12
+      ],
+      "jackpot": "1 million"
+    },
+    {
+      "id": "em-2025-10-28",
+      "date": "2025-10-28",
+      "formattedDate": "mardi 28 octobre 2025",
+      "day": "mardi",
+      "numbers": [
+        7,
+        8,
+        24,
+        35,
+        49
+      ],
+      "stars": [
+        2,
+        12
+      ],
+      "jackpot": "1 million"
+    },
+    {
       "id": "em-0",
       "date": "2025-10-21",
       "day": "Mardi",
@@ -2421,6 +2457,36 @@
     }
   ],
   "loto": [
+    {
+      "id": "loto-2025-10-25",
+      "date": "2025-10-25",
+      "formattedDate": "samedi 25 octobre 2025",
+      "day": "samedi",
+      "numbers": [
+        4,
+        5,
+        6,
+        16,
+        35
+      ],
+      "luckyNumber": 1,
+      "jackpot": "20 000 €"
+    },
+    {
+      "id": "loto-2025-10-27",
+      "date": "2025-10-27",
+      "formattedDate": "lundi 27 octobre 2025",
+      "day": "lundi",
+      "numbers": [
+        10,
+        23,
+        45,
+        47,
+        48
+      ],
+      "luckyNumber": 8,
+      "jackpot": "20 000 €"
+    },
     {
       "id": "loto-0",
       "date": "2025-10-22",
@@ -5023,6 +5089,38 @@
     }
   ],
   "eurodreams": [
+    {
+      "id": "ed-2025-10-23",
+      "date": "2025-10-23",
+      "formattedDate": "jeudi 23 octobre 2025",
+      "day": "jeudi",
+      "numbers": [
+        8,
+        17,
+        20,
+        21,
+        24,
+        31
+      ],
+      "dreamNumber": 5,
+      "jackpot": "30 000 €"
+    },
+    {
+      "id": "ed-2025-10-27",
+      "date": "2025-10-27",
+      "formattedDate": "lundi 27 octobre 2025",
+      "day": "lundi",
+      "numbers": [
+        18,
+        19,
+        21,
+        23,
+        30,
+        35
+      ],
+      "dreamNumber": 1,
+      "jackpot": "30 000 €"
+    },
     {
       "id": "ed-0",
       "date": "2025-10-20",
