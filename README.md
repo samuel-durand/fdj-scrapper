@@ -9,6 +9,26 @@ Application React moderne pour afficher les résultats des loteries françaises 
 
 L'application est hébergée sur **o2switch** avec mise à jour automatique quotidienne via **GitHub Actions** ! 🚀
 
+## 📁 Structure du Projet
+
+```
+loterie/
+├── 📁 src/              # Frontend React
+│   ├── components/      # Composants React
+│   ├── services/        # Services API
+│   └── contexts/        # Contexts (Auth)
+├── 📁 backend/          # Backend Node.js + Express + MongoDB
+│   ├── models/          # Modèles Mongoose
+│   ├── routes/          # Routes API
+│   └── middleware/      # Middlewares (auth, admin)
+├── 📁 scrapers/         # Scrapers FDJ (Puppeteer)
+│   └── scraper-tirage-du-jour.js ⭐ (Principal)
+├── 📁 scripts/          # Scripts utilitaires (.bat, .ps1)
+├── 📁 utils/            # Utilitaires de cache
+├── 📁 docs/             # Documentation complète
+└── 📄 resultats-cache.json  # Cache des résultats
+```
+
 ## ✨ Fonctionnalités
 
 ### 🎰 Résultats des Loteries

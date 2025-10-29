@@ -33,7 +33,7 @@ jobs:
           echo ""
           
           # Utiliser le scraper intelligent qui ne scrape que les tirages du jour
-          node scraper-tirage-du-jour.js
+          node scrapers/scraper-tirage-du-jour.js
           
           echo ""
           echo "✅ Scraping terminé !"

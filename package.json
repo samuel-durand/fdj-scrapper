@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:all": "node scripts/build-all.js",
     "preview": "vite preview",
-    "scrape": "node scraper-puppeteer.js",
-    "scrape-today": "node scraper-tirage-du-jour.js",
-    "test-puppeteer": "node test-puppeteer-o2switch.js",
-    "scrape-eurodreams": "node scraper-eurodreams.js",
-    "scrape-complet": "node scraper-urls-directes.js",
+    "scrape": "node scrapers/scraper-puppeteer.js",
+    "scrape-today": "node scrapers/scraper-tirage-du-jour.js",
+    "scrape-eurodreams": "node scrapers/scraper-eurodreams.js",
+    "scrape-complet": "node scrapers/scraper-urls-directes.js",
     "update-cache": "node utils/update-cache-3-mois.js",
     "nettoyer-cache": "node utils/nettoyer-cache.js",
     "fix-eurodreams": "node utils/fix-eurodreams-jackpot.js"
