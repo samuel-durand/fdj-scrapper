@@ -452,32 +452,100 @@ async function scrapeEurodreams(page, urlData, retries = 2) {
       await sleep(3000);
       
       const drawData = await page.evaluate(() => {
-        // Numéros principaux + Dream Number - NOUVEAU SÉLECTEUR
+        // Numéros principaux + Dream Number
         const allBalls = Array.from(document.querySelectorAll('span.heading4.lg\\:heading5.relative'));
         const allNumbers = allBalls.map(ball => {
           const text = ball.textContent.trim();
           return parseInt(text, 10);
         }).filter(n => !isNaN(n));
         
-        // Les 6 premiers sont les numéros principaux
         const numbers = allNumbers.slice(0, 6);
-        
-        // Le 7ème est le dream number
         const dreamNumber = allNumbers.length >= 7 ? allNumbers[6] : null;
         
-        // Jackpot/Rente
+        // Rente - chercher "X € par mois pendant Y ans"
         let jackpot = 'Non disponible';
-        const allText = document.body.innerText;
-        const jackpotMatch = allText.match(/(\d+(?:[,\s]\d+)*)\s*(?:€|euros?)/i);
-        if (jackpotMatch) {
-          jackpot = jackpotMatch[0];
+        const bodyText = document.body.innerText;
+        
+        // Chercher la rente
+        // Pattern 1: Direct "20 000 € par mois"
+        const directMatch = bodyText.match(/(\d+\s*\d+)\s*€/);
+        const dureeMatch = bodyText.match(/pendant\s+(\d+)\s+ans?/i);
+        
+        if (directMatch && dureeMatch) {
+          jackpot = `${directMatch[1]} € par mois pendant ${dureeMatch[1]} ans`;
+        } else if (directMatch) {
+          // Au moins le montant
+          jackpot = `${directMatch[0]} par mois`;
+        }
+        
+        // Cliquer sur "Ouvrir le tableau"
+        const allElements = Array.from(document.querySelectorAll('button, a, div[role="button"], span'));
+        for (const el of allElements) {
+          const text = el.textContent.trim().toLowerCase();
+          if (text.includes('ouvrir') || text.includes('tableau') || text.includes('répartition')) {
+            el.click();
+            break;
+          }
         }
         
         return { numbers, dreamNumber, jackpot };
       });
       
+      // Attendre que le tableau se charge
+      await sleep(2000);
+      
+      // Scraper le tableau des gains
+      const winningsData = await page.evaluate(() => {
+        const winningsDistribution = [];
+        const table = document.querySelector('table');
+        
+        if (table) {
+          const rows = Array.from(table.querySelectorAll('tr'));
+          
+          // Mapping des codes vers les combinaisons pour EuroDreams
+          const combinationMap = {
+            '61': '6 numéros + dream number',
+            '6': '6 numéros',
+            '5': '5 numéros + dream number',
+            '4': '4 numéros + dream number',
+            '3': '3 numéros + dream number',
+            '2': '2 numéros + dream number'
+          };
+          
+          let rank = 1;
+          rows.forEach((row, idx) => {
+            if (idx < 2) return; // Ignorer les headers
+            
+            const cells = Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim());
+            if (cells.length >= 4) {
+              const code = cells[0];
+              const combination = combinationMap[code] || code;
+              const winnersFrance = cells[2]; // Colonne "Grilles gagnantes France"
+              const amount = cells[3];
+              
+              if (code && combination) {
+                winningsDistribution.push({
+                  rank: rank++,
+                  combination: combination,
+                  winners: winnersFrance,
+                  amount: amount === '/' ? 'Non disponible' : amount
+                });
+              }
+            }
+          });
+        }
+        
+        return winningsDistribution;
+      });
+      
+      // Fusionner les données
+      drawData.winningsDistribution = winningsData;
+      
       if (drawData.numbers.length > 0) {
         console.log(`  ✅ Trouvé : ${drawData.numbers.join(', ')} + 💤 ${drawData.dreamNumber}`);
+        if (drawData.winningsDistribution && drawData.winningsDistribution.length > 0) {
+          console.log(`  📊 Gains : ${drawData.winningsDistribution.length} rangs récupérés`);
+        }
         
         return {
           id: `ed-${urlData.date}`,
@@ -486,7 +554,8 @@ async function scrapeEurodreams(page, urlData, retries = 2) {
           day: urlData.dateFormatted.split(' ')[0],
           numbers: drawData.numbers,
           dreamNumber: drawData.dreamNumber,
-          jackpot: drawData.jackpot
+          jackpot: drawData.jackpot,
+          winningsDistribution: drawData.winningsDistribution || []
         };
       }
       

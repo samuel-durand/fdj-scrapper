@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2025-10-29T14:42:08.270Z",
+  "lastUpdate": "2025-10-29T14:49:19.894Z",
   "euromillions": [
     {
       "id": "em-2025-10-28",
@@ -5425,7 +5425,45 @@
         35
       ],
       "dreamNumber": 1,
-      "jackpot": "30 000 €"
+      "jackpot": "30 000 € par mois pendant 30 ans",
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "6 numéros + dream number",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "6 numéros",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 3,
+          "combination": "5 numéros + dream number",
+          "winners": "25",
+          "amount": "535,30 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros + dream number",
+          "winners": "1 437",
+          "amount": "34 €"
+        },
+        {
+          "rank": 5,
+          "combination": "3 numéros + dream number",
+          "winners": "21 998",
+          "amount": "4,70 €"
+        },
+        {
+          "rank": 6,
+          "combination": "2 numéros + dream number",
+          "winners": "123 860",
+          "amount": "2,50 €"
+        }
+      ]
     },
     {
       "id": "ed-2025-10-23",
@@ -5441,7 +5479,45 @@
         31
       ],
       "dreamNumber": 5,
-      "jackpot": "30 000 €"
+      "jackpot": "30 000 € par mois pendant 30 ans",
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "6 numéros + dream number",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "6 numéros",
+          "winners": "0",
+          "amount": "2 000 € par mois pendant 5 ans"
+        },
+        {
+          "rank": 3,
+          "combination": "5 numéros + dream number",
+          "winners": "43",
+          "amount": "474,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros + dream number",
+          "winners": "1 931",
+          "amount": "31,70 €"
+        },
+        {
+          "rank": 5,
+          "combination": "3 numéros + dream number",
+          "winners": "27 501",
+          "amount": "4,70 €"
+        },
+        {
+          "rank": 6,
+          "combination": "2 numéros + dream number",
+          "winners": "155 800",
+          "amount": "2,50 €"
+        }
+      ]
     },
     {
       "id": "ed-0",
