@@ -8,9 +8,14 @@ Cette branche est spécifiquement conçue pour le déploiement du backend sur Re
 
 ### Configuration sur Render
 
+Un fichier `render.yaml` est inclus dans ce repository. Render le détectera automatiquement lors du déploiement.
+
+**Configuration manuelle** (si render.yaml n'est pas détecté) :
 1. **Build Command** : `npm install`
 2. **Start Command** : `node server.js`
 3. **Environment** : Node
+
+⚠️ **Important** : NE PAS utiliser `npm run build` comme Build Command. Le backend n'a pas besoin de build.
 
 ### Variables d'environnement requises
 

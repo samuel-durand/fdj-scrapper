@@ -21,10 +21,14 @@ Allez dans **Dashboard** → **Environment** et ajoutez les variables suivantes 
    - Sélectionnez la branche **`backend`**
 
 2. **Configuration Build & Deploy**
-   ```
-   Build Command: npm install
-   Start Command: node server.js
-   ```
+   
+   Le repository contient un fichier `render.yaml` qui configure automatiquement :
+   - **Build Command** : `npm install`
+   - **Start Command** : `node server.js`
+   
+   Render détectera ce fichier automatiquement. Vous n'avez normalement rien à configurer manuellement.
+   
+   ⚠️ **Important** : Si vous configurez manuellement, NE PAS utiliser `npm run build`. Le backend n'a pas de script build.
 
 3. **Ajouter les variables d'environnement**
    - Allez dans l'onglet "Environment"
