@@ -1,6 +1,10 @@
 // Service API pour communiquer avec le backend
+// En production, l'API est sur le même domaine (/api)
+// En développement, on utilise localhost:5000
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_URL = import.meta.env.VITE_API_URL || (
+  import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:5000/api'
+)
 
 // Récupérer le token depuis localStorage
 const getToken = () => {
