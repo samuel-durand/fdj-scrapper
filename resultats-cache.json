@@ -1,117 +1,6 @@
 {
-  "lastUpdate": "2025-10-23T16:57:43.804Z",
+  "lastUpdate": "2025-10-29T14:37:33.993Z",
   "euromillions": [
-    {
-      "id": "em-2025-10-24",
-      "date": "2025-10-24",
-      "formattedDate": "vendredi 24 octobre 2025",
-      "day": "vendredi",
-      "numbers": [
-        7,
-        8,
-        25,
-        31,
-        45
-      ],
-      "stars": [
-        7,
-        12
-      ],
-      "jackpot": "75 millions €",
-      "myMillionCode": "HE 121 1375",
-      "winningsDistribution": [
-        {
-          "rank": 1,
-          "combination": "5 numéros + 2 étoiles",
-          "winners": "0",
-          "amount": "Non disponible"
-        },
-        {
-          "rank": 2,
-          "combination": "5 numéros + 1 étoile",
-          "winners": "0",
-          "amount": "343 025,20 €"
-        },
-        {
-          "rank": 3,
-          "combination": "5 numéros",
-          "winners": "4",
-          "amount": "13 361,70 €"
-        },
-        {
-          "rank": 4,
-          "combination": "4 numéros + 2 étoiles",
-          "winners": "11",
-          "amount": "1 560,60 €"
-        },
-        {
-          "rank": 5,
-          "combination": "4 numéros + 1 étoile",
-          "winners": "203",
-          "amount": "107,70 €"
-        },
-        {
-          "rank": 6,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "350",
-          "amount": "68 €"
-        },
-        {
-          "rank": 7,
-          "combination": "4 numéros",
-          "winners": "404",
-          "amount": "38,30 €"
-        },
-        {
-          "rank": 8,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "4 724",
-          "amount": "15,90 €"
-        },
-        {
-          "rank": 9,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "8 240",
-          "amount": "10,40 €"
-        },
-        {
-          "rank": 10,
-          "combination": "3 numéros",
-          "winners": "17 432",
-          "amount": "8,80 €"
-        },
-        {
-          "rank": 11,
-          "combination": "1 numéro + 2 étoiles",
-          "winners": "23 491",
-          "amount": "7,80 €"
-        },
-        {
-          "rank": 12,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "115 960",
-          "amount": "5,10 €"
-        },
-        {
-          "rank": 13,
-          "combination": "2 numéros",
-          "winners": "254 605",
-          "amount": "3,70 €"
-        },
-        {
-          "rank": 14,
-          "combination": "02",
-          "winners": "/",
-          "amount": "Non disponible"
-        },
-        {
-          "rank": 15,
-          "combination": "01",
-          "winners": "/",
-          "amount": "Non disponible"
-        }
-      ]
-    },
     {
       "id": "em-2025-10-28",
       "date": "2025-10-28",
@@ -207,6 +96,117 @@
           "rank": 13,
           "combination": "2 numéros",
           "winners": "192 928",
+          "amount": "3,70 €"
+        },
+        {
+          "rank": 14,
+          "combination": "02",
+          "winners": "/",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 15,
+          "combination": "01",
+          "winners": "/",
+          "amount": "Non disponible"
+        }
+      ]
+    },
+    {
+      "id": "em-2025-10-24",
+      "date": "2025-10-24",
+      "formattedDate": "vendredi 24 octobre 2025",
+      "day": "vendredi",
+      "numbers": [
+        7,
+        8,
+        25,
+        31,
+        45
+      ],
+      "stars": [
+        7,
+        12
+      ],
+      "jackpot": "75 millions €",
+      "myMillionCode": "HE 121 1375",
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros + 2 étoiles",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "5 numéros + 1 étoile",
+          "winners": "0",
+          "amount": "343 025,20 €"
+        },
+        {
+          "rank": 3,
+          "combination": "5 numéros",
+          "winners": "4",
+          "amount": "13 361,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros + 2 étoiles",
+          "winners": "11",
+          "amount": "1 560,60 €"
+        },
+        {
+          "rank": 5,
+          "combination": "4 numéros + 1 étoile",
+          "winners": "203",
+          "amount": "107,70 €"
+        },
+        {
+          "rank": 6,
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "350",
+          "amount": "68 €"
+        },
+        {
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "404",
+          "amount": "38,30 €"
+        },
+        {
+          "rank": 8,
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "4 724",
+          "amount": "15,90 €"
+        },
+        {
+          "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "8 240",
+          "amount": "10,40 €"
+        },
+        {
+          "rank": 10,
+          "combination": "3 numéros",
+          "winners": "17 432",
+          "amount": "8,80 €"
+        },
+        {
+          "rank": 11,
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "23 491",
+          "amount": "7,80 €"
+        },
+        {
+          "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "115 960",
+          "amount": "5,10 €"
+        },
+        {
+          "rank": 13,
+          "combination": "2 numéros",
+          "winners": "254 605",
           "amount": "3,70 €"
         },
         {
@@ -2644,21 +2644,6 @@
   ],
   "loto": [
     {
-      "id": "loto-2025-10-25",
-      "date": "2025-10-25",
-      "formattedDate": "samedi 25 octobre 2025",
-      "day": "samedi",
-      "numbers": [
-        4,
-        5,
-        6,
-        16,
-        35
-      ],
-      "luckyNumber": 1,
-      "jackpot": "20 000 €"
-    },
-    {
       "id": "loto-2025-10-27",
       "date": "2025-10-27",
       "formattedDate": "lundi 27 octobre 2025",
@@ -2671,6 +2656,21 @@
         48
       ],
       "luckyNumber": 8,
+      "jackpot": "20 000 €"
+    },
+    {
+      "id": "loto-2025-10-25",
+      "date": "2025-10-25",
+      "formattedDate": "samedi 25 octobre 2025",
+      "day": "samedi",
+      "numbers": [
+        4,
+        5,
+        6,
+        16,
+        35
+      ],
+      "luckyNumber": 1,
       "jackpot": "20 000 €"
     },
     {
@@ -5276,22 +5276,6 @@
   ],
   "eurodreams": [
     {
-      "id": "ed-2025-10-23",
-      "date": "2025-10-23",
-      "formattedDate": "jeudi 23 octobre 2025",
-      "day": "jeudi",
-      "numbers": [
-        8,
-        17,
-        20,
-        21,
-        24,
-        31
-      ],
-      "dreamNumber": 5,
-      "jackpot": "30 000 €"
-    },
-    {
       "id": "ed-2025-10-27",
       "date": "2025-10-27",
       "formattedDate": "lundi 27 octobre 2025",
@@ -5305,6 +5289,22 @@
         35
       ],
       "dreamNumber": 1,
+      "jackpot": "30 000 €"
+    },
+    {
+      "id": "ed-2025-10-23",
+      "date": "2025-10-23",
+      "formattedDate": "jeudi 23 octobre 2025",
+      "day": "jeudi",
+      "numbers": [
+        8,
+        17,
+        20,
+        21,
+        24,
+        31
+      ],
+      "dreamNumber": 5,
       "jackpot": "30 000 €"
     },
     {

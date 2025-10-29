@@ -581,6 +581,15 @@ async function main() {
   
   await browser.close();
   
+  // Trier le cache par date décroissante (plus récent en premier)
+  console.log('🔄 Tri du cache par date...');
+  cache.euromillions.sort((a, b) => new Date(b.date) - new Date(a.date));
+  cache.loto.sort((a, b) => new Date(b.date) - new Date(a.date));
+  cache.eurodreams.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  // Mettre à jour la date
+  cache.lastUpdate = new Date().toISOString();
+  
   // Sauvegarder le cache
   console.log('💾 Sauvegarde du cache...');
   fs.writeFileSync(CACHE_FILE, JSON.stringify(cache, null, 2));
