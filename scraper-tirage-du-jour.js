@@ -298,32 +298,108 @@ async function scrapeLoto(page, urlData, retries = 2) {
       await sleep(3000);
       
       const drawData = await page.evaluate(() => {
-        // Numéros principaux + Numéro Chance - NOUVEAU SÉLECTEUR
+        // Numéros principaux + Numéro Chance
         const allBalls = Array.from(document.querySelectorAll('span.heading4.lg\\:heading5.relative'));
         const allNumbers = allBalls.map(ball => {
           const text = ball.textContent.trim();
           return parseInt(text, 10);
         }).filter(n => !isNaN(n));
         
-        // Les 5 premiers sont les numéros principaux
         const numbers = allNumbers.slice(0, 5);
-        
-        // Le 6ème est le numéro chance
         const luckyNumber = allNumbers.length >= 6 ? allNumbers[5] : null;
         
-        // Jackpot
+        // Jackpot - chercher "X millions €" en priorité
         let jackpot = 'Non disponible';
-        const allText = document.body.innerText;
-        const jackpotMatch = allText.match(/(\d+(?:[,\s]\d+)*)\s*(?:millions?|€)/i);
+        const bodyText = document.body.innerText;
+        const jackpotMatch = bodyText.match(/(\d+(?:\s+\d+)*)\s*millions?\s*€/i);
         if (jackpotMatch) {
           jackpot = jackpotMatch[0];
         }
         
-        return { numbers, luckyNumber, jackpot };
+        // Codes gagnants (10 codes de format "X 1234 5678")
+        const codesGagnants = [];
+        const codeMatches = bodyText.match(/([A-Z]\s*\d{4}\s*\d{4})/g);
+        if (codeMatches) {
+          // Prendre seulement les 10 premiers (codes uniques)
+          const uniqueCodes = [...new Set(codeMatches)];
+          codesGagnants.push(...uniqueCodes.slice(0, 10));
+        }
+        
+        // Cliquer sur "Ouvrir le tableau"
+        const allElements = Array.from(document.querySelectorAll('button, a, div[role="button"], span'));
+        for (const el of allElements) {
+          const text = el.textContent.trim().toLowerCase();
+          if (text.includes('ouvrir') || text.includes('tableau') || text.includes('répartition')) {
+            el.click();
+            break;
+          }
+        }
+        
+        return { numbers, luckyNumber, jackpot, codesGagnants };
       });
+      
+      // Attendre que le tableau se charge
+      await sleep(2000);
+      
+      // Scraper le tableau des gains
+      const winningsData = await page.evaluate(() => {
+        const winningsDistribution = [];
+        const table = document.querySelector('table');
+        
+        if (table) {
+          const rows = Array.from(table.querySelectorAll('tr'));
+          
+          // Mapping des codes vers les combinaisons pour le Loto
+          const combinationMap = {
+            '51': '5 numéros + numéro chance',
+            '5': '5 numéros',
+            '41': '4 numéros + numéro chance',
+            '4': '4 numéros',
+            '31': '3 numéros + numéro chance',
+            '3': '3 numéros',
+            '21': '2 numéros + numéro chance',
+            '2': '2 numéros',
+            '1101': '1 numéro + numéro chance',
+            '11': '1 numéro + numéro chance'
+          };
+          
+          let rank = 1;
+          rows.forEach((row, idx) => {
+            if (idx === 0) return; // Ignorer le header
+            
+            const cells = Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim());
+            if (cells.length >= 3) {
+              const code = cells[0];
+              const combination = combinationMap[code] || code;
+              const winners = cells[1];
+              const amount = cells[2];
+              
+              if (code && combination) {
+                winningsDistribution.push({
+                  rank: rank++,
+                  combination: combination,
+                  winners: winners,
+                  amount: amount === '/' ? 'Non disponible' : amount
+                });
+              }
+            }
+          });
+        }
+        
+        return winningsDistribution;
+      });
+      
+      // Fusionner les données
+      drawData.winningsDistribution = winningsData;
       
       if (drawData.numbers.length > 0) {
         console.log(`  ✅ Trouvé : ${drawData.numbers.join(', ')} + 🍀 ${drawData.luckyNumber}`);
+        if (drawData.codesGagnants && drawData.codesGagnants.length > 0) {
+          console.log(`  🎫 Codes gagnants : ${drawData.codesGagnants.length} codes`);
+        }
+        if (drawData.winningsDistribution && drawData.winningsDistribution.length > 0) {
+          console.log(`  📊 Gains : ${drawData.winningsDistribution.length} rangs récupérés`);
+        }
         
         return {
           id: `loto-${urlData.date}`,
@@ -332,7 +408,9 @@ async function scrapeLoto(page, urlData, retries = 2) {
           day: urlData.dateFormatted.split(' ')[0],
           numbers: drawData.numbers,
           luckyNumber: drawData.luckyNumber,
-          jackpot: drawData.jackpot
+          jackpot: drawData.jackpot,
+          codesGagnants: drawData.codesGagnants || [],
+          winningsDistribution: drawData.winningsDistribution || []
         };
       }
       

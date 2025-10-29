@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2025-10-29T14:37:33.993Z",
+  "lastUpdate": "2025-10-29T14:42:08.270Z",
   "euromillions": [
     {
       "id": "em-2025-10-28",
@@ -2656,7 +2656,75 @@
         48
       ],
       "luckyNumber": 8,
-      "jackpot": "20 000 €"
+      "jackpot": "5 millions €",
+      "codesGagnants": [
+        "B 4177 8799",
+        "B 7191 3149",
+        "D 9538 6109",
+        "H 7362 0146",
+        "J 6208 7026",
+        "L 4012 6031",
+        "N 2709 1301",
+        "N 2731 4539",
+        "T 6809 4177",
+        "W 8554 5565"
+      ],
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros + numéro chance",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "5 numéros",
+          "winners": "3",
+          "amount": "44 280,70 €"
+        },
+        {
+          "rank": 3,
+          "combination": "4 numéros + numéro chance",
+          "winners": "23",
+          "amount": "1 409,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros",
+          "winners": "206",
+          "amount": "567,60 €"
+        },
+        {
+          "rank": 5,
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 126",
+          "amount": "62 €"
+        },
+        {
+          "rank": 6,
+          "combination": "3 numéros",
+          "winners": "10 294",
+          "amount": "24,40 €"
+        },
+        {
+          "rank": 7,
+          "combination": "2 numéros + numéro chance",
+          "winners": "17 852",
+          "amount": "10,90 €"
+        },
+        {
+          "rank": 8,
+          "combination": "2 numéros",
+          "winners": "153 934",
+          "amount": "5 €"
+        },
+        {
+          "rank": 9,
+          "combination": "1 numéro + numéro chance",
+          "winners": "271 505",
+          "amount": "2,20 €"
+        }
+      ]
     },
     {
       "id": "loto-2025-10-25",
@@ -2671,7 +2739,75 @@
         35
       ],
       "luckyNumber": 1,
-      "jackpot": "20 000 €"
+      "jackpot": "5 millions €",
+      "codesGagnants": [
+        "F 8791 6265",
+        "G 0718 5439",
+        "H 9917 1562",
+        "J 6358 0191",
+        "L 0359 9323",
+        "L 4521 1190",
+        "P 3597 2432",
+        "Q 1240 0301",
+        "Q 8968 1886",
+        "V 4469 3301"
+      ],
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros + numéro chance",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "238 698,60 €"
+        },
+        {
+          "rank": 3,
+          "combination": "4 numéros + numéro chance",
+          "winners": "38",
+          "amount": "1 533,10 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros",
+          "winners": "390",
+          "amount": "538,80 €"
+        },
+        {
+          "rank": 5,
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 857",
+          "amount": "67,60 €"
+        },
+        {
+          "rank": 6,
+          "combination": "3 numéros",
+          "winners": "20 952",
+          "amount": "21,50 €"
+        },
+        {
+          "rank": 7,
+          "combination": "2 numéros + numéro chance",
+          "winners": "26 225",
+          "amount": "13,40 €"
+        },
+        {
+          "rank": 8,
+          "combination": "2 numéros",
+          "winners": "313 972",
+          "amount": "4,40 €"
+        },
+        {
+          "rank": 9,
+          "combination": "1 numéro + numéro chance",
+          "winners": "324 980",
+          "amount": "2,20 €"
+        }
+      ]
     },
     {
       "id": "loto-0",
