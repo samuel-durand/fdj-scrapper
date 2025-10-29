@@ -37,15 +37,30 @@ npm install
 
 ## 🔧 Configuration
 
-Créez un fichier `.env` à la racine :
+### Étape 1 : Copiez le fichier de configuration
+
+```bash
+# Copiez le template
+cp env.example .env
+```
+
+Puis éditez le fichier `.env` avec vos vraies valeurs. Voir **`CONFIG.md`** pour le guide complet.
+
+**Exemple de .env** :
 
 ```env
 NODE_ENV=development
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/loterie-fdj
-JWT_SECRET=votre_secret_jwt_securise
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/loterie-fdj?retryWrites=true&w=majority
+JWT_SECRET=votre_secret_jwt_securise_32_caracteres_minimum
 FRONTEND_URL=http://localhost:5173
 ```
+
+📖 **Guide détaillé** : Consultez `CONFIG.md` pour :
+- Obtenir votre URI MongoDB Atlas
+- Générer un JWT Secret sécurisé
+- Configurer Network Access sur MongoDB
+- Résoudre les problèmes de connexion
 
 ## 🚀 Démarrage
 
