@@ -5,105 +5,102 @@
 Le projet utilise deux branches Git pour séparer le déploiement du backend et du frontend :
 
 ### 🌳 Branche `main` - Développement et Frontend
-- **Contenu** : Code complet (frontend + backend)
+- **Contenu** : Code complet (frontend React + backend Node.js)
 - **Usage** : Développement local et déploiement du frontend sur O2Switch
-- **Déploiement** : O2Switch (fichiers statiques du build Vite)
+- **Déploiement** : O2Switch (fichiers statiques build Vite)
 
 ### 🌳 Branche `backend` - Backend uniquement
-- **Contenu** : Seulement les fichiers nécessaires au backend Node.js
+- **Contenu** : Seulement le code backend Node.js/Express
 - **Usage** : Déploiement automatique sur Render
 - **Déploiement** : Render (service Node.js)
 
 ## Structure de la branche `backend`
 
-La branche `backend` contient uniquement :
+La branche `backend` contient **uniquement** :
+
 ```
-├── middleware/          # Middlewares Express
+├── middleware/          # Middlewares Express (auth)
 ├── models/             # Modèles MongoDB (User, Alert, Combination, Notification)
 ├── routes/             # Routes API (auth, alerts, combinations, users, admin)
 ├── scripts/            # Scripts utilitaires (create-admin.js)
 ├── server.js           # Point d'entrée du serveur Express
-├── package.json        # Dépendances backend
-├── .gitignore          # Fichiers à ignorer
+├── package.json        # Dépendances backend uniquement
+├── render.yaml         # Configuration Render
 ├── README.md           # Documentation backend
-├── ENV-CONFIG-RENDER.md # Guide de configuration Render
-└── WORKFLOW.md         # Documentation du workflow
+└── DEPLOY.md           # Guide de déploiement rapide
 ```
 
 **Fichiers supprimés** (par rapport à `main`) :
-- `src/` - Composants React
+- `src/` - Code React du frontend
 - `public/` - Fichiers statiques frontend
-- `dist/` - Build frontend
 - `docs/` - Documentation projet
-- `scrapers/` - Scripts de scraping
-- `utils/` - Utilitaires frontend
-- `scripts/` (sauf create-admin.js) - Scripts de déploiement
-- `index.html`, `vite.config.js` - Configuration Vite
+- `scrapers/` - Scripts de scraping FDJ
+- `utils/` - Utilitaires
+- `scripts/` (sauf create-admin.js)
+- `vite.config.js`, `index.html` - Configuration Vite
 
-## Configuration Render (branche `backend`)
+## Configuration sur Render
 
-### 1. Créer le service sur Render
+### 1. Déploiement automatique
 
-1. Allez sur [render.com](https://render.com)
-2. Créez un nouveau **Web Service**
-3. Connectez votre repository GitHub : `samuel-durand/fdj-scrapper`
-4. **Important** : Sélectionnez la branche **`backend`**
-
-### 2. Configuration du Build
-
-- **Environment** : Node
+Le fichier `render.yaml` configure automatiquement Render :
 - **Build Command** : `npm install`
 - **Start Command** : `node server.js`
-- **Branch** : `backend`
+- **Runtime** : Node
 
-### 3. Variables d'environnement
+### 2. Variables d'environnement (Secrets)
 
-Ajoutez ces variables dans Render Dashboard → Environment :
+Les secrets sont configurés **directement sur Render Dashboard**, pas dans le code :
 
-| Variable | Exemple | Description |
-|----------|---------|-------------|
-| `NODE_ENV` | `production` | Mode production |
-| `PORT` | `10000` | Port (auto-assigné par Render) |
-| `MONGODB_URI` | `mongodb+srv://...` | URI MongoDB Atlas |
-| `JWT_SECRET` | `(générer une clé)` | Secret pour JWT (32+ caractères) |
-| `FRONTEND_URL` | `https://votre-domaine.o2switch.com` | URL du frontend |
+**Dashboard Render** → **Environment** → **Add Environment Variable** :
 
-**Générer un JWT Secret** :
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+| Variable | Exemple |
+|----------|---------|
+| `NODE_ENV` | `production` |
+| `MONGODB_URI` | `mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj` |
+| `JWT_SECRET` | `(clé générée de 32+ caractères)` |
+| `FRONTEND_URL` | `https://votre-domaine.o2switch.com` |
+
+**Avantages** :
+- ✅ Secrets jamais dans le code Git
+- ✅ Facile à modifier sans toucher au code
+- ✅ Différentes configs par environnement
+- ✅ Sécurité maximale
+
+### 3. MongoDB Atlas
+
+1. Créez un cluster gratuit M0 sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. **Database Access** : Créez un utilisateur
+3. **Network Access** : Ajoutez `0.0.0.0/0` (autoriser Render)
+4. Copiez l'URI et ajoutez-le dans les variables Render
+
+## Configuration sur O2Switch (Frontend)
+
+La branche `main` reste utilisée pour le frontend.
+
+### 1. Configuration de l'API
+
+Créez un fichier `.env.production` dans le projet (branche main) :
+
+```env
+VITE_API_URL=https://votre-service.onrender.com/api
 ```
 
-### 4. MongoDB Atlas
+### 2. Build et déploiement
 
-1. Créez un cluster gratuit sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Database Access : Créez un utilisateur
-3. Network Access : Ajoutez `0.0.0.0/0` (autoriser toutes les IPs)
-4. Copiez l'URI de connexion dans `MONGODB_URI`
-
-## Configuration O2Switch (branche `main`)
-
-### Frontend avec Vite
-
-1. Configurez l'URL de l'API Render dans votre `.env.production` :
-   ```env
-   VITE_API_URL=https://votre-service.onrender.com/api
-   ```
-
-2. Buildez le frontend :
-   ```bash
-   npm run build
-   ```
-
-3. Uploadez le contenu du dossier `dist/` sur O2Switch
+```bash
+npm run build
+# Uploadez le contenu de dist/ sur O2Switch
+```
 
 ## Workflow de mise à jour
 
-### Modifier le Backend
+### Mettre à jour le backend
 
 ```bash
-# 1. Faites vos modifications sur main
+# 1. Sur la branche main, modifiez le code backend
 git checkout main
-# ... modifications ...
+# ... modifications dans backend/ ...
 git add backend/
 git commit -m "Update backend"
 git push origin main
@@ -112,111 +109,97 @@ git push origin main
 git checkout backend
 git merge main
 git push origin backend
-# ✅ Render redéploie automatiquement
 ```
 
-### Modifier le Frontend
+Render redéploie automatiquement après le push ! ✨
+
+### Mettre à jour le frontend
 
 ```bash
 # Restez sur main
 git checkout main
-# ... modifications ...
+# ... modifications dans src/ ...
 git add src/
 git commit -m "Update frontend"
 git push origin main
 
-# Build et déployez sur O2Switch
+# Build et déploiement
 npm run build
 # Uploadez dist/ sur O2Switch
 ```
 
-## URLs de déploiement
+## Test de déploiement
 
 ### Backend (Render)
-- URL de production : `https://votre-service.onrender.com`
-- Health check : `https://votre-service.onrender.com/api/health`
 
-### Frontend (O2Switch)
-- URL de production : `https://votre-domaine.o2switch.com`
-
-## Tests
-
-### Tester le backend
 ```bash
 curl https://votre-service.onrender.com/api/health
-# Réponse attendue : {"status":"OK","message":"Server is running"}
 ```
 
-### Tester le frontend
+Réponse attendue :
+```json
+{"status":"OK","message":"Server is running"}
+```
+
+### Frontend (O2Switch)
+
 Ouvrez votre domaine O2Switch et vérifiez :
-- L'application se charge correctement
-- Les appels API fonctionnent (connexion, alertes, etc.)
-- Pas d'erreurs CORS dans la console
+- ✅ L'application se charge
+- ✅ Les appels API fonctionnent
+- ✅ Pas d'erreurs CORS dans la console
 
-## CORS Configuration
+## Résolution de problèmes
 
-Le backend est configuré pour accepter les requêtes depuis `FRONTEND_URL` :
-
-```javascript:server.js
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}))
-```
-
-Assurez-vous que `FRONTEND_URL` sur Render correspond **exactement** à votre domaine O2Switch.
-
-## Troubleshooting
-
-### Render : Service ne démarre pas
-- Vérifiez les logs sur Render Dashboard
-- Assurez-vous que MongoDB Atlas autorise les connexions
-- Vérifiez que toutes les variables d'environnement sont définies
+### Backend : Render ne démarre pas
+➜ Vérifiez les logs sur Render Dashboard  
+➜ Vérifiez que toutes les variables d'environnement sont définies  
+➜ Vérifiez MongoDB Atlas Network Access (0.0.0.0/0)
 
 ### Frontend : Erreurs CORS
-- Vérifiez que `FRONTEND_URL` dans Render correspond à votre domaine
-- Assurez-vous d'utiliser HTTPS (pas HTTP)
-- Vérifiez la console du navigateur pour les détails
+➜ `FRONTEND_URL` sur Render doit correspondre exactement à votre domaine O2Switch  
+➜ Utilisez HTTPS (pas HTTP)  
+➜ Vérifiez la console navigateur pour détails
 
-### Render : Service en veille (plan gratuit)
-- Le plan gratuit de Render met le service en veille après 15 min d'inactivité
-- Premier appel après veille : 30-60 secondes de délai
-- Solution : Utilisez [UptimeRobot](https://uptimerobot.com) pour ping toutes les 5-10 min
+### Backend : Service en veille (plan gratuit)
+➜ Render met le service en veille après 15 min d'inactivité  
+➜ Premier appel : 30-60 secondes de délai  
+➜ Solution : Utilisez [UptimeRobot](https://uptimerobot.com) pour ping toutes les 5-10 min
 
 ## Avantages de cette architecture
 
-✅ **Déploiements indépendants** : Backend et frontend se déploient séparément
-✅ **Optimisation** : Render pour Node.js, O2Switch pour fichiers statiques
-✅ **Coûts** : Plan gratuit Render + hébergement O2Switch existant
-✅ **Performance** : Chaque service optimisé pour son usage
-✅ **Évolutivité** : Facile d'ajouter d'autres services ou de migrer
+✅ **Déploiements indépendants** : Backend et frontend séparés  
+✅ **Sécurité** : Secrets gérés par Render, jamais dans Git  
+✅ **Simplicité** : Pas de fichiers .env dans le repo backend  
+✅ **Performance** : Render optimisé pour Node.js, O2Switch pour fichiers statiques  
+✅ **Coûts** : Plans gratuits (Render + O2Switch)  
+✅ **Évolutivité** : Facile d'ajouter des services
 
-## Scripts utiles
+## Commandes utiles
 
 ```bash
-# Créer un admin sur Render (via SSH ou localement)
-node scripts/create-admin.js
-
-# Vérifier les branches
+# Voir les branches
 git branch -a
 
-# Voir les différences entre branches
+# Comparer les branches
 git diff main..backend
 
-# Forcer la synchronisation backend
-git checkout backend
-git reset --hard main
-# Puis restaurer les fichiers spécifiques à backend si nécessaire
+# Créer un admin (localement ou sur Render via SSH)
+node scripts/create-admin.js
+
+# Tester l'API Render
+curl https://votre-service.onrender.com/api/health
 ```
 
-## Documentation complémentaire
+## Documentation
 
-- Backend README : Voir `README.md` dans la branche `backend`
-- Configuration Render : Voir `ENV-CONFIG-RENDER.md` dans la branche `backend`
-- Workflow détaillé : Voir `WORKFLOW.md` dans la branche `backend`
+| Fichier | Branche | Description |
+|---------|---------|-------------|
+| `README.md` | `backend` | Documentation backend complète |
+| `DEPLOY.md` | `backend` | Guide déploiement rapide |
+| `docs/BRANCHES-DEPLOYMENT.md` | `main` | Ce document |
+| `render.yaml` | `backend` | Configuration Render |
 
 ---
 
-**Date de création** : Octobre 2025  
-**Dernière mise à jour** : Voir l'historique Git
-
+**Dernière mise à jour** : Octobre 2025  
+**Workflow simplifié** : Secrets sur Render Dashboard, pas dans le code
