@@ -17,7 +17,100 @@
         7,
         12
       ],
-      "jackpot": "1 million"
+      "jackpot": "75 millions €",
+      "myMillionCode": "HE 121 1375",
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros + 2 étoiles",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "5 numéros + 1 étoile",
+          "winners": "0",
+          "amount": "343 025,20 €"
+        },
+        {
+          "rank": 3,
+          "combination": "5 numéros",
+          "winners": "4",
+          "amount": "13 361,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros + 2 étoiles",
+          "winners": "11",
+          "amount": "1 560,60 €"
+        },
+        {
+          "rank": 5,
+          "combination": "4 numéros + 1 étoile",
+          "winners": "203",
+          "amount": "107,70 €"
+        },
+        {
+          "rank": 6,
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "350",
+          "amount": "68 €"
+        },
+        {
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "404",
+          "amount": "38,30 €"
+        },
+        {
+          "rank": 8,
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "4 724",
+          "amount": "15,90 €"
+        },
+        {
+          "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "8 240",
+          "amount": "10,40 €"
+        },
+        {
+          "rank": 10,
+          "combination": "3 numéros",
+          "winners": "17 432",
+          "amount": "8,80 €"
+        },
+        {
+          "rank": 11,
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "23 491",
+          "amount": "7,80 €"
+        },
+        {
+          "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "115 960",
+          "amount": "5,10 €"
+        },
+        {
+          "rank": 13,
+          "combination": "2 numéros",
+          "winners": "254 605",
+          "amount": "3,70 €"
+        },
+        {
+          "rank": 14,
+          "combination": "02",
+          "winners": "/",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 15,
+          "combination": "01",
+          "winners": "/",
+          "amount": "Non disponible"
+        }
+      ]
     },
     {
       "id": "em-2025-10-28",
@@ -35,7 +128,100 @@
         2,
         12
       ],
-      "jackpot": "1 million"
+      "jackpot": "75 millions €",
+      "myMillionCode": "KT 230 2700",
+      "winningsDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros + 2 étoiles",
+          "winners": "0",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 2,
+          "combination": "5 numéros + 1 étoile",
+          "winners": "1",
+          "amount": "540 419,60 €"
+        },
+        {
+          "rank": 3,
+          "combination": "5 numéros",
+          "winners": "3",
+          "amount": "14 033,80 €"
+        },
+        {
+          "rank": 4,
+          "combination": "4 numéros + 2 étoiles",
+          "winners": "10",
+          "amount": "1 788,20 €"
+        },
+        {
+          "rank": 5,
+          "combination": "4 numéros + 1 étoile",
+          "winners": "104",
+          "amount": "135,90 €"
+        },
+        {
+          "rank": 6,
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "226",
+          "amount": "72,80 €"
+        },
+        {
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "259",
+          "amount": "40,70 €"
+        },
+        {
+          "rank": 8,
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "3 030",
+          "amount": "17,80 €"
+        },
+        {
+          "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "4 905",
+          "amount": "12,20 €"
+        },
+        {
+          "rank": 10,
+          "combination": "3 numéros",
+          "winners": "12 492",
+          "amount": "9 €"
+        },
+        {
+          "rank": 11,
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "16 165",
+          "amount": "8,40 €"
+        },
+        {
+          "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "76 124",
+          "amount": "5,80 €"
+        },
+        {
+          "rank": 13,
+          "combination": "2 numéros",
+          "winners": "192 928",
+          "amount": "3,70 €"
+        },
+        {
+          "rank": 14,
+          "combination": "02",
+          "winners": "/",
+          "amount": "Non disponible"
+        },
+        {
+          "rank": 15,
+          "combination": "01",
+          "winners": "/",
+          "amount": "Non disponible"
+        }
+      ]
     },
     {
       "id": "em-0",

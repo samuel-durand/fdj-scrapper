@@ -134,38 +134,117 @@ async function scrapeEuromillions(page, urlData, retries = 2) {
       // Attendre plus longtemps pour que la page charge complètement
       await sleep(3000);
       
-      // Extraire les données avec les NOUVEAUX sélecteurs
+      // Extraire les données avec les NOUVEAUX sélecteurs FDJ 2025
       const drawData = await page.evaluate(() => {
-        // Numéros principaux - NOUVEAU SÉLECTEUR
+        // Numéros principaux
         const ballsMain = Array.from(document.querySelectorAll('span.heading4.lg\\:heading5.relative'));
         const allNumbers = ballsMain.map(ball => {
           const text = ball.textContent.trim();
           return parseInt(text, 10);
         }).filter(n => !isNaN(n));
         
-        // Les 5 premiers sont les numéros principaux
         const numbers = allNumbers.slice(0, 5);
         
-        // Étoiles - NOUVEAU SÉLECTEUR (avec top-[0.2rem])
+        // Étoiles
         const ballsStars = Array.from(document.querySelectorAll('span.heading4.lg\\:heading5.relative.top-\\[0\\.2rem\\]'));
         const stars = ballsStars.map(ball => {
           const text = ball.textContent.trim();
           return parseInt(text, 10);
         }).filter(n => !isNaN(n));
         
-        // Jackpot - chercher dans les éléments avec "million" ou "€"
+        // Jackpot - chercher "XX millions €"
         let jackpot = 'Non disponible';
-        const allText = document.body.innerText;
-        const jackpotMatch = allText.match(/(\d+(?:[,\s]\d+)*)\s*(?:millions?|€)/i);
+        const bodyText = document.body.innerText;
+        const jackpotMatch = bodyText.match(/(\d+(?:\s+\d+)*)\s*millions?\s*€/i);
         if (jackpotMatch) {
           jackpot = jackpotMatch[0];
         }
         
-        return { numbers, stars, jackpot };
+        // Code My Million
+        let myMillionCode = null;
+        const myMillionMatch = bodyText.match(/([A-Z]{2}\s*\d{3}\s*\d{4})/);
+        if (myMillionMatch) {
+          myMillionCode = myMillionMatch[1];
+        }
+        
+        // Cliquer sur "Ouvrir le tableau" pour afficher les gains
+        const allElements = Array.from(document.querySelectorAll('button, a, div[role="button"], span'));
+        for (const el of allElements) {
+          const text = el.textContent.trim().toLowerCase();
+          if (text.includes('ouvrir') || text.includes('tableau') || text.includes('répartition')) {
+            el.click();
+            break;
+          }
+        }
+        
+        return { numbers, stars, jackpot, myMillionCode };
       });
+      
+      // Attendre que le tableau se charge
+      await sleep(2000);
+      
+      // Scraper le tableau des gains
+      const winningsData = await page.evaluate(() => {
+        const winningsDistribution = [];
+        const table = document.querySelector('table');
+        
+        if (table) {
+          const rows = Array.from(table.querySelectorAll('tr'));
+          
+          // Mapping des codes vers les combinaisons
+          const combinationMap = {
+            '52': '5 numéros + 2 étoiles',
+            '51': '5 numéros + 1 étoile',
+            '5': '5 numéros',
+            '42': '4 numéros + 2 étoiles',
+            '41': '4 numéros + 1 étoile',
+            '4': '4 numéros',
+            '32': '3 numéros + 2 étoiles',
+            '31': '3 numéros + 1 étoile',
+            '3': '3 numéros',
+            '22': '2 numéros + 2 étoiles',
+            '21': '2 numéros + 1 étoile',
+            '2': '2 numéros',
+            '12': '1 numéro + 2 étoiles'
+          };
+          
+          let rank = 1;
+          rows.forEach((row, idx) => {
+            if (idx < 2) return; // Ignorer les headers
+            
+            const cells = Array.from(row.querySelectorAll('td')).map(td => td.textContent.trim());
+            if (cells.length >= 4) {
+              const code = cells[0];
+              const combination = combinationMap[code] || code;
+              const winnersFrance = cells[1];
+              const amount = cells[3];
+              
+              if (code && combination) {
+                winningsDistribution.push({
+                  rank: rank++,
+                  combination: combination,
+                  winners: winnersFrance,
+                  amount: amount === '/' ? 'Non disponible' : amount
+                });
+              }
+            }
+          });
+        }
+        
+        return winningsDistribution;
+      });
+      
+      // Fusionner les données
+      drawData.winningsDistribution = winningsData;
       
       if (drawData.numbers.length > 0) {
         console.log(`  ✅ Trouvé : ${drawData.numbers.join(', ')} + ⭐ ${drawData.stars.join(', ')}`);
+        if (drawData.myMillionCode) {
+          console.log(`  💰 My Million : ${drawData.myMillionCode}`);
+        }
+        if (drawData.winningsDistribution && drawData.winningsDistribution.length > 0) {
+          console.log(`  📊 Gains : ${drawData.winningsDistribution.length} rangs récupérés`);
+        }
         
         return {
           id: `em-${urlData.date}`,
@@ -174,7 +253,9 @@ async function scrapeEuromillions(page, urlData, retries = 2) {
           day: urlData.dateFormatted.split(' ')[0],
           numbers: drawData.numbers,
           stars: drawData.stars,
-          jackpot: drawData.jackpot
+          jackpot: drawData.jackpot,
+          myMillionCode: drawData.myMillionCode || 'Non disponible',
+          winningsDistribution: drawData.winningsDistribution || []
         };
       }
       
