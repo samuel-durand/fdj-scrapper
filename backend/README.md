@@ -77,6 +77,39 @@ npm start
 
 Le serveur démarre sur `http://localhost:5000`
 
+### Créer un compte administrateur
+
+#### Mode interactif (recommandé si le terminal supporte readline)
+```bash
+npm run create-admin
+```
+
+Le script vous demandera :
+- Nom de l'administrateur
+- Email
+- Mot de passe (min. 6 caractères)
+
+#### Mode non-interactif (si le mode interactif ne fonctionne pas)
+```bash
+node scripts/create-admin.js "Nom Admin" "admin@example.com" "motdepasse123"
+```
+
+**Note** : Le mode non-interactif est automatiquement détecté lorsque vous passez 3 arguments.
+
+### Générer des alertes pour toutes les combinaisons
+```bash
+npm run generate-alerts
+```
+
+Ce script :
+- ✅ Vérifie toutes les combinaisons des utilisateurs
+- ✅ Compare avec les tirages du jour
+- ✅ Crée des alertes et notifications automatiquement
+- ✅ Met à jour les résultats des combinaisons gagnantes
+- ✅ Affiche un résumé des gains
+
+**Note** : Le script utilise des tirages simulés par défaut. Vous pouvez les modifier dans le script pour utiliser de vrais tirages.
+
 ---
 
 ## 📚 API Endpoints

@@ -12,6 +12,14 @@ import adminRoutes from './routes/admin.js'
 
 dotenv.config()
 
+// Vérifier les variables d'environnement critiques
+if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
+  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis dans .env')
+  console.error('   Créez un fichier backend/.env avec ces variables')
+  console.error('   Exemple: JWT_SECRET=votre_secret_ici_minimum_32_caracteres')
+  process.exit(1)
+}
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -57,10 +65,7 @@ app.use((err, req, res, next) => {
 })
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj')
   .then(() => {
     console.log('✅ Connected to MongoDB')
     app.listen(PORT, () => {

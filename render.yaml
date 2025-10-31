@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: loterie-fdj-backend
+    runtime: node
+    plan: free
+    region: frankfurt  # Le plus proche de l'Europe
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000  # Render utilise le PORT fourni dynamiquement, mais 10000 fonctionne par défaut
+    healthCheckPath: /api/health
+
