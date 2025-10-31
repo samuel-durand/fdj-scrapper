@@ -49,12 +49,7 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' })
 })
 
-// Route catch-all pour le frontend React (doit être après les routes API)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'))
-})
-
-// Error handling middleware
+// Error handling middleware (doit être avant le catch-all)
 app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(err.status || 500).json({
@@ -62,6 +57,11 @@ app.use((err, req, res, next) => {
     message: err.message || 'Something went wrong!',
     error: process.env.NODE_ENV === 'development' ? err : {}
   })
+})
+
+// Route catch-all pour le frontend React (doit être en dernier)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
 // MongoDB Connection
