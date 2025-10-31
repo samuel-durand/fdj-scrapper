@@ -465,6 +465,7 @@ Pour plus de détails, consultez le dossier **`docs/`** :
 - **[CHANGELOG_EURODREAMS.md](docs/CHANGELOG_EURODREAMS.md)** - Historique v2.0
 - **[GUIDE_UTILISATION.md](docs/GUIDE_UTILISATION.md)** - Guide d'utilisation
 - **[COMMENT_CA_MARCHE.md](docs/COMMENT_CA_MARCHE.md)** - Fonctionnement technique
+- **[DEPLOY-RENDER.md](DEPLOY-RENDER.md)** - 🚀 Déploiement sur Render (5 min)
 
 <details>
 <summary>📖 Voir toute la documentation disponible</summary>
@@ -488,6 +489,8 @@ Pour plus de détails, consultez le dossier **`docs/`** :
 ### Git et déploiement
 - [GUIDE_GIT_COMPLET.md](docs/GUIDE_GIT_COMPLET.md) - Guide Git complet
 - [SECURITE_GITHUB.md](docs/SECURITE_GITHUB.md) - Sécurité et bonnes pratiques
+- [DEPLOY-RENDER.md](DEPLOY-RENDER.md) - 🚀 Guide de déploiement sur Render
+- [backend/DEPLOY.md](backend/DEPLOY.md) - Guide de déploiement backend détaillé
 
 ### Historique et changelog
 - [CHANGELOG_EURODREAMS.md](docs/CHANGELOG_EURODREAMS.md) - Version 2.0
