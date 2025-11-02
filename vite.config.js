@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { copyFileSync } from 'fs'
+import { copyFileSync, existsSync } from 'fs'
+import { join } from 'path'
 
 export default defineConfig({
   plugins: [
@@ -9,14 +10,47 @@ export default defineConfig({
       name: 'copy-cache',
       buildStart() {
         // Copier resultats-cache.json dans public/ avant le build
-        try {
-          copyFileSync('resultats-cache.json', 'public/resultats-cache.json')
-          console.log('✅ resultats-cache.json copié dans public/')
-        } catch (err) {
-          console.warn('⚠️ Impossible de copier resultats-cache.json:', err.message)
+        // Supporte à la fois la racine et public/
+        const cacheFiles = [
+          { from: 'resultats-cache.json', to: 'public/resultats-cache.json' },
+          { from: 'public/resultats-cache.json', to: 'public/resultats-cache.json' }
+        ]
+        
+        for (const { from, to } of cacheFiles) {
+          if (existsSync(from)) {
+            try {
+              copyFileSync(from, to)
+              console.log(`✅ ${from} copié vers ${to}`)
+              break
+            } catch (err) {
+              console.warn(`⚠️ Impossible de copier ${from}:`, err.message)
+            }
+          }
         }
       }
     }
   ],
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    // Améliorer la gestion des assets pour Railways
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom']
+        }
+      }
+    }
+  },
+  // Configuration pour la production
+  base: '/',
+  server: {
+    port: 3000,
+    host: true
+  },
+  preview: {
+    port: 3000,
+    host: true
+  }
 })
 
