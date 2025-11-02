@@ -30,21 +30,49 @@ const PORT = process.env.PORT || 5000
 // Configuration CORS
 const frontendUrls = process.env.FRONTEND_URL 
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:5173']
+  : []
 
 app.use(cors({
   origin: (origin, callback) => {
-    // En production sur Railway, accepter toutes les origines si FRONTEND_URL n'est pas défini
-    // Sinon, vérifier contre la liste autorisée
-    if (!origin || process.env.NODE_ENV !== 'production' || frontendUrls.includes(origin)) {
-      callback(null, true)
-    } else if (process.env.RAILWAY_PUBLIC_DOMAIN || frontendUrls.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(null, true) // Permettre pour faciliter le développement
+    // En développement, accepter toutes les origines
+    if (process.env.NODE_ENV !== 'production') {
+      return callback(null, true)
     }
+    
+    // En production :
+    // Si aucune origine (requêtes non-browser), accepter
+    if (!origin) {
+      return callback(null, true)
+    }
+    
+    // Si FRONTEND_URL est défini, vérifier contre la liste
+    if (frontendUrls.length > 0) {
+      // Vérifier l'origine exacte
+      if (frontendUrls.includes(origin)) {
+        return callback(null, true)
+      }
+      // Vérifier aussi avec/sans trailing slash et http/https
+      const normalizedOrigin = origin.replace(/\/$/, '')
+      const isAllowed = frontendUrls.some(url => {
+        const normalizedUrl = url.replace(/\/$/, '')
+        return normalizedOrigin === normalizedUrl || 
+               normalizedOrigin === normalizedUrl.replace('https://', 'http://') ||
+               normalizedOrigin === normalizedUrl.replace('http://', 'https://')
+      })
+      if (isAllowed) {
+        return callback(null, true)
+      }
+      // Si pas trouvé, rejeter en production
+      return callback(new Error('Not allowed by CORS'))
+    }
+    
+    // Si FRONTEND_URL n'est pas défini, accepter toutes les origines (moins sécurisé)
+    console.warn('⚠️  CORS: FRONTEND_URL non défini, acceptation de toutes les origines')
+    callback(null, true)
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
