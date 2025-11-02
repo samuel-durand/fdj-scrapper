@@ -34,9 +34,8 @@ Utilisez l'URI de connexion de votre instance MongoDB.
 2. **Cliquez sur "New Project"**
 3. **Sélectionnez "Deploy from GitHub repo"**
 4. **Sélectionnez votre repository**
-5. **Choisissez la racine du backend** :
-   - Railway peut détecter automatiquement le dossier `backend/`
-   - Ou configurez le **Root Directory** : `backend`
+5. **Sélectionnez la branche `backend`**
+   - **Root Directory** : Laisser vide (tout est à la racine sur cette branche)
 
 ### 3. Configurer les variables d'environnement
 
@@ -115,7 +114,7 @@ npm run build
 ## 📁 Structure du Backend pour Railway
 
 ```
-backend/
+(racine de la branche backend)
 ├── server.js           # Serveur Express (API uniquement en production)
 ├── package.json        # Scripts et dépendances
 ├── nixpacks.toml       # Configuration Railway
@@ -123,8 +122,11 @@ backend/
 ├── routes/             # Routes API
 ├── models/             # Modèles MongoDB
 ├── middleware/         # Middleware (auth, etc.)
+├── scripts/            # Scripts utilitaires
 └── .env                # Variables locales (NE PAS COMMITER)
 ```
+
+**Note :** Sur la branche `backend`, tous les fichiers sont à la racine (pas de dossier `backend/`).
 
 ## 🔧 Configuration CORS
 

@@ -14,8 +14,9 @@ dotenv.config()
 
 // Vérifier les variables d'environnement critiques
 if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
-  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis dans .env')
-  console.error('   Créez un fichier backend/.env avec ces variables')
+  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis')
+  console.error('   En local : créez un fichier .env à la racine')
+  console.error('   Sur Railway : ajoutez ces variables dans Railway Dashboard')
   console.error('   Exemple: JWT_SECRET=votre_secret_ici_minimum_32_caracteres')
   process.exit(1)
 }
