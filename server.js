@@ -133,12 +133,22 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-f
     app.listen(PORT, host, () => {
       console.log(`🚀 Server running on port ${PORT}`)
       console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
-      console.log(`📍 API URL: http://${host}:${PORT}/api`)
+      
+      // Afficher l'URL API correcte selon l'environnement
+      if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+        console.log(`📍 API URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}/api`)
+      } else if (process.env.NODE_ENV === 'production') {
+        console.log(`📍 API URL: http://${host}:${PORT}/api`)
+      } else {
+        console.log(`📍 API URL: http://localhost:${PORT}/api`)
+      }
+      
       if (process.env.FRONTEND_URL) {
         console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
       }
+      
       if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-        console.log(`🌐 Railway URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}`)
+        console.log(`🌐 Railway Domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`)
       }
     })
   })
