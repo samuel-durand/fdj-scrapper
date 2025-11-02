@@ -5,7 +5,9 @@
 nixPkgs = ["nodejs-18_x"]
 
 [phases.install]
-cmds = ["npm ci --omit=dev"]
+# Désactiver la détection automatique de production pour npm
+# Utiliser --omit=dev explicitement au lieu de laisser npm le détecter automatiquement
+cmds = ["NPM_CONFIG_PRODUCTION=false npm ci --omit=dev"]
 
 # Pas de phase build nécessaire pour le backend Node.js
 
@@ -13,6 +15,6 @@ cmds = ["npm ci --omit=dev"]
 cmd = "npm start"
 
 [variables]
-NODE_ENV = "production"
+# NODE_ENV sera défini dans Railway Dashboard, pas ici pour éviter les conflits avec npm
 API_ONLY = "true"
 

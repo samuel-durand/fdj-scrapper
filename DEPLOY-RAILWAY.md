@@ -55,8 +55,8 @@ Dans Railway Dashboard, allez dans **"Variables"** et ajoutez :
 |----------|-------------|---------|
 | `FRONTEND_URL` | URL de votre frontend | `https://votre-domaine.com` ou plusieurs URLs séparées par des virgules |
 | `PORT` | Port du serveur (auto par Railway) | `5000` (défini automatiquement) |
-| `NODE_ENV` | Environnement | `production` (défini dans nixpacks.toml) |
-| `API_ONLY` | Mode API uniquement | `true` (défini dans nixpacks.toml) |
+| `NODE_ENV` | Environnement | `production` (à définir dans Railway Dashboard) |
+| `API_ONLY` | Mode API uniquement | `true` (défini automatiquement) |
 
 **Exemple de configuration complète :**
 
@@ -65,6 +65,7 @@ MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj
 JWT_SECRET=votre_secret_jwt_super_long_minimum_32_caracteres_secure
 JWT_REFRESH_SECRET=votre_refresh_secret_different_et_aussi_long
 FRONTEND_URL=https://votre-domaine.com
+NODE_ENV=production
 ```
 
 **Important :**
