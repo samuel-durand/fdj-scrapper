@@ -1,0 +1,14 @@
+# Configuration Nixpacks pour Railway - Backend Node.js uniquement
+# Pas de build nécessaire, juste installation des dépendances
+
+[phases.setup]
+nixPkgs = ["nodejs-18_x"]
+
+[phases.install]
+cmds = ["rm -rf node_modules/.cache 2>/dev/null || true", "npm ci --omit=dev"]
+
+# Pas de phase build - c'est un backend Node.js pur
+
+[start]
+cmd = "npm start"
+
