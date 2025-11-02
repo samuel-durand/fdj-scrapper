@@ -84,7 +84,14 @@ if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
 
 // Health check pour Railway (sur la racine) - DOIT être avant les routes catch-all
 app.get('/', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running', service: 'loterie-fdj-backend' })
+  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  res.json({ 
+    status: 'OK', 
+    message: 'Server is running', 
+    service: 'loterie-fdj-backend',
+    mongodb: mongoStatus,
+    timestamp: new Date().toISOString()
+  })
 })
 
 // Health check API
@@ -130,36 +137,40 @@ if (process.env.API_ONLY || process.env.NODE_ENV === 'production') {
   })
 }
 
-// MongoDB Connection
+// Démarrer le serveur IMMÉDIATEMENT (pour que Railway puisse faire le health check)
+// La connexion MongoDB se fera en arrière-plan
+const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
+const server = app.listen(PORT, host, () => {
+  console.log(`🚀 Server running on port ${PORT}`)
+  console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
+  
+  // Afficher l'URL API correcte selon l'environnement
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    console.log(`📍 API URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}/api`)
+  } else if (process.env.NODE_ENV === 'production') {
+    console.log(`📍 API URL: http://${host}:${PORT}/api`)
+  } else {
+    console.log(`📍 API URL: http://localhost:${PORT}/api`)
+  }
+  
+  if (process.env.FRONTEND_URL) {
+    console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
+  }
+  
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    console.log(`🌐 Railway Domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`)
+  }
+})
+
+// MongoDB Connection (en arrière-plan, ne bloque pas le démarrage)
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj')
   .then(() => {
     console.log('✅ Connected to MongoDB')
-    const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
-    app.listen(PORT, host, () => {
-      console.log(`🚀 Server running on port ${PORT}`)
-      console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
-      
-      // Afficher l'URL API correcte selon l'environnement
-      if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-        console.log(`📍 API URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}/api`)
-      } else if (process.env.NODE_ENV === 'production') {
-        console.log(`📍 API URL: http://${host}:${PORT}/api`)
-      } else {
-        console.log(`📍 API URL: http://localhost:${PORT}/api`)
-      }
-      
-      if (process.env.FRONTEND_URL) {
-        console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
-      }
-      
-      if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-        console.log(`🌐 Railway Domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`)
-      }
-    })
   })
   .catch((error) => {
     console.error('❌ MongoDB connection error:', error)
-    process.exit(1)
+    console.error('⚠️  Server will continue but database features will not work')
+    // Ne pas faire process.exit(1) pour que Railway puisse toujours faire le health check
   })
 
 // Graceful shutdown
