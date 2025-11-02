@@ -82,17 +82,22 @@ if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
   app.use(express.static(path.join(__dirname, '../dist')))
 }
 
-// Routes
+// Health check pour Railway (sur la racine) - DOIT être avant les routes catch-all
+app.get('/', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running', service: 'loterie-fdj-backend' })
+})
+
+// Health check API
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running' })
+})
+
+// Routes API
 app.use('/api/auth', authRoutes)
 app.use('/api/alerts', alertRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/combinations', combinationRoutes)
 app.use('/api/admin', adminRoutes)
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' })
-})
 
 // Error handling middleware (doit être avant le catch-all)
 app.use((err, req, res, next) => {
@@ -104,21 +109,21 @@ app.use((err, req, res, next) => {
   })
 })
 
-// Route catch-all pour le frontend React - UNIQUEMENT si API_ONLY n'est pas défini
-if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
+// Route catch-all pour les routes non-API (en mode production/API_ONLY)
+if (process.env.API_ONLY || process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => {
-    // Ne servir que les routes non-API
-    if (!req.path.startsWith('/api/')) {
-      res.sendFile(path.join(__dirname, '../dist/index.html'))
-    } else {
-      res.status(404).json({ error: 'Route API non trouvée' })
+    // Ne pas interférer avec les routes /api
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({ error: 'Route API non trouvée' })
     }
+    // Pour toutes les autres routes, retourner un message
+    res.status(404).json({ error: 'API uniquement. Le frontend est déployé séparément.', available: '/api' })
   })
 } else {
-  // En mode API uniquement, retourner 404 pour les routes non-API
+  // En développement, servir le frontend React
   app.get('*', (req, res) => {
     if (!req.path.startsWith('/api/')) {
-      res.status(404).json({ error: 'API uniquement. Le frontend est déployé séparément.' })
+      res.sendFile(path.join(__dirname, '../dist/index.html'))
     } else {
       res.status(404).json({ error: 'Route API non trouvée' })
     }
