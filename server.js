@@ -83,9 +83,10 @@ if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
 }
 
 // Health check pour Railway (sur la racine) - DOIT être avant les routes catch-all
+// Support GET et HEAD (Railway peut utiliser HEAD)
 app.get('/', (req, res) => {
   const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  res.json({ 
+  res.status(200).json({ 
     status: 'OK', 
     message: 'Server is running', 
     service: 'loterie-fdj-backend',
@@ -94,9 +95,17 @@ app.get('/', (req, res) => {
   })
 })
 
+app.head('/', (req, res) => {
+  res.status(200).end()
+})
+
 // Health check API
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Server is running' })
+  res.status(200).json({ status: 'OK', message: 'Server is running' })
+})
+
+app.head('/api/health', (req, res) => {
+  res.status(200).end()
 })
 
 // Routes API
