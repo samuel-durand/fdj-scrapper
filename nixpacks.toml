@@ -5,7 +5,7 @@
 nixPkgs = ["nodejs-18_x"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm ci --omit=dev"]
 
 # Pas de phase build nécessaire pour le backend Node.js
 
