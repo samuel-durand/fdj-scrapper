@@ -6,10 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "build": "echo 'Backend ready - no build needed'",
     "dev": "nodemon server.js",
     "test-db": "node test-connection.js",
     "create-admin": "node scripts/create-admin.js",
+    "generate-alerts": "node scripts/generate-alerts.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -27,10 +27,10 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3"
+    "mongoose": "^8.0.3",
+    "package-lock.json": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   }
 }
-
