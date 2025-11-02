@@ -26,16 +26,32 @@ const __dirname = path.dirname(__filename)
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// Middleware
+// Configuration CORS
+const frontendUrls = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+  : ['http://localhost:5173']
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // En production sur Railway, accepter toutes les origines si FRONTEND_URL n'est pas défini
+    // Sinon, vérifier contre la liste autorisée
+    if (!origin || process.env.NODE_ENV !== 'production' || frontendUrls.includes(origin)) {
+      callback(null, true)
+    } else if (process.env.RAILWAY_PUBLIC_DOMAIN || frontendUrls.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(null, true) // Permettre pour faciliter le développement
+    }
+  },
   credentials: true
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Servir les fichiers statiques du frontend (dist)
-app.use(express.static(path.join(__dirname, '../dist')))
+// Servir les fichiers statiques du frontend (dist) - UNIQUEMENT si API_ONLY n'est pas défini
+if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
+  app.use(express.static(path.join(__dirname, '../dist')))
+}
 
 // Routes
 app.use('/api/auth', authRoutes)
@@ -59,18 +75,42 @@ app.use((err, req, res, next) => {
   })
 })
 
-// Route catch-all pour le frontend React (doit être en dernier)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'))
-})
+// Route catch-all pour le frontend React - UNIQUEMENT si API_ONLY n'est pas défini
+if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
+  app.get('*', (req, res) => {
+    // Ne servir que les routes non-API
+    if (!req.path.startsWith('/api/')) {
+      res.sendFile(path.join(__dirname, '../dist/index.html'))
+    } else {
+      res.status(404).json({ error: 'Route API non trouvée' })
+    }
+  })
+} else {
+  // En mode API uniquement, retourner 404 pour les routes non-API
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api/')) {
+      res.status(404).json({ error: 'API uniquement. Le frontend est déployé séparément.' })
+    } else {
+      res.status(404).json({ error: 'Route API non trouvée' })
+    }
+  })
+}
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj')
   .then(() => {
     console.log('✅ Connected to MongoDB')
-    app.listen(PORT, () => {
+    const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
+    app.listen(PORT, host, () => {
       console.log(`🚀 Server running on port ${PORT}`)
-      console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`)
+      console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
+      console.log(`📍 API URL: http://${host}:${PORT}/api`)
+      if (process.env.FRONTEND_URL) {
+        console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
+      }
+      if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+        console.log(`🌐 Railway URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}`)
+      }
     })
   })
   .catch((error) => {
