@@ -129,9 +129,11 @@ export function checkDrawForAlerts(userId, draw, gameType) {
     }
   }
   
-  // Sauvegarder les notifications déclenchées
+  // Sauvegarder les notifications déclenchées via l'API
   if (triggered.length > 0) {
-    saveNotifications(userId, triggered)
+    // Note: Les notifications sont maintenant gérées par le backend
+    // Cette fonction est conservée pour la compatibilité mais ne fait plus rien
+    // Les notifications seront créées côté serveur lors de la vérification des alertes
   }
   
   return triggered

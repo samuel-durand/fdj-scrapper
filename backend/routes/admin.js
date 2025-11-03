@@ -43,6 +43,131 @@ router.get('/stats', async (req, res) => {
       createdAt: { $gte: sevenDaysAgo }
     })
 
+    // Données temporelles pour les graphiques (30 derniers jours)
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    thirtyDaysAgo.setHours(0, 0, 0, 0)
+
+    // Générer les dates des 30 derniers jours
+    const dates = []
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date()
+      date.setDate(date.getDate() - i)
+      date.setHours(0, 0, 0, 0)
+      dates.push(date)
+    }
+
+    // Statistiques utilisateurs par jour
+    const usersByDay = await User.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: thirtyDaysAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ])
+
+    // Statistiques combinaisons par jour
+    const combinationsByDay = await Combination.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: thirtyDaysAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ])
+
+    // Statistiques alertes par jour
+    const alertsByDay = await Alert.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: thirtyDaysAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ])
+
+    // Créer des maps pour accès rapide
+    const usersMap = new Map(usersByDay.map(u => [u._id, u.count]))
+    const combinationsMap = new Map(combinationsByDay.map(c => [c._id, c.count]))
+    const alertsMap = new Map(alertsByDay.map(a => [a._id, a.count]))
+
+    // Formater les données temporelles
+    const timeSeriesData = dates.map(date => {
+      const dateStr = date.toISOString().split('T')[0]
+      return {
+        date: dateStr,
+        label: date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }),
+        users: usersMap.get(dateStr) || 0,
+        combinations: combinationsMap.get(dateStr) || 0,
+        alerts: alertsMap.get(dateStr) || 0
+      }
+    })
+
+    // Statistiques par mois (6 derniers mois)
+    const sixMonthsAgo = new Date()
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
+    sixMonthsAgo.setDate(1)
+    sixMonthsAgo.setHours(0, 0, 0, 0)
+
+    const usersByMonth = await User.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: sixMonthsAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ])
+
+    const combinationsByMonth = await Combination.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: sixMonthsAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m', date: '$createdAt' }
+          },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ])
+
     res.json({
       success: true,
       data: {
@@ -61,6 +186,13 @@ router.get('/stats', async (req, res) => {
           total: totalAlerts,
           active: activeAlerts,
           inactive: totalAlerts - activeAlerts
+        },
+        timeSeries: {
+          daily: timeSeriesData
+        },
+        monthly: {
+          users: usersByMonth,
+          combinations: combinationsByMonth
         }
       }
     })

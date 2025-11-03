@@ -5,13 +5,14 @@ import Calendar from './Calendar'
 import Pagination from './Pagination'
 import DrawDetailsModal from './DrawDetailsModal'
 import Statistics from './Statistics'
+import GameStatistics from './GameStatistics'
 
 function Euromillions() {
   const [draws, setDraws] = useState([])
   const [displayedDraws, setDisplayedDraws] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar', 'pagination' ou 'statistics'
+  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar', 'pagination', 'statistics' ou 'charts'
   const [selectedDraw, setSelectedDraw] = useState(null)
   const [modalDraw, setModalDraw] = useState(null) // Tirage affiché dans la modale
 
@@ -79,6 +80,12 @@ function Euromillions() {
           onClick={() => setViewMode('statistics')}
         >
           📈 Statistiques
+        </button>
+        <button
+          className={`toggle-btn ${viewMode === 'charts' ? 'active' : ''}`}
+          onClick={() => setViewMode('charts')}
+        >
+          📊 Graphiques
         </button>
       </div>
     </div>
@@ -163,6 +170,10 @@ function Euromillions() {
 
     {!loading && !error && viewMode === 'statistics' && (
       <Statistics draws={draws} gameType="euromillions" />
+    )}
+
+    {!loading && !error && viewMode === 'charts' && (
+      <GameStatistics gameType="euromillions" />
     )}
 
     {!loading && !error && viewMode === 'list' && (

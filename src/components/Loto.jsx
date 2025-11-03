@@ -5,13 +5,14 @@ import Calendar from './Calendar'
 import Pagination from './Pagination'
 import DrawDetailsModal from './DrawDetailsModal'
 import Statistics from './Statistics'
+import GameStatistics from './GameStatistics'
 
 function Loto() {
   const [draws, setDraws] = useState([])
   const [displayedDraws, setDisplayedDraws] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar', 'pagination' ou 'statistics'
+  const [viewMode, setViewMode] = useState('list') // 'list', 'calendar', 'pagination', 'statistics' ou 'charts'
   const [selectedDraw, setSelectedDraw] = useState(null)
   const [modalDraw, setModalDraw] = useState(null) // Tirage affiché dans la modale
 
@@ -77,6 +78,12 @@ function Loto() {
           onClick={() => setViewMode('statistics')}
         >
           📈 Statistiques
+        </button>
+        <button
+          className={`toggle-btn ${viewMode === 'charts' ? 'active' : ''}`}
+          onClick={() => setViewMode('charts')}
+        >
+          📊 Graphiques
         </button>
       </div>
     </div>
@@ -170,6 +177,10 @@ function Loto() {
 
     {!loading && !error && viewMode === 'statistics' && (
       <Statistics draws={draws} gameType="loto" />
+    )}
+
+    {!loading && !error && viewMode === 'charts' && (
+      <GameStatistics gameType="loto" />
     )}
 
     {!loading && !error && viewMode === 'list' && (

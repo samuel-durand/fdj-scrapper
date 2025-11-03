@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import * as adminService from '../../services/adminService'
+import DashboardCharts from './DashboardCharts'
 import './AdminPanel.css'
 
 export default function AdminPanel({ onClose }) {
@@ -201,60 +202,9 @@ export default function AdminPanel({ onClose }) {
 
           {!loading && !error && (
             <>
-              {/* Statistiques */}
+              {/* Statistiques avec graphiques */}
               {activeTab === 'stats' && stats && (
-                <div className="admin-stats">
-                  <div className="stats-grid">
-                    <div className="stat-card">
-                      <div className="stat-icon">👥</div>
-                      <div className="stat-info">
-                        <h3>{stats.users.total}</h3>
-                        <p>Utilisateurs totaux</p>
-                        <small>{stats.users.active} actifs • {stats.users.inactive} inactifs</small>
-                      </div>
-                    </div>
-                    
-                    <div className="stat-card">
-                      <div className="stat-icon">🆕</div>
-                      <div className="stat-info">
-                        <h3>{stats.users.recent}</h3>
-                        <p>Nouveaux (7 jours)</p>
-                      </div>
-                    </div>
-
-                    <div className="stat-card">
-                      <div className="stat-icon">🎲</div>
-                      <div className="stat-info">
-                        <h3>{stats.combinations.total}</h3>
-                        <p>Combinaisons totales</p>
-                        <small>{stats.combinations.recent} récentes (7j)</small>
-                      </div>
-                    </div>
-
-                    <div className="stat-card">
-                      <div className="stat-icon">🔔</div>
-                      <div className="stat-info">
-                        <h3>{stats.alerts.total}</h3>
-                        <p>Alertes totales</p>
-                        <small>{stats.alerts.active} actives</small>
-                      </div>
-                    </div>
-                  </div>
-
-                  {stats.combinations.byGame.length > 0 && (
-                    <div className="game-stats">
-                      <h3>Combinaisons par jeu</h3>
-                      <div className="game-stats-list">
-                        {stats.combinations.byGame.map(game => (
-                          <div key={game._id} className="game-stat-item">
-                            <span className="game-name">{game._id.toUpperCase()}</span>
-                            <span className="game-count">{game.count}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <DashboardCharts stats={stats} />
               )}
 
               {/* Utilisateurs */}

@@ -1,34 +1,76 @@
 import { useState, useEffect } from 'react'
 import { 
-  getNotifications, 
-  markNotificationAsRead, 
-  clearNotifications,
-  getUnreadCount 
-} from '../../services/alertService'
+  getNotifications,
+  getUnreadCount,
+  markNotificationAsRead,
+  markAllAsRead,
+  clearAllNotifications
+} from '../../services/notificationService'
 import './Alerts.css'
 
 export default function NotificationCenter({ userId, onClose }) {
   const [notifications, setNotifications] = useState([])
+  const [unreadCount, setUnreadCount] = useState(0)
+  const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all') // all, unread
 
   useEffect(() => {
-    loadNotifications()
+    if (userId) {
+      loadNotifications()
+      loadUnreadCount()
+    }
   }, [userId])
 
-  const loadNotifications = () => {
-    const notifs = getNotifications(userId)
-    setNotifications(notifs)
+  const loadNotifications = async () => {
+    try {
+      setLoading(true)
+      const filters = filter === 'unread' ? { read: 'false' } : {}
+      const result = await getNotifications(filters)
+      if (result.success) {
+        setNotifications(result.data || [])
+        setUnreadCount(result.unreadCount || 0)
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des notifications:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleMarkAsRead = (notificationId) => {
-    markNotificationAsRead(userId, notificationId)
-    loadNotifications()
+  const loadUnreadCount = async () => {
+    const count = await getUnreadCount()
+    setUnreadCount(count)
   }
 
-  const handleClearAll = () => {
+  useEffect(() => {
+    if (userId) {
+      loadNotifications()
+    }
+  }, [filter, userId])
+
+  const handleMarkAsRead = async (notificationId) => {
+    const result = await markNotificationAsRead(notificationId)
+    if (result.success) {
+      await loadNotifications()
+      await loadUnreadCount()
+    }
+  }
+
+  const handleMarkAllAsRead = async () => {
+    const result = await markAllAsRead()
+    if (result.success) {
+      await loadNotifications()
+      await loadUnreadCount()
+    }
+  }
+
+  const handleClearAll = async () => {
     if (window.confirm('Voulez-vous vraiment supprimer toutes les notifications ?')) {
-      clearNotifications(userId)
-      setNotifications([])
+      const result = await clearAllNotifications()
+      if (result.success) {
+        setNotifications([])
+        setUnreadCount(0)
+      }
     }
   }
 
@@ -55,8 +97,13 @@ export default function NotificationCenter({ userId, onClose }) {
             className={`filter-btn ${filter === 'unread' ? 'active' : ''}`}
             onClick={() => setFilter('unread')}
           >
-            Non lues ({getUnreadCount(userId)})
+            Non lues ({unreadCount})
           </button>
+          {unreadCount > 0 && (
+            <button className="mark-all-read-btn" onClick={handleMarkAllAsRead}>
+              ✓ Tout marquer comme lu
+            </button>
+          )}
           {notifications.length > 0 && (
             <button className="clear-btn" onClick={handleClearAll}>
               🗑️ Tout effacer
@@ -65,7 +112,12 @@ export default function NotificationCenter({ userId, onClose }) {
         </div>
 
         <div className="notifications-list">
-          {filteredNotifications.length === 0 ? (
+          {loading ? (
+            <div className="loading-notifications">
+              <div className="spinner"></div>
+              <p>Chargement des notifications...</p>
+            </div>
+          ) : filteredNotifications.length === 0 ? (
             <div className="no-notifications">
               <span className="empty-icon">🔕</span>
               <p>Aucune notification</p>
@@ -76,9 +128,9 @@ export default function NotificationCenter({ userId, onClose }) {
           ) : (
             filteredNotifications.map((notification) => (
               <NotificationItem
-                key={notification.timestamp}
+                key={notification._id || notification.id}
                 notification={notification}
-                onMarkAsRead={() => handleMarkAsRead(notification.timestamp)}
+                onMarkAsRead={() => handleMarkAsRead(notification._id || notification.id)}
               />
             ))
           )}
@@ -89,7 +141,8 @@ export default function NotificationCenter({ userId, onClose }) {
 }
 
 function NotificationItem({ notification, onMarkAsRead }) {
-  const formattedDate = new Date(notification.timestamp).toLocaleString('fr-FR', {
+  const date = notification.createdAt || notification.timestamp
+  const formattedDate = new Date(date).toLocaleString('fr-FR', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -116,13 +169,15 @@ function NotificationItem({ notification, onMarkAsRead }) {
         
         {notification.draw && (
           <div className="notification-draw-info">
-            <span className="draw-date">
-              📅 {new Date(notification.draw.date).toLocaleDateString('fr-FR')}
-            </span>
-            {notification.draw.numbers && (
+            {notification.draw.date && (
+              <span className="draw-date">
+                📅 {new Date(notification.draw.date).toLocaleDateString('fr-FR')}
+              </span>
+            )}
+            {notification.draw.numbers && notification.draw.numbers.length > 0 && (
               <span className="draw-numbers">
                 🎲 {notification.draw.numbers.join(' - ')}
-                {notification.draw.stars && ` ⭐ ${notification.draw.stars.join(' - ')}`}
+                {notification.draw.stars && notification.draw.stars.length > 0 && ` ⭐ ${notification.draw.stars.join(' - ')}`}
                 {notification.draw.luckyNumber && ` 🍀 ${notification.draw.luckyNumber}`}
               </span>
             )}

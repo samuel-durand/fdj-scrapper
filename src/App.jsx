@@ -11,7 +11,8 @@ import AdminPanel from './components/Admin/AdminPanel'
 import { getEuromillionsResults, getLotoResults } from './services/lotteryService'
 import { getEurodreamsResults } from './services/lotteryService'
 import { useAuth } from './contexts/AuthContext'
-import { checkNewDraws, getUnreadCount } from './services/alertService'
+import { checkNewDraws } from './services/alertService'
+import { getUnreadCount } from './services/notificationService'
 
 // Fonction pour calculer le prochain jour de tirage
 function getNextDrawDate(gameType) {
@@ -191,9 +192,14 @@ function App() {
   }, [user])
 
   // Mettre à jour le compteur de notifications non lues
-  const updateUnreadCount = () => {
+  const updateUnreadCount = async () => {
     if (user?.id) {
-      setUnreadCount(getUnreadCount(user.id))
+      try {
+        const count = await getUnreadCount()
+        setUnreadCount(count)
+      } catch (error) {
+        console.error('Erreur lors de la récupération du nombre de notifications:', error)
+      }
     }
   }
 
@@ -201,6 +207,7 @@ function App() {
   useEffect(() => {
     if (!user?.id) return
 
+    updateUnreadCount() // Charger immédiatement
     const interval = setInterval(() => {
       updateUnreadCount()
     }, 5 * 60 * 1000) // 5 minutes

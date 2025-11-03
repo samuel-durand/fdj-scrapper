@@ -4,7 +4,15 @@ import { api } from './api'
 export const getAlerts = async () => {
   try {
     const response = await api.get('/alerts')
-    return response.success ? response.data : []
+    // L'API retourne { success: true, data: [...] }
+    if (response.success && Array.isArray(response.data)) {
+      return response.data
+    }
+    // Fallback si la structure est différente
+    if (Array.isArray(response)) {
+      return response
+    }
+    return []
   } catch (error) {
     console.error('Get alerts error:', error)
     return []

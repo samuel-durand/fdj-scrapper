@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Pagination from './Pagination';
 import DrawDetailsModal from './DrawDetailsModal';
 import Statistics from './Statistics';
+import GameStatistics from './GameStatistics';
 import './Lottery.css';
 
 const Eurodreams = () => {
@@ -11,7 +12,7 @@ const Eurodreams = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeView, setActiveView] = useState('draws'); // 'draws' ou 'stats'
+  const [activeView, setActiveView] = useState('draws'); // 'draws', 'stats' ou 'charts'
 
   useEffect(() => {
     loadResults();
@@ -108,6 +109,12 @@ const Eurodreams = () => {
         >
           📊 Statistiques & Générateur
         </button>
+        <button
+          className={`view-tab ${activeView === 'charts' ? 'active' : ''}`}
+          onClick={() => setActiveView('charts')}
+        >
+          📈 Graphiques
+        </button>
       </div>
 
       {/* Vue Tirages */}
@@ -175,6 +182,11 @@ const Eurodreams = () => {
       {/* Vue Statistiques */}
       {activeView === 'stats' && draws.length > 0 && (
         <Statistics draws={draws} gameType="eurodreams" />
+      )}
+
+      {/* Vue Graphiques */}
+      {activeView === 'charts' && (
+        <GameStatistics gameType="eurodreams" />
       )}
 
       {isModalOpen && selectedDraw && (

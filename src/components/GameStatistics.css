@@ -1,0 +1,227 @@
+.game-statistics-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.stats-header {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+.stats-header h2 {
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+}
+
+.stats-summary {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+/* Grille de graphiques */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.chart-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 350px;
+  width: 100%;
+}
+
+/* Grille de tableaux */
+.stats-tables-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.stats-table-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+}
+
+.stats-table-card h3 {
+  font-size: 18px;
+  color: var(--text-primary);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stats-table thead {
+  background: var(--bg-secondary);
+}
+
+.stats-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.stats-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.stats-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.stats-table tbody tr.top-three {
+  background: rgba(255, 184, 0, 0.1);
+}
+
+.stat-number {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+}
+
+.stat-number.euromillions {
+  background: linear-gradient(135deg, #0052CC 0%, #4A90E2 100%);
+}
+
+.stat-number.loto {
+  background: linear-gradient(135deg, #00C389 0%, #059669 100%);
+}
+
+.stat-number.eurodreams {
+  background: linear-gradient(135deg, #FF006E 0%, #FF4081 100%);
+}
+
+.stat-number.cold {
+  opacity: 0.6;
+}
+
+/* États de chargement et erreur */
+.loading-stats,
+.error-stats,
+.no-stats {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+}
+
+.loading-stats .spinner {
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--fdj-blue);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.retry-btn {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: var(--fdj-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: var(--fdj-dark-blue);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-statistics-container {
+    padding: 10px;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-tables-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-wrapper {
+    height: 300px;
+  }
+
+  .stats-summary {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* Mode sombre */
+[data-theme="dark"] .chart-card,
+[data-theme="dark"] .stats-table-card {
+  border: 1px solid var(--border-color);
+}
+

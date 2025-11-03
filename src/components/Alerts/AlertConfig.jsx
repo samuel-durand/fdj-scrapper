@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { createAlert, ALERT_TYPES, GAMES } from '../../services/alertService'
+import { createAlert } from '../../services/alertServiceAPI'
+import { ALERT_TYPES, GAMES } from '../../services/alertService'
 import './Alerts.css'
 
 export default function AlertConfig({ userId, onClose, onAlertCreated }) {
+  // userId n'est plus nécessaire car l'API utilise le token, mais on le garde pour compatibilité
   const [step, setStep] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
   const [alertConfig, setAlertConfig] = useState({
     type: ALERT_TYPES.JACKPOT_THRESHOLD,
     game: GAMES.EUROMILLIONS,
@@ -19,10 +23,43 @@ export default function AlertConfig({ userId, onClose, onAlertCreated }) {
     if (step > 1) setStep(step - 1)
   }
 
-  const handleCreate = () => {
-    const alert = createAlert(userId, alertConfig)
-    onAlertCreated(alert)
-    onClose()
+  const handleCreate = async () => {
+    try {
+      setLoading(true)
+      setError(null)
+      
+      // Préparer les données pour l'API
+      const alertData = {
+        name: alertConfig.name,
+        type: alertConfig.type,
+        game: alertConfig.game,
+        config: {}
+      }
+
+      // Ajouter les configurations spécifiques selon le type
+      if (alertConfig.type === ALERT_TYPES.JACKPOT_THRESHOLD) {
+        alertData.config.threshold = alertConfig.threshold
+      } else if (alertConfig.type === ALERT_TYPES.FAVORITE_NUMBERS) {
+        alertData.config.numbers = alertConfig.numbers
+        alertData.config.minMatches = alertConfig.minMatches || 1
+      } else if (alertConfig.type === ALERT_TYPES.LUCKY_NUMBER_MATCH) {
+        alertData.config.luckyNumber = alertConfig.luckyNumber
+      }
+
+      const result = await createAlert(alertData)
+      
+      if (result.success) {
+        onAlertCreated(result.alert)
+        onClose()
+      } else {
+        setError(result.error || 'Erreur lors de la création de l\'alerte')
+      }
+    } catch (err) {
+      console.error('Erreur lors de la création de l\'alerte:', err)
+      setError(err.message || 'Erreur lors de la création de l\'alerte')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const isValid = () => {
@@ -81,11 +118,16 @@ export default function AlertConfig({ userId, onClose, onAlertCreated }) {
             <button 
               onClick={handleCreate} 
               className="btn-success"
-              disabled={!isValid()}
+              disabled={!isValid() || loading}
             >
-              ✅ Créer l'alerte
+              {loading ? '⏳ Création...' : '✅ Créer l\'alerte'}
             </button>
           )}
+        {error && (
+          <div className="error-message" style={{ marginTop: '10px', color: 'red' }}>
+            ⚠️ {error}
+          </div>
+        )}
         </div>
       </div>
     </div>

@@ -43,6 +43,7 @@ export default function UserProfile({ onClose }) {
 
   const handleAlertCreated = () => {
     setRefreshAlerts(prev => prev + 1)
+    // Le composant AlertsList se rechargera grâce au changement de key
   }
 
   return (
@@ -175,8 +176,7 @@ export default function UserProfile({ onClose }) {
             </p>
 
             <AlertsList 
-              userId={user?.id} 
-              key={refreshAlerts}
+              refreshTrigger={refreshAlerts}
             />
           </div>
         )}

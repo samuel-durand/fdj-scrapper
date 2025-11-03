@@ -27,7 +27,11 @@ function question(query) {
 async function createAdmin() {
   try {
     // Connexion à MongoDB
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj')
+    if (!process.env.MONGODB_URI) {
+      console.error('❌ ERREUR: MONGODB_URI doit être défini dans .env')
+      process.exit(1)
+    }
+    await mongoose.connect(process.env.MONGODB_URI)
     console.log('✅ Connected to MongoDB')
 
     console.log('\n🔐 Création d\'un compte administrateur\n')

@@ -1,10 +1,7 @@
 // Service API pour communiquer avec le backend
-// En production, l'API est sur le même domaine (/api)
-// En développement, on utilise localhost:5000
+// Utilise VITE_API_URL depuis .env ou /api par défaut
 
-const API_URL = import.meta.env.VITE_API_URL || (
-  import.meta.env.MODE === 'production' ? '/api' : 'http://localhost:5000/api'
-)
+const API_URL = import.meta.env.VITE_API_URL || '/api'
 
 // Récupérer le token depuis localStorage
 const getToken = () => {
@@ -49,8 +46,42 @@ const apiRequest = async (endpoint, options = {}) => {
   }
 
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, config)
-    const data = await response.json()
+    const fullUrl = `${API_URL}${endpoint}`
+    if (import.meta.env.DEV || import.meta.env.MODE === 'development') {
+      console.log('🌐 Requête API:', fullUrl, config.method || 'GET')
+    }
+    
+    let response
+    try {
+      response = await fetch(fullUrl, config)
+    } catch (networkError) {
+      console.error('Erreur réseau:', networkError)
+      console.error('URL tentée:', fullUrl)
+      throw new Error('Impossible de se connecter au serveur. Vérifiez que le backend est démarré et que VITE_API_URL est correctement configuré.')
+    }
+    
+    // Vérifier si la réponse a du contenu avant de parser le JSON
+    const contentType = response.headers.get('content-type')
+    const hasJsonContent = contentType && contentType.includes('application/json')
+    
+    let data = {}
+    
+    // Essayer de parser le JSON seulement si la réponse en contient
+    if (hasJsonContent) {
+      const text = await response.text()
+      if (text && text.trim()) {
+        try {
+          data = JSON.parse(text)
+        } catch (parseError) {
+          console.error('Erreur de parsing JSON:', parseError)
+          console.error('Contenu reçu:', text.substring(0, 200))
+          throw new Error('Réponse invalide du serveur')
+        }
+      }
+    } else if (response.status === 204 || response.status === 201) {
+      // Réponse No Content ou Created sans body
+      data = { success: true }
+    }
 
     // Si le token est expiré, essayer de le rafraîchir
     if (response.status === 401 && data.code === 'TOKEN_EXPIRED' && !options.skipRefresh) {
@@ -67,13 +98,20 @@ const apiRequest = async (endpoint, options = {}) => {
     }
 
     if (!response.ok) {
-      throw new Error(data.message || 'Erreur lors de la requête')
+      throw new Error(data.message || data.error || `Erreur ${response.status}: ${response.statusText}`)
     }
 
     return data
   } catch (error) {
+    // Si c'est déjà une Error créée, la relancer
+    if (error instanceof Error && error.message) {
+      console.error('API Error:', error.message)
+      throw error
+    }
+    
+    // Sinon, créer une nouvelle Error avec un message approprié
     console.error('API Error:', error)
-    throw error
+    throw new Error(error.message || 'Erreur de connexion au serveur')
   }
 }
 
@@ -94,7 +132,24 @@ const refreshAccessToken = async () => {
       body: JSON.stringify({ refreshToken })
     })
 
-    const data = await response.json()
+    // Vérifier si la réponse a du contenu JSON
+    const contentType = response.headers.get('content-type')
+    if (!contentType || !contentType.includes('application/json')) {
+      return false
+    }
+
+    const text = await response.text()
+    if (!text) {
+      return false
+    }
+
+    let data
+    try {
+      data = JSON.parse(text)
+    } catch (parseError) {
+      console.error('Erreur de parsing JSON lors du refresh:', parseError)
+      return false
+    }
 
     if (response.ok && data.success) {
       saveTokens(data.data.token, refreshToken)

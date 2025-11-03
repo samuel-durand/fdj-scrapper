@@ -9,6 +9,8 @@ import alertRoutes from './routes/alerts.js'
 import userRoutes from './routes/users.js'
 import combinationRoutes from './routes/combinations.js'
 import adminRoutes from './routes/admin.js'
+import statsRoutes from './routes/stats.js'
+import notificationRoutes from './routes/notifications.js'
 
 dotenv.config()
 
@@ -29,21 +31,43 @@ const PORT = process.env.PORT || 5000
 // Configuration CORS
 const frontendUrls = process.env.FRONTEND_URL 
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:5173']
+  : []
 
 app.use(cors({
   origin: (origin, callback) => {
-    // En production sur Railway, accepter toutes les origines si FRONTEND_URL n'est pas défini
-    // Sinon, vérifier contre la liste autorisée
-    if (!origin || process.env.NODE_ENV !== 'production' || frontendUrls.includes(origin)) {
-      callback(null, true)
-    } else if (process.env.RAILWAY_PUBLIC_DOMAIN || frontendUrls.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(null, true) // Permettre pour faciliter le développement
+    // Accepter les requêtes sans origin (Postman, curl, etc.)
+    if (!origin) {
+      return callback(null, true)
     }
+    
+    // En production, vérifier strictement contre FRONTEND_URL
+    if (process.env.NODE_ENV === 'production') {
+      if (frontendUrls.length > 0 && frontendUrls.includes(origin)) {
+        return callback(null, true)
+      }
+      // Permettre Railway si configuré
+      if (process.env.RAILWAY_PUBLIC_DOMAIN && origin.includes(process.env.RAILWAY_PUBLIC_DOMAIN)) {
+        return callback(null, true)
+      }
+      return callback(new Error('Not allowed by CORS'))
+    }
+    
+    // En développement, utiliser FRONTEND_URL si défini, sinon permettre toutes les origines
+    if (frontendUrls.length > 0) {
+      if (frontendUrls.includes(origin)) {
+        return callback(null, true)
+      }
+      // Permettre localhost si FRONTEND_URL n'est pas vide mais n'inclut pas cette origine
+      // (pour faciliter le développement)
+      return callback(null, true)
+    }
+    
+    // Si FRONTEND_URL n'est pas défini en dev, permettre toutes les origines
+    return callback(null, true)
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -59,6 +83,8 @@ app.use('/api/alerts', alertRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/combinations', combinationRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/stats', statsRoutes)
+app.use('/api/notifications', notificationRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -97,10 +123,16 @@ if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
 }
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj')
+if (!process.env.MONGODB_URI) {
+  console.error('❌ ERREUR: MONGODB_URI doit être défini dans .env')
+  console.error('   Ajoutez MONGODB_URI dans votre fichier backend/.env')
+  process.exit(1)
+}
+
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ Connected to MongoDB')
-    const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
+    const host = process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost')
     app.listen(PORT, host, () => {
       console.log(`🚀 Server running on port ${PORT}`)
       console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
