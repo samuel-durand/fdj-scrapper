@@ -40,7 +40,11 @@ loterie/
 - 🔄 Navigation par onglets entre les 3 loteries
 
 ### 📊 Statistiques & Générateur (NOUVEAU!)
-- 📈 **Statistiques avancées** : Top 10 numéros chauds/froids pour chaque jeu
+- 📈 **Statistiques avancées** avec visualisations Chart.js :
+  - 📊 Graphique en barres : Top 15 numéros les plus fréquents
+  - 🍩 Graphique en donut : Répartition des numéros bonus (étoiles, chance, dream)
+  - 📈 Comparaison chaud/froid : Fréquences moyennes des numéros
+- 📊 **Statistiques détaillées** : Top 10 numéros chauds/froids pour chaque jeu
 - 🎲 **Générateur de numéros intelligent** avec 4 modes :
   - 🔥 Numéros Chauds (les plus sortis)
   - ❄️ Numéros Froids (les moins sortis)
@@ -52,13 +56,21 @@ loterie/
 ### 👤 Espace Utilisateur (NOUVEAU!)
 - 🔐 **Authentification sécurisée** (JWT + mots de passe hashés)
 - 👤 **Profil personnalisé** avec préférences de jeux
-- 🔔 **Alertes personnalisées** pour les tirages (jackpot, jeu favori, etc.)
-- 📬 **Centre de notifications** pour suivre les nouveaux tirages
+- 🔔 **Alertes personnalisées** (stockées dans MongoDB) :
+  - 💰 Seuil de jackpot
+  - 🎯 Numéros favoris
+  - 🆕 Nouveau tirage
+  - ⭐ Numéro chance correspondant
+- 📬 **Centre de notifications** (API MongoDB) pour suivre les nouveaux tirages
 - 🎲 **Gestion des combinaisons** sauvegardées
+- 🔄 **Synchronisation en temps réel** via API backend
 
 ### 🔐 Panel Administrateur (NOUVEAU!)
 - 👥 **Gestion des utilisateurs** (activation, rôles, suppression)
-- 📊 **Statistiques globales** de la plateforme
+- 📊 **Statistiques globales** avec graphiques interactifs Chart.js :
+  - 📈 Graphique en ligne : évolution sur 30 jours (utilisateurs, combinaisons, alertes)
+  - 📊 Graphique en barres : statistiques mensuelles (6 derniers mois)
+  - 🍩 Graphique en donut : répartition des combinaisons par jeu
 - 🎲 **Consultation des combinaisons** de tous les utilisateurs
 - 🔔 **Gestion des alertes** système
 
@@ -102,6 +114,7 @@ npm run dev
 ### Backend (dans le dossier backend/)
 - `npm run dev` - Lance le serveur backend (port 5000)
 - `npm run create-admin` - Crée un utilisateur administrateur
+- `npm run generate-alerts` - Génère des alertes automatiques pour toutes les combinaisons
 
 ### Scraping
 - `npm run scrape-today` - 🆕 **Scraper intelligent** (tirage du jour uniquement - ULTRA RAPIDE!)
@@ -139,15 +152,22 @@ npm run dev
    npm install
    ```
 
-2. **Configurer MongoDB** :
-   - Installer MongoDB localement OU utiliser MongoDB Atlas (gratuit)
-   - Créer le fichier `backend/.env` :
+2. **Configurer les variables d'environnement** :
+   - Créer le fichier `.env` à la racine pour le frontend :
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+   - Créer le fichier `backend/.env` pour le backend :
    ```env
    MONGODB_URI=mongodb://localhost:27017/loterie-fdj
-   JWT_SECRET=votre_secret_super_securise
+   # OU utiliser MongoDB Atlas (recommandé en production)
+   # MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/loterie
+   JWT_SECRET=votre_secret_super_securise_minimum_32_caracteres
+   JWT_REFRESH_SECRET=votre_refresh_secret_super_securise
    PORT=5000
    FRONTEND_URL=http://localhost:5173
    ```
+   **Note** : `FRONTEND_URL` est optionnel en développement (localhost:5173 ajouté automatiquement)
 
 3. **Créer un utilisateur admin** :
    ```bash
@@ -421,6 +441,8 @@ L'application est **100% statique** après le build :
 - **CSS3** - Animations et gradients
 - **Context API** - Gestion d'état global
 - **Fetch API** - Communication avec l'API
+- **Chart.js + react-chartjs-2** - Graphiques interactifs pour statistiques
+- **API Service Layer** - Services dédiés (alerts, notifications, stats)
 
 ### Backend (Optionnel)
 - **Node.js** - Runtime JavaScript
@@ -429,7 +451,9 @@ L'application est **100% statique** après le build :
 - **Mongoose** - ODM pour MongoDB
 - **JWT** - Authentification sécurisée
 - **Bcrypt** - Hashage des mots de passe
-- **CORS** - Gestion des origines croisées
+- **CORS** - Gestion des origines croisées avec configuration automatique
+- **Chart.js** - Graphiques et visualisations de données
+- **API RESTful** - Routes pour alertes, notifications, statistiques, admin
 
 ### Scraping
 - **Puppeteer** - Scraping headless browser
