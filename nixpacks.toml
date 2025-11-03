@@ -1,14 +1,18 @@
-# Configuration Nixpacks pour Railway - Backend Node.js uniquement
-# Pas de build nécessaire, juste installation des dépendances
+# Configuration Nixpacks pour Railways - Backend uniquement
+# Ce fichier indique à Railways comment builder et démarrer l'API backend
 
 [phases.setup]
 nixPkgs = ["nodejs-18_x"]
 
 [phases.install]
-cmds = ["npm install --omit=dev --no-audit --no-fund"]
+cmds = ["npm ci"]
 
-# Pas de phase build - c'est un backend Node.js pur
+# Pas de phase build nécessaire pour le backend Node.js
 
 [start]
 cmd = "npm start"
+
+[variables]
+NODE_ENV = "production"
+API_ONLY = "true"
 

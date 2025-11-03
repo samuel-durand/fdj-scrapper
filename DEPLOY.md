@@ -1,107 +1,191 @@
-# 🚀 Guide de Déploiement Rapide
+# 🚀 Guide de Déploiement sur Render
 
-## Déploiement sur Render
+Ce guide vous explique comment déployer le backend de l'application Loterie FDJ sur Render.
 
-### Étape 1 : Créer le service
+## 📋 Prérequis
 
-1. Allez sur [render.com](https://render.com)
-2. Créez un **Web Service**
-3. Connectez votre repository GitHub : `samuel-durand/fdj-scrapper`
-4. **Sélectionnez la branche `backend`** ⚠️ Important !
+- ✅ Compte Render.com ([S'inscrire ici](https://render.com))
+- ✅ Compte MongoDB Atlas ([S'inscrire ici](https://www.mongodb.com/cloud/atlas))
+- ✅ Accès au repository GitHub
 
-### Étape 2 : Configuration automatique
+---
 
-Render détecte automatiquement le fichier `render.yaml` qui configure :
-- Build Command : `npm install`
-- Start Command : `node server.js`
+## 🗄️ Étape 1 : Configurer MongoDB Atlas
 
-Vous n'avez **rien à configurer manuellement** !
+### 1.1 Créer un cluster
 
-### Étape 3 : Variables d'environnement
+1. Connectez-vous à [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Cliquez sur "Build a Database"
+3. Choisissez le plan **FREE (M0)**
+4. Sélectionnez une région proche (ex: **AWS / Frankfurt**)
+5. Nommez votre cluster (ex: `loterie-fdj`)
 
-Dans **Dashboard Render** → **Environment**, ajoutez :
+### 1.2 Créer un utilisateur de base de données
+
+1. Dans "Database Access", cliquez "Add New Database User"
+2. Choisissez "Password Authentication"
+3. Générez un mot de passe fort
+4. **⚠️ IMPORTANT : Sauvegardez ce mot de passe !**
+5. Rôles : `Atlas admin` ou `Read and write to any database`
+
+### 1.3 Configurer le réseau
+
+1. Dans "Network Access", cliquez "Add IP Address"
+2. Cliquez "Allow Access from Anywhere" (ajoute `0.0.0.0/0`)
+3. Confirmez
+
+### 1.4 Récupérer la connection string
+
+1. Dans "Database", cliquez "Connect"
+2. Choisissez "Connect your application"
+3. Sélectionnez "Node.js" comme driver
+4. Copiez la connection string :
 
 ```
-NODE_ENV = production
-MONGODB_URI = mongodb+srv://user:password@cluster.mongodb.net/loterie-fdj
-JWT_SECRET = (générer avec la commande ci-dessous)
-FRONTEND_URL = https://votre-domaine.o2switch.com
+mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
 ```
 
-**Générer JWT_SECRET** :
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+5. **Ajoutez le nom de la base de données** :
+```
+mongodb+srv://username:password@cluster.mongodb.net/loterie-fdj?retryWrites=true&w=majority
 ```
 
-### Étape 4 : MongoDB Atlas
+**⚠️ Remplacez `username` et `password` par vos vraies valeurs !**
 
-1. Créez un compte gratuit sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Créez un cluster **M0 Free**
-3. **Database Access** : Créez un utilisateur avec mot de passe
-4. **Network Access** : Ajoutez `0.0.0.0/0` (autoriser toutes les IPs pour Render)
-5. Cliquez sur **Connect** → **Connect your application** → Copiez l'URI
-6. Remplacez `<password>` par votre mot de passe et ajoutez `/loterie-fdj`
+---
 
-### Étape 5 : Déployer
+## 🌐 Étape 2 : Déployer sur Render
 
-Cliquez sur **"Create Web Service"** sur Render. Le déploiement commence automatiquement !
+### 2.1 Créer un nouveau service
 
-### Étape 6 : Tester
+1. Connectez-vous à [Render Dashboard](https://dashboard.render.com)
+2. Cliquez "New +" → "Web Service"
+3. Connectez votre repository GitHub
+4. Sélectionnez le repository `fdj-scrapper`
 
-Une fois déployé, testez votre API :
+### 2.2 Configurer le service
 
-```bash
-curl https://votre-service.onrender.com/api/health
+**Configuration de base** :
+- **Name** : `loterie-fdj-backend`
+- **Region** : Frankfurt (proche de l'Europe)
+- **Branch** : `main`
+- **Root Directory** : `backend`
+- **Runtime** : Node
+- **Build Command** : `npm install`
+- **Start Command** : `npm start`
+- **Plan** : Free
+
+### 2.3 Ajouter les variables d'environnement
+
+Dans la section "Environment Variables", ajoutez :
+
+| Variable | Valeur |
+|----------|--------|
+| `NODE_ENV` | `production` |
+| `PORT` | `10000` |
+| `MONGODB_URI` | `mongodb+srv://username:password@cluster.mongodb.net/loterie-fdj?retryWrites=true&w=majority` |
+| `JWT_SECRET` | `Générez un secret de 32+ caractères` |
+| `JWT_REFRESH_SECRET` | `Générez un autre secret de 32+ caractères` |
+| `FRONTEND_URL` | `https://votre-domaine.com` |
+
+**Comment générer les secrets JWT ?** Ouvrez un terminal Node.js :
+
+```javascript
+require('crypto').randomBytes(64).toString('hex')
 ```
 
-Réponse attendue :
+Exécutez deux fois pour avoir deux secrets différents.
+
+### 2.4 Déployer
+
+1. Cliquez "Create Web Service"
+2. Le déploiement démarre automatiquement
+3. Attendez 2-3 minutes
+4. Une fois déployé, vous obtiendrez l'URL : `https://loterie-fdj-backend.onrender.com`
+
+---
+
+## ✅ Étape 3 : Vérifier le déploiement
+
+### 3.1 Health Check
+
+Visitez : `https://loterie-fdj-backend.onrender.com/api/health`
+
+Vous devriez voir :
 ```json
-{"status":"OK","message":"Server is running"}
+{
+  "status": "OK",
+  "message": "Server is running"
+}
 ```
 
-## Frontend sur O2Switch
+### 3.2 Tester la connexion MongoDB
 
-Configurez l'URL de l'API dans votre frontend :
-
-**.env.production** (ou configuration Vite) :
-```env
-VITE_API_URL=https://votre-service.onrender.com/api
+Dans les logs Render, vérifiez :
+```
+✅ Connected to MongoDB
+🚀 Server running on port 10000
 ```
 
-Puis buildez et uploadez sur O2Switch :
-```bash
-npm run build
-# Uploadez le dossier dist/ sur O2Switch
-```
+### 3.3 Créer un administrateur
 
-## Mise à jour du backend
-
-Pour déployer une nouvelle version :
+Connectez-vous au service Render via SSH ou utilisez un script local :
 
 ```bash
-git checkout backend
-git merge main  # Ou faites vos modifications directement
-git push origin backend
-```
-
-Render redéploie automatiquement ! ✨
-
-## Vérification CORS
-
-Si le frontend ne peut pas contacter le backend :
-1. Vérifiez que `FRONTEND_URL` sur Render = votre domaine O2Switch exact
-2. Vérifiez la console du navigateur pour les erreurs CORS
-3. Assurez-vous d'utiliser HTTPS (pas HTTP)
-
-## Créer un compte admin
-
-Une fois déployé, connectez-vous en SSH sur Render ou localement :
-
-```bash
-node scripts/create-admin.js
+# Modifiez temporairement BACKEND_URL dans .env local
+cd backend
+node scripts/create-admin.js "Admin" "admin@example.com" "password123"
 ```
 
 ---
 
-✅ **C'est tout !** Votre backend est déployé et prêt à recevoir des requêtes.
+## 🔄 Mise à jour automatique
+
+Chaque fois que vous poussez sur GitHub :
+
+```bash
+git add .
+git commit -m "Update backend"
+git push origin main
+```
+
+Render redéploie automatiquement en 2-3 minutes ! ✨
+
+---
+
+## 🐛 Dépannage
+
+### Problème : "MongoDB connection error"
+
+**Solutions** :
+- Vérifiez que l'IP `0.0.0.0/0` est autorisée dans MongoDB Atlas
+- Vérifiez que `MONGODB_URI` est correct dans Render
+- Vérifiez que le mot de passe MongoDB ne contient pas de caractères spéciaux non échappés
+
+### Problème : "JWT_SECRET must have a value"
+
+**Solution** :
+- Vérifiez que `JWT_SECRET` et `JWT_REFRESH_SECRET` sont bien définis dans Render
+- Vérifiez qu'ils font au moins 32 caractères
+
+### Problème : Le service se redémarre constamment
+
+**Solution** :
+- Consultez les logs Render pour voir l'erreur exacte
+- Vérifiez que toutes les variables d'environnement sont correctes
+- Vérifiez que le PORT est bien configuré (Render fournit le PORT dynamiquement)
+
+---
+
+## 🔗 Prochaines étapes
+
+Une fois le backend déployé :
+
+1. **Configurer le frontend** : Mettez à jour `.env.production` avec l'URL Render
+2. **Déployer le frontend** : Sur o2switch ou autre hébergement
+3. **Tester l'application** : Ouvrez l'app et essayez de vous inscrire
+
+---
+
+**🎉 Félicitations ! Votre backend est maintenant en ligne !**
 

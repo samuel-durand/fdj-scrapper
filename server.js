@@ -9,14 +9,15 @@ import alertRoutes from './routes/alerts.js'
 import userRoutes from './routes/users.js'
 import combinationRoutes from './routes/combinations.js'
 import adminRoutes from './routes/admin.js'
+import statsRoutes from './routes/stats.js'
+import notificationRoutes from './routes/notifications.js'
 
 dotenv.config()
 
 // Vérifier les variables d'environnement critiques
 if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
-  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis')
-  console.error('   En local : créez un fichier .env à la racine')
-  console.error('   Sur Railway : ajoutez ces variables dans Railway Dashboard')
+  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis dans .env')
+  console.error('   Créez un fichier backend/.env avec ces variables')
   console.error('   Exemple: JWT_SECRET=votre_secret_ici_minimum_32_caracteres')
   process.exit(1)
 }
@@ -34,44 +35,38 @@ const frontendUrls = process.env.FRONTEND_URL
 
 app.use(cors({
   origin: (origin, callback) => {
-    // En développement, accepter toutes les origines
-    if (process.env.NODE_ENV !== 'production') {
-      return callback(null, true)
-    }
-    
-    // En production :
-    // Si aucune origine (requêtes non-browser), accepter
+    // Accepter les requêtes sans origin (Postman, curl, etc.)
     if (!origin) {
       return callback(null, true)
     }
     
-    // Si FRONTEND_URL est défini, vérifier contre la liste
-    if (frontendUrls.length > 0) {
-      // Vérifier l'origine exacte
-      if (frontendUrls.includes(origin)) {
+    // En production, vérifier strictement contre FRONTEND_URL
+    if (process.env.NODE_ENV === 'production') {
+      if (frontendUrls.length > 0 && frontendUrls.includes(origin)) {
         return callback(null, true)
       }
-      // Vérifier aussi avec/sans trailing slash et http/https
-      const normalizedOrigin = origin.replace(/\/$/, '')
-      const isAllowed = frontendUrls.some(url => {
-        const normalizedUrl = url.replace(/\/$/, '')
-        return normalizedOrigin === normalizedUrl || 
-               normalizedOrigin === normalizedUrl.replace('https://', 'http://') ||
-               normalizedOrigin === normalizedUrl.replace('http://', 'https://')
-      })
-      if (isAllowed) {
+      // Permettre Railway si configuré
+      if (process.env.RAILWAY_PUBLIC_DOMAIN && origin.includes(process.env.RAILWAY_PUBLIC_DOMAIN)) {
         return callback(null, true)
       }
-      // Si pas trouvé, rejeter en production
       return callback(new Error('Not allowed by CORS'))
     }
     
-    // Si FRONTEND_URL n'est pas défini, accepter toutes les origines (moins sécurisé)
-    console.warn('⚠️  CORS: FRONTEND_URL non défini, acceptation de toutes les origines')
-    callback(null, true)
+    // En développement, utiliser FRONTEND_URL si défini, sinon permettre toutes les origines
+    if (frontendUrls.length > 0) {
+      if (frontendUrls.includes(origin)) {
+        return callback(null, true)
+      }
+      // Permettre localhost si FRONTEND_URL n'est pas vide mais n'inclut pas cette origine
+      // (pour faciliter le développement)
+      return callback(null, true)
+    }
+    
+    // Si FRONTEND_URL n'est pas défini en dev, permettre toutes les origines
+    return callback(null, true)
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }))
 app.use(express.json())
@@ -82,38 +77,19 @@ if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
   app.use(express.static(path.join(__dirname, '../dist')))
 }
 
-// Health check pour Railway (sur la racine) - DOIT être avant les routes catch-all
-// Support GET et HEAD (Railway peut utiliser HEAD)
-app.get('/', (req, res) => {
-  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
-  res.status(200).json({ 
-    status: 'OK', 
-    message: 'Server is running', 
-    service: 'loterie-fdj-backend',
-    mongodb: mongoStatus,
-    timestamp: new Date().toISOString()
-  })
-})
-
-app.head('/', (req, res) => {
-  res.status(200).end()
-})
-
-// Health check API
-app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'OK', message: 'Server is running' })
-})
-
-app.head('/api/health', (req, res) => {
-  res.status(200).end()
-})
-
-// Routes API
+// Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/alerts', alertRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/combinations', combinationRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/stats', statsRoutes)
+app.use('/api/notifications', notificationRoutes)
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'OK', message: 'Server is running' })
+})
 
 // Error handling middleware (doit être avant le catch-all)
 app.use((err, req, res, next) => {
@@ -125,61 +101,53 @@ app.use((err, req, res, next) => {
   })
 })
 
-// Route catch-all pour les routes non-API (en mode production/API_ONLY)
-if (process.env.API_ONLY || process.env.NODE_ENV === 'production') {
+// Route catch-all pour le frontend React - UNIQUEMENT si API_ONLY n'est pas défini
+if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
   app.get('*', (req, res) => {
-    // Ne pas interférer avec les routes /api
-    if (req.path.startsWith('/api/')) {
-      return res.status(404).json({ error: 'Route API non trouvée' })
-    }
-    // Pour toutes les autres routes, retourner un message
-    res.status(404).json({ error: 'API uniquement. Le frontend est déployé séparément.', available: '/api' })
-  })
-} else {
-  // En développement, servir le frontend React
-  app.get('*', (req, res) => {
+    // Ne servir que les routes non-API
     if (!req.path.startsWith('/api/')) {
       res.sendFile(path.join(__dirname, '../dist/index.html'))
     } else {
       res.status(404).json({ error: 'Route API non trouvée' })
     }
   })
+} else {
+  // En mode API uniquement, retourner 404 pour les routes non-API
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api/')) {
+      res.status(404).json({ error: 'API uniquement. Le frontend est déployé séparément.' })
+    } else {
+      res.status(404).json({ error: 'Route API non trouvée' })
+    }
+  })
 }
 
-// Démarrer le serveur IMMÉDIATEMENT (pour que Railway puisse faire le health check)
-// La connexion MongoDB se fera en arrière-plan
-const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost'
-const server = app.listen(PORT, host, () => {
-  console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
-  
-  // Afficher l'URL API correcte selon l'environnement
-  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-    console.log(`📍 API URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}/api`)
-  } else if (process.env.NODE_ENV === 'production') {
-    console.log(`📍 API URL: http://${host}:${PORT}/api`)
-  } else {
-    console.log(`📍 API URL: http://localhost:${PORT}/api`)
-  }
-  
-  if (process.env.FRONTEND_URL) {
-    console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
-  }
-  
-  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
-    console.log(`🌐 Railway Domain: ${process.env.RAILWAY_PUBLIC_DOMAIN}`)
-  }
-})
+// MongoDB Connection
+if (!process.env.MONGODB_URI) {
+  console.error('❌ ERREUR: MONGODB_URI doit être défini dans .env')
+  console.error('   Ajoutez MONGODB_URI dans votre fichier backend/.env')
+  process.exit(1)
+}
 
-// MongoDB Connection (en arrière-plan, ne bloque pas le démarrage)
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/loterie-fdj')
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('✅ Connected to MongoDB')
+    const host = process.env.HOST || (process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost')
+    app.listen(PORT, host, () => {
+      console.log(`🚀 Server running on port ${PORT}`)
+      console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
+      console.log(`📍 API URL: http://${host}:${PORT}/api`)
+      if (process.env.FRONTEND_URL) {
+        console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
+      }
+      if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+        console.log(`🌐 Railway URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}`)
+      }
+    })
   })
   .catch((error) => {
     console.error('❌ MongoDB connection error:', error)
-    console.error('⚠️  Server will continue but database features will not work')
-    // Ne pas faire process.exit(1) pour que Railway puisse toujours faire le health check
+    process.exit(1)
   })
 
 // Graceful shutdown

@@ -34,8 +34,9 @@ Utilisez l'URI de connexion de votre instance MongoDB.
 2. **Cliquez sur "New Project"**
 3. **Sélectionnez "Deploy from GitHub repo"**
 4. **Sélectionnez votre repository**
-5. **Sélectionnez la branche `backend`**
-   - **Root Directory** : Laisser vide (tout est à la racine sur cette branche)
+5. **Choisissez la racine du backend** :
+   - Railway peut détecter automatiquement le dossier `backend/`
+   - Ou configurez le **Root Directory** : `backend`
 
 ### 3. Configurer les variables d'environnement
 
@@ -55,8 +56,8 @@ Dans Railway Dashboard, allez dans **"Variables"** et ajoutez :
 |----------|-------------|---------|
 | `FRONTEND_URL` | URL de votre frontend | `https://votre-domaine.com` ou plusieurs URLs séparées par des virgules |
 | `PORT` | Port du serveur (auto par Railway) | `5000` (défini automatiquement) |
-| `NODE_ENV` | Environnement | `production` (à définir dans Railway Dashboard) |
-| `API_ONLY` | Mode API uniquement | `true` (défini automatiquement) |
+| `NODE_ENV` | Environnement | `production` (défini dans nixpacks.toml) |
+| `API_ONLY` | Mode API uniquement | `true` (défini dans nixpacks.toml) |
 
 **Exemple de configuration complète :**
 
@@ -65,7 +66,6 @@ MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj
 JWT_SECRET=votre_secret_jwt_super_long_minimum_32_caracteres_secure
 JWT_REFRESH_SECRET=votre_refresh_secret_different_et_aussi_long
 FRONTEND_URL=https://votre-domaine.com
-NODE_ENV=production
 ```
 
 **Important :**
@@ -115,7 +115,7 @@ npm run build
 ## 📁 Structure du Backend pour Railway
 
 ```
-(racine de la branche backend)
+backend/
 ├── server.js           # Serveur Express (API uniquement en production)
 ├── package.json        # Scripts et dépendances
 ├── nixpacks.toml       # Configuration Railway
@@ -123,11 +123,8 @@ npm run build
 ├── routes/             # Routes API
 ├── models/             # Modèles MongoDB
 ├── middleware/         # Middleware (auth, etc.)
-├── scripts/            # Scripts utilitaires
 └── .env                # Variables locales (NE PAS COMMITER)
 ```
-
-**Note :** Sur la branche `backend`, tous les fichiers sont à la racine (pas de dossier `backend/`).
 
 ## 🔧 Configuration CORS
 
