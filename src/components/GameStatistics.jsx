@@ -414,7 +414,9 @@ export default function GameStatistics({ gameType }) {
         {barChartData && (
           <div className="chart-card">
             <div className="chart-wrapper">
-              <Bar data={barChartData} options={barChartOptions} />
+              {barChartData && barChartData.labels && barChartData.labels.length > 0 && (
+                <Bar data={barChartData} options={barChartOptions} />
+              )}
             </div>
           </div>
         )}
@@ -423,7 +425,9 @@ export default function GameStatistics({ gameType }) {
         {donutChartData && (
           <div className="chart-card">
             <div className="chart-wrapper">
-              <Doughnut data={donutChartData} options={donutChartOptions} />
+              {donutChartData && donutChartData.labels && donutChartData.labels.length > 0 && (
+                <Doughnut data={donutChartData} options={donutChartOptions} />
+              )}
             </div>
           </div>
         )}
@@ -432,7 +436,9 @@ export default function GameStatistics({ gameType }) {
         {hotColdData && (
           <div className="chart-card">
             <div className="chart-wrapper">
-              <Bar data={hotColdData} options={hotColdOptions} />
+              {hotColdData && hotColdData.labels && hotColdData.labels.length > 0 && (
+                <Bar data={hotColdData} options={hotColdOptions} />
+              )}
             </div>
           </div>
         )}

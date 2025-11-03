@@ -329,9 +329,22 @@ export default function DashboardCharts({ stats }) {
     }
   }
 
+  // Vérifier si on a des données à afficher
   if (!stats) {
-    return <div className="dashboard-charts-loading">Chargement des données...</div>
+    return (
+      <div className="dashboard-charts">
+        <div className="loading-message">
+          <p>Chargement des statistiques...</p>
+        </div>
+      </div>
+    )
   }
+
+  // Debug: vérifier les données
+  console.log('📊 DashboardCharts - Stats:', stats)
+  console.log('📊 Line chart data:', lineChartData)
+  console.log('📊 Bar chart data:', barChartData)
+  console.log('📊 Doughnut chart data:', doughnutChartData)
 
   return (
     <div className="dashboard-charts">
@@ -402,25 +415,31 @@ export default function DashboardCharts({ stats }) {
       {/* Graphiques */}
       <div className="charts-grid">
         {/* Graphique en ligne */}
-        <div className="chart-container">
-          <div className="chart-wrapper">
-            <Line data={lineChartData} options={lineChartOptions} />
+        {lineChartData.labels.length > 0 && (
+          <div className="chart-container">
+            <div className="chart-wrapper">
+              <Line data={lineChartData} options={lineChartOptions} />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Graphique en barres */}
-        <div className="chart-container">
-          <div className="chart-wrapper">
-            <Bar data={barChartData} options={barChartOptions} />
+        {barChartData.labels.length > 0 && (
+          <div className="chart-container">
+            <div className="chart-wrapper">
+              <Bar data={barChartData} options={barChartOptions} />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Graphique en donut */}
-        <div className="chart-container chart-doughnut">
-          <div className="chart-wrapper">
-            <Doughnut data={doughnutChartData} options={doughnutChartOptions} />
+        {doughnutChartData.labels.length > 0 && (
+          <div className="chart-container chart-doughnut">
+            <div className="chart-wrapper">
+              <Doughnut data={doughnutChartData} options={doughnutChartOptions} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )
