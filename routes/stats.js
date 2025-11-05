@@ -1,12 +1,8 @@
 import express from 'express'
-<<<<<<< HEAD:routes/stats.js
-import { readFileSync } from 'fs'
-=======
 import { readFileSync, existsSync } from 'fs'
->>>>>>> main:backend/routes/stats.js
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
-import { protect } from '../middleware/auth.js'
+import { protect } from './middleware/auth.js'
 
 const router = express.Router()
 
@@ -14,9 +10,6 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 // Chemin vers le cache des résultats
-<<<<<<< HEAD:routes/stats.js
-const CACHE_PATH = join(__dirname, '../../public/resultats-cache.json')
-=======
 // Cherche dans plusieurs emplacements possibles :
 // 1. public/resultats-cache.json (racine du projet)
 // 2. resultats-cache.json (racine du projet)
@@ -43,7 +36,6 @@ if (!CACHE_PATH) {
   console.warn('⚠️  Aucun fichier resultats-cache.json trouvé dans les emplacements attendus')
   CACHE_PATH = possiblePaths[0] // Utiliser le premier par défaut pour l'erreur
 }
->>>>>>> main:backend/routes/stats.js
 
 /**
  * Charge les données du cache

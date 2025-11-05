@@ -12,7 +12,20 @@ import adminRoutes from './routes/admin.js'
 import statsRoutes from './routes/stats.js'
 import notificationRoutes from './routes/notifications.js'
 
-dotenv.config()
+// Configuration dotenv : charger .env systématiquement
+// Toutes les variables doivent être définies dans .env (pas de valeurs par défaut)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const envPath = path.join(__dirname, '.env')
+
+// Charger .env systématiquement
+const result = dotenv.config({ path: envPath })
+if (result.error) {
+  console.warn('⚠️  Fichier .env non trouvé, utilisation des variables d\'environnement système')
+  console.warn('   Pour le développement local, créez backend/.env avec vos variables')
+} else {
+  console.log('✅ Variables chargées depuis .env')
+}
 
 // Vérifier les variables d'environnement critiques
 if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
@@ -26,7 +39,13 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT
+
+if (!PORT) {
+  console.error('❌ ERREUR: PORT doit être défini dans .env')
+  console.error('   Ajoutez PORT=5000 (ou autre port) dans votre fichier backend/.env')
+  process.exit(1)
+}
 
 // Configuration CORS
 const frontendUrls = process.env.FRONTEND_URL 
