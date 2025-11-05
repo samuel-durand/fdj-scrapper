@@ -13,7 +13,7 @@ import {
   Filler
 } from 'chart.js'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
-import { api } from '../services/api'
+import { getGameStats } from '../services/statsService'
 import './GameStatistics.css'
 
 // Enregistrer les composants Chart.js
@@ -49,7 +49,7 @@ export default function GameStatistics({ gameType }) {
     try {
       setLoading(true)
       setError(null)
-      const response = await api.get(`/stats/games/${gameType}`)
+      const response = await getGameStats(gameType)
       if (response.success) {
         setStats(response.data)
       } else {

@@ -10,7 +10,7 @@ import alertRoutes from './routes/alerts.js'
 import userRoutes from './routes/users.js'
 import combinationRoutes from './routes/combinations.js'
 import adminRoutes from './routes/admin.js'
-import statsRoutes from './routes/stats.js'
+// import statsRoutes from './routes/stats.js' // Désactivé : stats calculées dans le frontend
 import notificationRoutes from './routes/notifications.js'
 
 // Configuration dotenv : charger .env systématiquement
@@ -124,7 +124,7 @@ app.use('/api/alerts', alertRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/combinations', combinationRoutes)
 app.use('/api/admin', adminRoutes)
-app.use('/api/stats', statsRoutes)
+// app.use('/api/stats', statsRoutes) // Désactivé : stats calculées dans le frontend
 app.use('/api/notifications', notificationRoutes)
 
 // Health check
