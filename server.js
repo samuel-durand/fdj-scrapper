@@ -33,6 +33,19 @@ const frontendUrls = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
   : []
 
+// En développement, ajouter automatiquement localhost:5173 si pas déjà présent
+const devUrls = [...frontendUrls]
+if (process.env.NODE_ENV !== 'production') {
+  const localhost5173 = 'http://localhost:5173'
+  const localhost3000 = 'http://localhost:3000'
+  if (!devUrls.includes(localhost5173)) {
+    devUrls.push(localhost5173)
+  }
+  if (!devUrls.includes(localhost3000)) {
+    devUrls.push(localhost3000)
+  }
+}
+
 app.use(cors({
   origin: (origin, callback) => {
     // Accepter les requêtes sans origin (Postman, curl, etc.)
@@ -52,17 +65,23 @@ app.use(cors({
       return callback(new Error('Not allowed by CORS'))
     }
     
-    // En développement, utiliser FRONTEND_URL si défini, sinon permettre toutes les origines
-    if (frontendUrls.length > 0) {
-      if (frontendUrls.includes(origin)) {
+    // En développement, utiliser les URLs configurées + localhost
+    if (devUrls.length > 0) {
+      if (devUrls.includes(origin)) {
+        console.log(`✅ CORS: Origine autorisée (configurée): ${origin}`)
         return callback(null, true)
       }
-      // Permettre localhost si FRONTEND_URL n'est pas vide mais n'inclut pas cette origine
-      // (pour faciliter le développement)
+      // Permettre aussi localhost avec différents ports en dev
+      if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+        console.log(`✅ CORS: Origine autorisée (localhost): ${origin}`)
+        return callback(null, true)
+      }
+      // Afficher un warning mais accepter quand même en dev
+      console.warn(`⚠️  CORS: Origine non configurée mais acceptée en dev: ${origin}`)
       return callback(null, true)
     }
     
-    // Si FRONTEND_URL n'est pas défini en dev, permettre toutes les origines
+    // Si aucune URL n'est définie en dev, permettre toutes les origines
     return callback(null, true)
   },
   credentials: true,
@@ -138,7 +157,10 @@ mongoose.connect(process.env.MONGODB_URI)
       console.log(`🌍 Mode: ${process.env.NODE_ENV || 'development'}`)
       console.log(`📍 API URL: http://${host}:${PORT}/api`)
       if (process.env.FRONTEND_URL) {
-        console.log(`📍 Frontend URL: ${process.env.FRONTEND_URL}`)
+        console.log(`📍 Frontend URL configuré: ${process.env.FRONTEND_URL}`)
+      }
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`📍 URLs CORS autorisées en dev: ${devUrls.join(', ')}`)
       }
       if (process.env.RAILWAY_PUBLIC_DOMAIN) {
         console.log(`🌐 Railway URL: https://${process.env.RAILWAY_PUBLIC_DOMAIN}`)
