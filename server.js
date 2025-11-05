@@ -9,7 +9,7 @@ import alertRoutes from './routes/alerts.js'
 import userRoutes from './routes/users.js'
 import combinationRoutes from './routes/combinations.js'
 import adminRoutes from './routes/admin.js'
-import statsRoutes from './routes/stats.js'
+// import statsRoutes from './routes/stats.js' // Désactivé : stats calculées dans le frontend
 import notificationRoutes from './routes/notifications.js'
 
 // Configuration dotenv : charger .env systématiquement
@@ -34,9 +34,6 @@ if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
   console.error('   Exemple: JWT_SECRET=votre_secret_ici_minimum_32_caracteres')
   process.exit(1)
 }
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 const app = express()
 const PORT = process.env.PORT
@@ -121,7 +118,7 @@ app.use('/api/alerts', alertRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/combinations', combinationRoutes)
 app.use('/api/admin', adminRoutes)
-app.use('/api/stats', statsRoutes)
+// app.use('/api/stats', statsRoutes) // Désactivé : stats calculées dans le frontend
 app.use('/api/notifications', notificationRoutes)
 
 // Health check
