@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: loterie-fdj-backend
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm run build && cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /api/health
+
