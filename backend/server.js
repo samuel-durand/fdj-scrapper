@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { existsSync } from 'fs'
 import authRoutes from './routes/auth.js'
 import alertRoutes from './routes/alerts.js'
 import userRoutes from './routes/users.js'
@@ -12,21 +13,41 @@ import adminRoutes from './routes/admin.js'
 import statsRoutes from './routes/stats.js'
 import notificationRoutes from './routes/notifications.js'
 
-dotenv.config()
+// Configuration dotenv : charger .env seulement en développement ou si le fichier existe localement
+// En production (Railway), les variables d'environnement sont définies directement dans Railway Dashboard
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const envPath = path.join(__dirname, '.env')
+
+// Charger .env seulement si :
+// 1. On est en développement (NODE_ENV !== 'production')
+// 2. OU si le fichier .env existe localement (pour compatibilité)
+if (process.env.NODE_ENV !== 'production' || existsSync(envPath)) {
+  const result = dotenv.config({ path: envPath })
+  if (result.error && process.env.NODE_ENV !== 'production') {
+    console.warn('⚠️  Fichier .env non trouvé, utilisation des variables d\'environnement système')
+  } else if (process.env.NODE_ENV !== 'production') {
+    console.log('✅ Variables chargées depuis .env (développement)')
+  }
+} else {
+  console.log('✅ Mode production : utilisation des variables d\'environnement Railway')
+}
 
 // Vérifier les variables d'environnement critiques
 if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
-  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis dans .env')
-  console.error('   Créez un fichier backend/.env avec ces variables')
-  console.error('   Exemple: JWT_SECRET=votre_secret_ici_minimum_32_caracteres')
+  console.error('❌ ERREUR: JWT_SECRET et JWT_REFRESH_SECRET doivent être définis')
+  if (process.env.NODE_ENV === 'production') {
+    console.error('   En production : configurez ces variables dans Railway Dashboard')
+    console.error('   Allez dans votre projet Railway → Variables → Ajoutez JWT_SECRET et JWT_REFRESH_SECRET')
+  } else {
+    console.error('   En développement : créez un fichier backend/.env avec ces variables')
+    console.error('   Exemple: JWT_SECRET=votre_secret_ici_minimum_32_caracteres')
+  }
   process.exit(1)
 }
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 3000
 
 // Configuration CORS
 const frontendUrls = process.env.FRONTEND_URL 
@@ -143,8 +164,13 @@ if (!process.env.API_ONLY && process.env.NODE_ENV !== 'production') {
 
 // MongoDB Connection
 if (!process.env.MONGODB_URI) {
-  console.error('❌ ERREUR: MONGODB_URI doit être défini dans .env')
-  console.error('   Ajoutez MONGODB_URI dans votre fichier backend/.env')
+  console.error('❌ ERREUR: MONGODB_URI doit être défini')
+  if (process.env.NODE_ENV === 'production') {
+    console.error('   En production : configurez MONGODB_URI dans Railway Dashboard')
+    console.error('   Allez dans votre projet Railway → Variables → Ajoutez MONGODB_URI')
+  } else {
+    console.error('   En développement : ajoutez MONGODB_URI dans votre fichier backend/.env')
+  }
   process.exit(1)
 }
 

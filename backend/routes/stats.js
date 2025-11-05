@@ -1,5 +1,5 @@
 import express from 'express'
-import { readFileSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { protect } from '../middleware/auth.js'
@@ -10,7 +10,32 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 // Chemin vers le cache des résultats
-const CACHE_PATH = join(__dirname, '../../public/resultats-cache.json')
+// Cherche dans plusieurs emplacements possibles :
+// 1. public/resultats-cache.json (racine du projet)
+// 2. resultats-cache.json (racine du projet)
+// 3. ../public/resultats-cache.json (depuis backend/)
+const possiblePaths = [
+  join(__dirname, '../../public/resultats-cache.json'), // Racine/public/
+  join(__dirname, '../../resultats-cache.json'),         // Racine/
+  join(__dirname, '../public/resultats-cache.json'),    // backend/public/
+  join(__dirname, '../resultats-cache.json'),           // backend/
+  join(process.cwd(), 'public/resultats-cache.json'),   // CWD/public/
+  join(process.cwd(), 'resultats-cache.json')           // CWD/
+]
+
+let CACHE_PATH = null
+for (const path of possiblePaths) {
+  if (existsSync(path)) {
+    CACHE_PATH = path
+    console.log(`✅ Cache trouvé: ${path}`)
+    break
+  }
+}
+
+if (!CACHE_PATH) {
+  console.warn('⚠️  Aucun fichier resultats-cache.json trouvé dans les emplacements attendus')
+  CACHE_PATH = possiblePaths[0] // Utiliser le premier par défaut pour l'erreur
+}
 
 /**
  * Charge les données du cache
