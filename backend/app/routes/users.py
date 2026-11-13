@@ -8,7 +8,7 @@ from pymongo import ReturnDocument
 from ..db import get_db, now
 from ..security import check_password, hash_password, login_required
 from ..serialize import out
-from . import GAME_KEYS, body, fail
+from . import DRAW_GAME_KEYS, body, fail
 from .auth import validate_user
 
 bp = Blueprint("users", __name__, url_prefix="/api/users")
@@ -30,11 +30,11 @@ def preferences():
     updates = {}
     if "favoriteGames" in data:
         games = data["favoriteGames"]
-        if not isinstance(games, list) or any(x not in GAME_KEYS for x in games):
+        if not isinstance(games, list) or any(x not in DRAW_GAME_KEYS for x in games):
             return fail("Jeux favoris invalides")
         updates["preferences.favoriteGames"] = games
     if "defaultTab" in data:
-        if data["defaultTab"] not in GAME_KEYS:
+        if data["defaultTab"] not in DRAW_GAME_KEYS:
             return fail("Onglet par défaut invalide")
         updates["preferences.defaultTab"] = data["defaultTab"]
     if "notifications" in data:

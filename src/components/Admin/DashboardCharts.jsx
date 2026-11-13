@@ -7,441 +7,194 @@ import {
   LineElement,
   BarElement,
   ArcElement,
-  Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 } from 'chart.js'
 import { Line, Bar, Doughnut } from 'react-chartjs-2'
+import useTheme from '../../hooks/useTheme'
+import { GAMES } from '../../games'
 import './DashboardCharts.css'
 
-// Enregistrer les composants Chart.js
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Tooltip, Legend, Filler)
 
-export default function DashboardCharts({ stats }) {
-  // Configuration des couleurs selon le thème
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
-  
-  const textColor = isDark ? '#f1f5f9' : '#1f2937'
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
-  
-  // Calculer les variations et moyennes
-  const metrics = useMemo(() => {
-    if (!stats || !stats.timeSeries?.daily) {
-      return {
-        usersVariation: 0,
-        combinationsVariation: 0,
-        alertsVariation: 0,
-        avgUsers: 0,
-        avgCombinations: 0,
-        avgAlerts: 0
-      }
-    }
+// Palette alignée sur le site, déclinée pour le thème sombre
+const PALETTE = {
+  light: {
+    text: '#1b1d3a', muted: '#5c6184', grid: 'rgba(27, 29, 58, .08)', surface: '#ffffff',
+    users: '#282d87', combinations: '#0a8a5c', alerts: '#e6007e',
+    euromillions: '#1f2b8f', loto: '#0067c8', eurodreams: '#8a3fc0',
+  },
+  dark: {
+    text: '#eceefa', muted: '#a4a9c9', grid: 'rgba(255, 255, 255, .08)', surface: '#161936',
+    users: '#8f96ff', combinations: '#3ccf96', alerts: '#ff4fae',
+    euromillions: '#6f80ff', loto: '#3d9df5', eurodreams: '#b47ae6',
+  },
+}
 
-    const daily = stats.timeSeries.daily
-    const last7Days = daily.slice(-7)
-    const prev7Days = daily.slice(-14, -7)
+const alpha = (hex, a) => hex + Math.round(a * 255).toString(16).padStart(2, '0')
+const sum = (list, key) => list.reduce((s, d) => s + (d[key] || 0), 0)
 
-    const avgLast7 = {
-      users: last7Days.reduce((sum, d) => sum + d.users, 0) / 7,
-      combinations: last7Days.reduce((sum, d) => sum + d.combinations, 0) / 7,
-      alerts: last7Days.reduce((sum, d) => sum + d.alerts, 0) / 7
-    }
+function variation(daily, key) {
+  const last = sum(daily.slice(-7), key)
+  const prev = sum(daily.slice(-14, -7), key)
+  if (!prev) return null
+  return Math.round(((last - prev) / prev) * 100)
+}
 
-    const avgPrev7 = {
-      users: prev7Days.reduce((sum, d) => sum + d.users, 0) / 7,
-      combinations: prev7Days.reduce((sum, d) => sum + d.combinations, 0) / 7,
-      alerts: prev7Days.reduce((sum, d) => sum + d.alerts, 0) / 7
-    }
-
-    return {
-      usersVariation: avgPrev7.users > 0 
-        ? ((avgLast7.users - avgPrev7.users) / avgPrev7.users * 100).toFixed(1)
-        : 0,
-      combinationsVariation: avgPrev7.combinations > 0
-        ? ((avgLast7.combinations - avgPrev7.combinations) / avgPrev7.combinations * 100).toFixed(1)
-        : 0,
-      alertsVariation: avgPrev7.alerts > 0
-        ? ((avgLast7.alerts - avgPrev7.alerts) / avgPrev7.alerts * 100).toFixed(1)
-        : 0,
-      avgUsers: avgLast7.users.toFixed(1),
-      avgCombinations: avgLast7.combinations.toFixed(1),
-      avgAlerts: avgLast7.alerts.toFixed(1)
-    }
-  }, [stats])
-
-  // Données pour le graphique en ligne (évolution temporelle)
-  const lineChartData = useMemo(() => {
-    if (!stats?.timeSeries?.daily) {
-      return {
-        labels: [],
-        datasets: []
-      }
-    }
-
-    const labels = stats.timeSeries.daily.map(d => d.label)
-    
-    return {
-      labels,
-      datasets: [
-        {
-          label: 'Utilisateurs',
-          data: stats.timeSeries.daily.map(d => d.users),
-          borderColor: '#0052CC',
-          backgroundColor: 'rgba(0, 82, 204, 0.1)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 3,
-          pointHoverRadius: 5
-        },
-        {
-          label: 'Combinaisons',
-          data: stats.timeSeries.daily.map(d => d.combinations),
-          borderColor: '#00C389',
-          backgroundColor: 'rgba(0, 195, 137, 0.1)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 3,
-          pointHoverRadius: 5
-        },
-        {
-          label: 'Alertes',
-          data: stats.timeSeries.daily.map(d => d.alerts),
-          borderColor: '#FF006E',
-          backgroundColor: 'rgba(255, 0, 110, 0.1)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 3,
-          pointHoverRadius: 5
-        }
-      ]
-    }
-  }, [stats])
-
-  // Données pour le graphique en barres (mensuel)
-  const barChartData = useMemo(() => {
-    if (!stats?.monthly?.users || !stats?.monthly?.combinations) {
-      return {
-        labels: [],
-        datasets: []
-      }
-    }
-
-    const labels = stats.monthly.users.map(u => {
-      const [year, month] = u._id.split('-')
-      return new Date(year, parseInt(month) - 1).toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' })
-    })
-
-    const combinationsMap = new Map(
-      stats.monthly.combinations.map(c => [c._id, c.count])
-    )
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: 'Utilisateurs',
-          data: stats.monthly.users.map(u => u.count),
-          backgroundColor: '#0052CC',
-          borderRadius: 8,
-          borderSkipped: false
-        },
-        {
-          label: 'Combinaisons',
-          data: stats.monthly.users.map(u => combinationsMap.get(u._id) || 0),
-          backgroundColor: '#00C389',
-          borderRadius: 8,
-          borderSkipped: false
-        }
-      ]
-    }
-  }, [stats])
-
-  // Données pour le graphique en donut (répartition par jeu)
-  const doughnutChartData = useMemo(() => {
-    if (!stats?.combinations?.byGame || stats.combinations.byGame.length === 0) {
-      return {
-        labels: [],
-        datasets: []
-      }
-    }
-
-    const colors = {
-      euromillions: '#0052CC',
-      loto: '#00C389',
-      eurodreams: '#FF006E'
-    }
-
-    return {
-      labels: stats.combinations.byGame.map(g => g._id.toUpperCase()),
-      datasets: [
-        {
-          data: stats.combinations.byGame.map(g => g.count),
-          backgroundColor: stats.combinations.byGame.map(g => colors[g._id] || '#6B46C1'),
-          borderColor: isDark ? '#1e293b' : '#ffffff',
-          borderWidth: 2,
-          hoverOffset: 8
-        }
-      ]
-    }
-  }, [stats, isDark])
-
-  // Options communes pour les graphiques
-  const commonOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'top',
-        labels: {
-          color: textColor,
-          padding: 15,
-          font: {
-            size: 12,
-            weight: '500'
-          },
-          usePointStyle: true
-        }
-      },
-      tooltip: {
-        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-        titleColor: textColor,
-        bodyColor: textColor,
-        borderColor: gridColor,
-        borderWidth: 1,
-        padding: 12,
-        cornerRadius: 8,
-        displayColors: true
-      }
-    },
-    scales: {
-      x: {
-        grid: {
-          color: gridColor,
-          drawBorder: false
-        },
-        ticks: {
-          color: textColor,
-          font: {
-            size: 11
-          }
-        }
-      },
-      y: {
-        beginAtZero: true,
-        grid: {
-          color: gridColor,
-          drawBorder: false
-        },
-        ticks: {
-          color: textColor,
-          font: {
-            size: 11
-          }
-        }
-      }
-    },
-    animation: {
-      duration: 1000,
-      easing: 'easeInOutQuart'
-    }
-  }
-
-  const lineChartOptions = {
-    ...commonOptions,
-    plugins: {
-      ...commonOptions.plugins,
-      title: {
-        display: true,
-        text: 'Évolution sur 30 jours',
-        color: textColor,
-        font: {
-          size: 16,
-          weight: 'bold'
-        },
-        padding: {
-          bottom: 20
-        }
-      }
-    }
-  }
-
-  const barChartOptions = {
-    ...commonOptions,
-    plugins: {
-      ...commonOptions.plugins,
-      title: {
-        display: true,
-        text: 'Statistiques mensuelles (6 derniers mois)',
-        color: textColor,
-        font: {
-          size: 16,
-          weight: 'bold'
-        },
-        padding: {
-          bottom: 20
-        }
-      }
-    }
-  }
-
-  const doughnutChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: 'right',
-        labels: {
-          color: textColor,
-          padding: 15,
-          font: {
-            size: 12,
-            weight: '500'
-          },
-          usePointStyle: true
-        }
-      },
-      tooltip: {
-        backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
-        titleColor: textColor,
-        bodyColor: textColor,
-        borderColor: gridColor,
-        borderWidth: 1,
-        padding: 12,
-        cornerRadius: 8
-      }
-    },
-    animation: {
-      animateRotate: true,
-      animateScale: true,
-      duration: 1000
-    }
-  }
-
-  // Vérifier si on a des données à afficher
-  if (!stats) {
-    return (
-      <div className="dashboard-charts">
-        <div className="loading-message">
-          <p>Chargement des statistiques...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // Debug: vérifier les données
-  console.log('📊 DashboardCharts - Stats:', stats)
-  console.log('📊 Line chart data:', lineChartData)
-  console.log('📊 Bar chart data:', barChartData)
-  console.log('📊 Doughnut chart data:', doughnutChartData)
-
+function Kpi({ label, value, detail, trend, color }) {
   return (
-    <div className="dashboard-charts">
-      {/* Cartes de statistiques clés */}
-      <div className="stats-cards">
-        <div className="stat-card">
-          <div className="stat-card-icon">👥</div>
-          <div className="stat-card-content">
-            <div className="stat-card-value">{stats.users?.total || 0}</div>
-            <div className="stat-card-label">Utilisateurs totaux</div>
-            <div className="stat-card-detail">
-              {stats.users?.active || 0} actifs • {metrics.avgUsers}/jour (7j)
-            </div>
-            {metrics.usersVariation !== 0 && (
-              <div className={`stat-card-variation ${metrics.usersVariation > 0 ? 'positive' : 'negative'}`}>
-                {metrics.usersVariation > 0 ? '↑' : '↓'} {Math.abs(metrics.usersVariation)}%
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-card-icon">🎲</div>
-          <div className="stat-card-content">
-            <div className="stat-card-value">{stats.combinations?.total || 0}</div>
-            <div className="stat-card-label">Combinaisons totales</div>
-            <div className="stat-card-detail">
-              {stats.combinations?.recent || 0} récentes (7j) • {metrics.avgCombinations}/jour
-            </div>
-            {metrics.combinationsVariation !== 0 && (
-              <div className={`stat-card-variation ${metrics.combinationsVariation > 0 ? 'positive' : 'negative'}`}>
-                {metrics.combinationsVariation > 0 ? '↑' : '↓'} {Math.abs(metrics.combinationsVariation)}%
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-card-icon">🔔</div>
-          <div className="stat-card-content">
-            <div className="stat-card-value">{stats.alerts?.total || 0}</div>
-            <div className="stat-card-label">Alertes totales</div>
-            <div className="stat-card-detail">
-              {stats.alerts?.active || 0} actives • {metrics.avgAlerts}/jour (7j)
-            </div>
-            {metrics.alertsVariation !== 0 && (
-              <div className={`stat-card-variation ${metrics.alertsVariation > 0 ? 'positive' : 'negative'}`}>
-                {metrics.alertsVariation > 0 ? '↑' : '↓'} {Math.abs(metrics.alertsVariation)}%
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-card-icon">📊</div>
-          <div className="stat-card-content">
-            <div className="stat-card-value">
-              {stats.combinations?.byGame?.reduce((sum, g) => sum + g.count, 0) || 0}
-            </div>
-            <div className="stat-card-label">Total toutes catégories</div>
-            <div className="stat-card-detail">
-              {stats.combinations?.byGame?.length || 0} types de jeux
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Graphiques */}
-      <div className="charts-grid">
-        {/* Graphique en ligne */}
-        {lineChartData.labels.length > 0 && (
-          <div className="chart-container">
-            <div className="chart-wrapper">
-              <Line data={lineChartData} options={lineChartOptions} />
-            </div>
-          </div>
+    <div className="adm-kpi" style={{ '--kpi': color }}>
+      <span className="adm-kpi__label">{label}</span>
+      <span className="adm-kpi__value">{value.toLocaleString('fr-FR')}</span>
+      <span className="adm-kpi__detail">
+        {detail}
+        {trend != null && trend !== 0 && (
+          <span className={`adm-kpi__trend ${trend > 0 ? 'is-up' : 'is-down'}`}
+            title="Variation sur 7 jours par rapport aux 7 jours précédents">
+            {trend > 0 ? '▲' : '▼'} {Math.abs(trend)} %
+          </span>
         )}
-
-        {/* Graphique en barres */}
-        {barChartData.labels.length > 0 && (
-          <div className="chart-container">
-            <div className="chart-wrapper">
-              <Bar data={barChartData} options={barChartOptions} />
-            </div>
-          </div>
-        )}
-
-        {/* Graphique en donut */}
-        {doughnutChartData.labels.length > 0 && (
-          <div className="chart-container chart-doughnut">
-            <div className="chart-wrapper">
-              <Doughnut data={doughnutChartData} options={doughnutChartOptions} />
-            </div>
-          </div>
-        )}
-      </div>
+      </span>
     </div>
   )
 }
 
+function ChartCard({ title, subtitle, children, wide }) {
+  return (
+    <figure className={`adm-chart ${wide ? 'adm-chart--wide' : ''}`}>
+      <figcaption>
+        <strong>{title}</strong>
+        {subtitle && <span>{subtitle}</span>}
+      </figcaption>
+      <div className="adm-chart__canvas">{children}</div>
+    </figure>
+  )
+}
+
+export default function DashboardCharts({ stats }) {
+  const theme = useTheme()
+  const c = PALETTE[theme]
+  const daily = stats.timeSeries?.daily || []
+
+  const tooltip = {
+    backgroundColor: c.surface,
+    titleColor: c.text,
+    bodyColor: c.text,
+    borderColor: c.grid,
+    borderWidth: 1,
+    padding: 10,
+    cornerRadius: 8,
+    boxPadding: 4,
+    usePointStyle: true,
+  }
+
+  const legend = {
+    position: 'bottom',
+    labels: { color: c.muted, usePointStyle: true, pointStyle: 'circle', boxWidth: 8, padding: 16, font: { weight: '600' } },
+  }
+
+  const axes = {
+    x: { grid: { display: false }, border: { display: false }, ticks: { color: c.muted, maxRotation: 0, autoSkipPadding: 12 } },
+    y: { beginAtZero: true, grid: { color: c.grid }, border: { display: false }, ticks: { color: c.muted, precision: 0 } },
+  }
+
+  const baseOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: { legend, tooltip },
+    scales: axes,
+  }
+
+  const lineData = useMemo(() => ({
+    labels: daily.map((d) => d.label),
+    datasets: [
+      ['users', 'Inscriptions'],
+      ['combinations', 'Combinaisons'],
+      ['alerts', 'Alertes'],
+    ].map(([key, label]) => ({
+      label,
+      data: daily.map((d) => d[key]),
+      borderColor: c[key],
+      backgroundColor: alpha(c[key], .12),
+      fill: key === 'users',
+      tension: .35,
+      borderWidth: 2,
+      pointRadius: 0,
+      pointHoverRadius: 4,
+    })),
+  }), [daily, c])
+
+  const barData = useMemo(() => {
+    const months = [...new Set([
+      ...(stats.monthly?.users || []).map((m) => m._id),
+      ...(stats.monthly?.combinations || []).map((m) => m._id),
+    ])].sort()
+    const map = (list) => new Map((list || []).map((m) => [m._id, m.count]))
+    const users = map(stats.monthly?.users)
+    const combos = map(stats.monthly?.combinations)
+    return {
+      labels: months.map((id) => {
+        const [y, m] = id.split('-')
+        return new Date(y, m - 1).toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' })
+      }),
+      datasets: [
+        { label: 'Inscriptions', data: months.map((m) => users.get(m) || 0), backgroundColor: c.users },
+        { label: 'Combinaisons', data: months.map((m) => combos.get(m) || 0), backgroundColor: c.combinations },
+      ].map((d) => ({ ...d, borderRadius: 6, borderSkipped: false, maxBarThickness: 28 })),
+    }
+  }, [stats, c])
+
+  const byGame = stats.combinations?.byGame || []
+  const doughnutData = useMemo(() => ({
+    labels: byGame.map((g) => GAMES[g._id]?.name || g._id),
+    datasets: [{
+      data: byGame.map((g) => g.count),
+      backgroundColor: byGame.map((g) => c[g._id] || c.users),
+      borderColor: c.surface,
+      borderWidth: 3,
+      hoverOffset: 6,
+    }],
+  }), [byGame, c])
+
+  const u = stats.users || {}
+  const co = stats.combinations || {}
+  const al = stats.alerts || {}
+
+  return (
+    <div className="adm-dashboard">
+      <div className="adm-kpis">
+        <Kpi label="Utilisateurs" value={u.total || 0} color={c.users}
+          detail={`${u.active || 0} actifs · +${u.recent || 0} cette semaine`} trend={variation(daily, 'users')} />
+        <Kpi label="Combinaisons" value={co.total || 0} color={c.combinations}
+          detail={`+${co.recent || 0} cette semaine`} trend={variation(daily, 'combinations')} />
+        <Kpi label="Alertes" value={al.total || 0} color={c.alerts}
+          detail={`${al.active || 0} actives · ${al.inactive || 0} en pause`} trend={variation(daily, 'alerts')} />
+        <Kpi label="Comptes désactivés" value={u.inactive || 0} color={c.muted}
+          detail={u.total ? `${Math.round(((u.inactive || 0) / u.total) * 100)} % des comptes` : 'Aucun compte'} />
+      </div>
+
+      <div className="adm-charts">
+        <ChartCard title="Activité" subtitle="30 derniers jours" wide>
+          <Line data={lineData} options={baseOptions} />
+        </ChartCard>
+
+        <ChartCard title="Par mois" subtitle="6 derniers mois">
+          {barData.labels.length
+            ? <Bar data={barData} options={baseOptions} />
+            : <p className="adm-chart__empty">Pas encore de données.</p>}
+        </ChartCard>
+
+        <ChartCard title="Combinaisons par jeu">
+          {byGame.length
+            ? <Doughnut data={doughnutData} options={{
+                responsive: true, maintainAspectRatio: false, cutout: '68%',
+                plugins: { legend, tooltip },
+              }} />
+            : <p className="adm-chart__empty">Aucune combinaison enregistrée.</p>}
+        </ChartCard>
+      </div>
+    </div>
+  )
+}

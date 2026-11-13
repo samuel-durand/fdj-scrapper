@@ -19,6 +19,14 @@
   --c-eurodreams: #5a2d91;
   --c-eurodreams-2: #8a3fc0;
   --c-dream: #e6007e;
+  --c-keno: #08795a;
+  --c-keno-2: #14a87c;
+  --c-crescendo: #c94a06;
+  --c-crescendo-2: #f07a2c;
+  --c-letter: #6d28c9;
+  --c-amigo: #075e91;
+  --c-amigo-2: #1d93cf;
+  --c-yellow: #ffc800;
   --c-success: #0a8a5c;
 
   /* ---- Surfaces (clair) ---- */
@@ -32,6 +40,13 @@
   --radius: 16px;
   --radius-sm: 10px;
   --font: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* ---- Verre dépoli (cartes posées sur la scène 3D) ---- */
+  --glass: rgba(255, 255, 255, .8);
+  --glass-strong: rgba(255, 255, 255, .9);
+  --glass-inset: rgba(242, 243, 248, .7);
+  --glass-border: rgba(255, 255, 255, .75);
+  --glass-blur: blur(14px) saturate(1.5);
 
   /* ---- Alias des anciennes variables (composants existants) ---- */
   --bg-primary: var(--surface);
@@ -70,6 +85,10 @@
   --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
   --card-hover-shadow: 0 10px 30px rgba(0, 0, 0, .5);
   --c-brand: #8f96ff;
+  --glass: rgba(22, 25, 54, .72);
+  --glass-strong: rgba(22, 25, 54, .86);
+  --glass-inset: rgba(13, 15, 34, .45);
+  --glass-border: rgba(255, 255, 255, .08);
   color-scheme: dark;
 }
 

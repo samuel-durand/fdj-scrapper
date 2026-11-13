@@ -3,7 +3,7 @@ import './Calendar.css';
 
 /**
  * Calendrier pour naviguer entre les résultats
- * @param {string} gameType - 'euromillions' ou 'loto'
+ * @param {string} gameType - clé du jeu (games.js)
  * @param {Array} draws - Liste des tirages
  * @param {Function} onDateSelect - Callback quand une date est sélectionnée
  */
@@ -15,6 +15,9 @@ function Calendar({ gameType, draws, onDateSelect }) {
     euromillions: { days: [2, 5], info: 'Tirages : mardi et vendredi' },
     loto: { days: [1, 3, 6], info: 'Tirages : lundi, mercredi et samedi (+ Super Loto exceptionnels)' },
     eurodreams: { days: [1, 4], info: 'Tirages : lundi et jeudi' },
+    keno: { days: [0, 1, 2, 3, 4, 5, 6], info: 'Tirage : tous les soirs' },
+    crescendo: { days: [6], info: 'Tirages : le samedi, chaque heure de 13h à 19h' },
+    amigo: { days: [0, 1, 2, 3, 4, 5, 6], info: 'Tirages : toutes les 5 minutes' },
   };
   const drawDays = (DRAW_DAYS[gameType] || DRAW_DAYS.loto).days;
   // "AAAA-MM-JJ" lu en heure locale (new Date("AAAA-MM-JJ") serait en UTC)

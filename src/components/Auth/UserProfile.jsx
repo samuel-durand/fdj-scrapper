@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import AlertsList from '../Alerts/AlertsList'
 import AlertConfig from '../Alerts/AlertConfig'
 import MyCombinations from '../MyCombinations/MyCombinations'
+import { GAMES, GAME_KEYS } from '../../games'
 import './Auth.css'
 
 export default function UserProfile({ onClose }) {
@@ -91,32 +92,16 @@ export default function UserProfile({ onClose }) {
           <p className="section-description">Sélectionnez les jeux qui vous intéressent</p>
           
           <div className="game-preferences">
-            <label className="game-checkbox">
-              <input
-                type="checkbox"
-                checked={preferences.favoriteGames?.includes('euromillions')}
-                onChange={() => handleGameToggle('euromillions')}
-              />
-              <span className="game-label">⭐ EuroMillions - My Million</span>
-            </label>
-
-            <label className="game-checkbox">
-              <input
-                type="checkbox"
-                checked={preferences.favoriteGames?.includes('loto')}
-                onChange={() => handleGameToggle('loto')}
-              />
-              <span className="game-label">🍀 Loto®</span>
-            </label>
-
-            <label className="game-checkbox">
-              <input
-                type="checkbox"
-                checked={preferences.favoriteGames?.includes('eurodreams')}
-                onChange={() => handleGameToggle('eurodreams')}
-              />
-              <span className="game-label">💤 EuroDreams</span>
-            </label>
+            {GAME_KEYS.map((key) => (
+              <label className="game-checkbox" key={key}>
+                <input
+                  type="checkbox"
+                  checked={preferences.favoriteGames?.includes(key) || false}
+                  onChange={() => handleGameToggle(key)}
+                />
+                <span className="game-label">{GAMES[key].fullName}</span>
+              </label>
+            ))}
               </div>
             </div>
 
@@ -131,9 +116,7 @@ export default function UserProfile({ onClose }) {
               onChange={(e) => setPreferences({ ...preferences, defaultTab: e.target.value })}
               className="preference-select"
             >
-              <option value="euromillions">EuroMillions</option>
-              <option value="loto">Loto</option>
-              <option value="eurodreams">EuroDreams</option>
+              {GAME_KEYS.map((key) => <option key={key} value={key}>{GAMES[key].name}</option>)}
             </select>
           </div>
 

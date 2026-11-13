@@ -6,7 +6,10 @@ from typing import Any
 
 from flask import jsonify, request
 
+# Jeux à grille fixe : combinaisons, alertes, notifications
 GAME_KEYS = ("euromillions", "loto", "eurodreams")
+# Tous les jeux de tirage dont on publie les résultats
+DRAW_GAME_KEYS = GAME_KEYS + ("keno", "crescendo", "amigo")
 
 
 def body() -> dict[str, Any]:

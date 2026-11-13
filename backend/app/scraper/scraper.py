@@ -5,10 +5,11 @@ from __future__ import annotations
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from datetime import date
+import json
+from datetime import date, datetime, timedelta
 
-from .client import FdjClient
-from .games import GAMES, Game, draw_date, parse_announce
+from .client import FdjClient, Page
+from .games import GAMES, PARIS, Game, parse_announce, parse_dt
 from .repository import DrawRepository
 
 log = logging.getLogger(__name__)
@@ -40,22 +41,78 @@ class Scraper:
         self.workers = workers
 
     # ------------------------------------------------------------------ fetch
+    @staticmethod
+    def _page_draws(page: Page, game: Game) -> list[dict]:
+        """Tous les tirages du jeu présents dans la page (derniers tirages + journée affichée)."""
+        seen: dict[str, dict] = {}
+        for (name, params), data in page.queries.items():
+            if name != "drawGameResultByDate" or not isinstance(data, list):
+                continue
+            try:
+                if json.loads(params).get("gameName") != game.fdj_name:
+                    continue
+            except (TypeError, ValueError):
+                continue
+            for raw in data:
+                if isinstance(raw, dict) and raw.get("numbers") and raw.get("date"):
+                    d = game.parse(raw)
+                    if d["id"] not in seen or d.get("payouts"):
+                        seen[d["id"]] = d
+        draws = list(seen.values())
+        # Barème des gains (Keno, Amigo) : identique pour tous les tirages, la FDJ ne l'envoie
+        # qu'une fois par page -> on le recopie sur les tirages qui n'ont qu'une référence.
+        if any("payouts" in d for d in draws):
+            ref = next((d["payouts"] for d in draws if d.get("payouts")), None)
+            for d in draws:
+                if not d.get("payouts"):
+                    if ref:
+                        d["payouts"] = ref
+                    else:
+                        d.pop("payouts", None)  # tirage incomplet : sera recomplété au prochain passage
+        return draws
+
     def _fetch_overview(self, client: FdjClient, game: Game):
+        # La page « résultats » redirige vers la dernière journée : pour Amigo / Crescendo,
+        # elle contient déjà tous les tirages du jour.
         page = client.fetch(game.results_path)
-        latest = page.get("drawGameResultByDate", gameName=game.fdj_name) or []
         active = page.get("drawGameActiveDates", gameName=game.fdj_name) or []
         announce = page.get("drawGameAnnounce", gameName=game.fdj_name)
-        dates = sorted({draw_date(a["date"]) for a in active if a.get("date")}, reverse=True)
-        return [game.parse(r) for r in latest if r.get("numbers")], dates, parse_announce(game, announce)
+        # journée -> heure du dernier tirage de la journée
+        last_of_day: dict[date, datetime] = {}
+        for a in active:
+            if a.get("date"):
+                dt = parse_dt(a["date"])
+                last_of_day[dt.date()] = max(dt, last_of_day.get(dt.date(), dt))
+        return self._page_draws(page, game), last_of_day, parse_announce(game, announce)
 
-    def _fetch_dated(self, client: FdjClient, game: Game, d: date) -> dict | None:
+    def _fetch_dated(self, client: FdjClient, game: Game, d: date) -> list[dict]:
         page = client.fetch(game.dated_path(d))
-        data = page.get("drawGameResultByDate", gameName=game.fdj_name, date=d.strftime("%d/%m/%Y"))
-        for raw in data or []:
-            # Vérifie que la FDJ n'a pas redirigé vers un autre tirage
-            if raw.get("numbers") and draw_date(raw["date"]) == d:
-                return game.parse(raw)
-        return None
+        # Vérifie que la FDJ n'a pas redirigé vers une autre journée
+        return [x for x in self._page_draws(page, game) if x["date"] == d.isoformat()]
+
+    def _missing_dates(self, game: Game, last_of_day: dict[date, datetime], latest: list[dict],
+                       refresh: bool) -> list[date]:
+        """Journées à (re)télécharger."""
+        dates = sorted(last_of_day, reverse=True)
+        if game.history_days:
+            oldest = datetime.now(PARIS).date() - timedelta(days=game.history_days)
+            dates = [d for d in dates if d >= oldest]
+        if not game.intraday:
+            known = self.repo.known(game.key)
+            latest_ids = {d["id"] for d in latest}
+            return [d for d in dates
+                    if f"{game.prefix}-{d.isoformat()}" not in latest_ids
+                    and (refresh or not known.get(f"{game.prefix}-{d.isoformat()}"))]
+        # Plusieurs tirages par jour : journée absente de la base, ou dont le dernier tirage
+        # (annoncé par la FDJ) manque — publié après notre dernier passage.
+        stored_last = self.repo.last_draw_times(game.key)
+        shown = {d["date"] for d in latest}
+
+        def incomplete(d: date) -> bool:
+            have = stored_last.get(d.isoformat())
+            return have is None or parse_dt(have) < last_of_day[d] - timedelta(minutes=1)
+
+        return [d for d in dates if d.isoformat() not in shown and (refresh or incomplete(d))]
 
     def _save(self, report: Report, game: Game, draws: list[dict]) -> None:
         added, updated = self.repo.upsert(game.key, draws)
@@ -88,25 +145,17 @@ class Scraper:
                 latest, dates, announce = ov
                 if announce and self.repo.set_next_draw(game.key, announce):
                     report.new_announces.append((game.key, announce))
+                jobs.extend((game, d) for d in self._missing_dates(game, dates, latest, refresh))
                 self._save(report, game, latest)
-
-                known = self.repo.known(game.key)
-                latest_ids = {d["id"] for d in latest}
-                for d in dates:
-                    draw_id = f"{game.prefix}-{d.isoformat()}"
-                    if draw_id in latest_ids:
-                        continue
-                    if refresh or not known.get(draw_id):
-                        jobs.append((game, d))
 
             log.info("%d page(s) datée(s) à récupérer", len(jobs))
             results = pool.map(lambda j: (j, self._safe(self._fetch_dated, client, *j)), jobs)
             report.requests += len(jobs)
             for (game, d), res in results:
-                if isinstance(res, Exception) or res is None:
+                if isinstance(res, Exception) or not res:
                     report.games[game.key].failed.append(f"{d.isoformat()} : {res or 'tirage introuvable'}")
                     continue
-                self._save(report, game, [res])
+                self._save(report, game, res)
 
         for game in selected:
             newest = self.repo.list(game.key, limit=1)

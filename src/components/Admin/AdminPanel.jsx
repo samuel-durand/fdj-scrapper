@@ -1,425 +1,401 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import * as adminService from '../../services/adminService'
+import { GAMES } from '../../games'
+import { DrawBalls } from '../Results/Balls'
 import DashboardCharts from './DashboardCharts'
 import './AdminPanel.css'
 
+const TABS = [
+  { key: 'stats', label: 'Tableau de bord' },
+  { key: 'users', label: 'Utilisateurs' },
+  { key: 'combinations', label: 'Combinaisons' },
+  { key: 'alerts', label: 'Alertes' },
+]
+
+const ALERT_LABELS = {
+  jackpot_threshold: 'Seuil de jackpot',
+  favorite_numbers: 'Numéros favoris',
+  new_draw: 'Nouveau tirage',
+  winning_combination: 'Combinaison gagnante',
+  lucky_number_match: 'Numéro chance',
+}
+
+const formatDate = (value) =>
+  value ? new Date(value).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
+
+const initial = (name) => (name || '?').trim().charAt(0).toUpperCase()
+
+function Icon({ name }) {
+  const paths = {
+    close: <path d="M6 6l12 12M18 6L6 18" />,
+    search: <><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></>,
+    trash: <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3" />,
+    crown: <path d="M3 18h18M4 8l4 4 4-7 4 7 4-4-2 10H6z" />,
+    user: <><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>,
+    lock: <><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
+    unlock: <><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 7.5-2" /></>,
+    shield: <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" />,
+  }
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {paths[name]}
+    </svg>
+  )
+}
+
+function GameChip({ game }) {
+  return <span className={`adm-chip adm-chip--${game}`}>{GAMES[game]?.name || game}</span>
+}
+
+function Pagination({ pagination, onPage }) {
+  if (!pagination || pagination.pages <= 1) return null
+  const { page, pages } = pagination
+  // Fenêtre de 5 pages autour de la page courante
+  const start = Math.max(1, Math.min(page - 2, pages - 4))
+  const nums = Array.from({ length: Math.min(5, pages) }, (_, i) => start + i)
+  return (
+    <nav className="adm-pagination" aria-label="Pagination">
+      <button onClick={() => onPage(page - 1)} disabled={page <= 1} aria-label="Page précédente">‹</button>
+      {nums.map((n) => (
+        <button key={n} onClick={() => onPage(n)} className={n === page ? 'is-active' : ''}
+          aria-current={n === page ? 'page' : undefined}>
+          {n}
+        </button>
+      ))}
+      <button onClick={() => onPage(page + 1)} disabled={page >= pages} aria-label="Page suivante">›</button>
+    </nav>
+  )
+}
+
+function Empty({ children }) {
+  return <div className="adm-empty">{children}</div>
+}
+
 export default function AdminPanel({ onClose }) {
   const { user } = useAuth()
-  const [activeTab, setActiveTab] = useState('stats') // stats, users, combinations, alerts
-  const [loading, setLoading] = useState(true)
+  const isAdmin = user?.role === 'admin'
+  const [tab, setTab] = useState('stats')
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  
-  // Stats
+  const [toast, setToast] = useState(null)
+
   const [stats, setStats] = useState(null)
-  
-  // Users
-  const [users, setUsers] = useState([])
-  const [usersPagination, setUsersPagination] = useState(null)
+  const [users, setUsers] = useState({ data: [], pagination: null })
   const [userSearch, setUserSearch] = useState('')
-  
-  // Combinations
-  const [combinations, setCombinations] = useState([])
-  const [combinationsPagination, setCombinationsPagination] = useState(null)
-  
-  // Alerts
-  const [alerts, setAlerts] = useState([])
-  const [alertsPagination, setAlertsPagination] = useState(null)
+  const [combinations, setCombinations] = useState({ data: [], pagination: null })
+  const [alerts, setAlerts] = useState({ data: [], pagination: null })
 
-  // Vérifier que l'utilisateur est admin
+  const notify = (message, kind = 'success') => setToast({ message, kind, id: Date.now() })
+
   useEffect(() => {
-    if (!user || user.role !== 'admin') {
-      setError('Accès refusé - Droits administrateur requis')
-      setLoading(false)
-    }
-  }, [user])
+    if (!toast) return
+    const t = setTimeout(() => setToast(null), 3000)
+    return () => clearTimeout(t)
+  }, [toast])
 
-  // Charger les stats au démarrage
   useEffect(() => {
-    if (activeTab === 'stats') {
-      loadStats()
-    } else if (activeTab === 'users') {
-      loadUsers()
-    } else if (activeTab === 'combinations') {
-      loadCombinations()
-    } else if (activeTab === 'alerts') {
-      loadAlerts()
-    }
-  }, [activeTab])
+    const onKey = (e) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
 
-  const loadStats = async () => {
+  const run = async (request, onSuccess) => {
     setLoading(true)
-    const result = await adminService.getAdminStats()
-    if (result.success) {
-      setStats(result.data)
-    } else {
-      setError(result.error)
-    }
+    setError('')
+    const result = await request()
+    if (result.success) onSuccess(result)
+    else setError(result.error)
     setLoading(false)
   }
 
-  const loadUsers = async (page = 1) => {
-    setLoading(true)
-    const result = await adminService.getUsers({ page, search: userSearch })
+  const loadStats = () => run(adminService.getAdminStats, (r) => setStats(r.data))
+  const loadUsers = (page = 1) =>
+    run(() => adminService.getUsers({ page, search: userSearch }), (r) => setUsers({ data: r.data, pagination: r.pagination }))
+  const loadCombinations = (page = 1) =>
+    run(() => adminService.getAllCombinations({ page, limit: 30 }), (r) => setCombinations({ data: r.data, pagination: r.pagination }))
+  const loadAlerts = (page = 1) =>
+    run(() => adminService.getAllAlerts({ page, limit: 30 }), (r) => setAlerts({ data: r.data, pagination: r.pagination }))
+
+  const loaders = { stats: loadStats, users: loadUsers, combinations: loadCombinations, alerts: loadAlerts }
+
+  useEffect(() => {
+    if (isAdmin) loaders[tab]()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tab, isAdmin])
+
+  const act = useCallback(async (request, successMessage, reload) => {
+    const result = await request()
     if (result.success) {
-      setUsers(result.data)
-      setUsersPagination(result.pagination)
+      notify(successMessage)
+      reload()
     } else {
-      setError(result.error)
+      notify(result.error || 'Une erreur est survenue', 'error')
     }
-    setLoading(false)
+  }, [])
+
+  const page = (p) => p?.page || 1
+
+  const toggleRole = (u) =>
+    act(() => adminService.updateUser(u._id, { role: u.role === 'admin' ? 'user' : 'admin' }),
+      u.role === 'admin' ? `${u.name} n'est plus administrateur` : `${u.name} est maintenant administrateur`,
+      () => loadUsers(page(users.pagination)))
+
+  const toggleActive = (u) =>
+    act(() => adminService.updateUser(u._id, { isActive: !u.isActive }),
+      u.isActive ? `Compte de ${u.name} désactivé` : `Compte de ${u.name} réactivé`,
+      () => loadUsers(page(users.pagination)))
+
+  const deleteUser = (u) => {
+    if (!confirm(`Supprimer ${u.name} et toutes ses données ? Cette action est définitive.`)) return
+    act(() => adminService.deleteUser(u._id), 'Utilisateur supprimé', () => loadUsers(page(users.pagination)))
   }
 
-  const loadCombinations = async (page = 1) => {
-    setLoading(true)
-    const result = await adminService.getAllCombinations({ page, limit: 30 })
-    if (result.success) {
-      setCombinations(result.data)
-      setCombinationsPagination(result.pagination)
-    } else {
-      setError(result.error)
-    }
-    setLoading(false)
-  }
-
-  const loadAlerts = async (page = 1) => {
-    setLoading(true)
-    const result = await adminService.getAllAlerts({ page, limit: 30 })
-    if (result.success) {
-      setAlerts(result.data)
-      setAlertsPagination(result.pagination)
-    } else {
-      setError(result.error)
-    }
-    setLoading(false)
-  }
-
-  const handleDeleteUser = async (userId) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur et toutes ses données ?')) {
-      return
-    }
-
-    const result = await adminService.deleteUser(userId)
-    if (result.success) {
-      alert('Utilisateur supprimé')
-      loadUsers()
-    } else {
-      alert('Erreur: ' + result.error)
-    }
-  }
-
-  const handleToggleUserActive = async (userId, currentStatus) => {
-    const result = await adminService.updateUser(userId, { isActive: !currentStatus })
-    if (result.success) {
-      loadUsers()
-    } else {
-      alert('Erreur: ' + result.error)
-    }
-  }
-
-  const handleToggleUserRole = async (userId, currentRole) => {
-    const newRole = currentRole === 'admin' ? 'user' : 'admin'
-    const result = await adminService.updateUser(userId, { role: newRole })
-    if (result.success) {
-      loadUsers()
-    } else {
-      alert('Erreur: ' + result.error)
-    }
-  }
-
-  const handleDeleteCombination = async (combinationId) => {
+  const deleteCombination = (c) => {
     if (!confirm('Supprimer cette combinaison ?')) return
-    
-    const result = await adminService.deleteCombination(combinationId)
-    if (result.success) {
-      loadCombinations()
-    } else {
-      alert('Erreur: ' + result.error)
-    }
+    act(() => adminService.deleteCombination(c._id), 'Combinaison supprimée',
+      () => loadCombinations(page(combinations.pagination)))
   }
 
-  const handleDeleteAlert = async (alertId) => {
+  const deleteAlert = (a) => {
     if (!confirm('Supprimer cette alerte ?')) return
-    
-    const result = await adminService.deleteAlert(alertId)
-    if (result.success) {
-      loadAlerts()
-    } else {
-      alert('Erreur: ' + result.error)
-    }
+    act(() => adminService.deleteAlert(a._id), 'Alerte supprimée', () => loadAlerts(page(alerts.pagination)))
   }
 
-  if (!user || user.role !== 'admin') {
-    return (
-      <div className="admin-modal-overlay" onClick={onClose}>
-        <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
-          <button className="admin-modal-close" onClick={onClose}>×</button>
-          <h2 className="admin-title">⛔ Accès Refusé</h2>
-          <p className="admin-error">Vous devez être administrateur pour accéder à cette page.</p>
-        </div>
-      </div>
-    )
+  const total = (p, list) => p?.total ?? list.length
+  const counts = {
+    users: stats?.users?.total,
+    combinations: stats?.combinations?.total,
+    alerts: stats?.alerts?.total,
   }
 
   return (
-    <div className="admin-modal-overlay" onClick={onClose}>
-      <div className="admin-modal admin-panel-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="admin-modal-close" onClick={onClose}>×</button>
-        
-        <h2 className="admin-title">🔐 Panel Administrateur</h2>
-        <p className="admin-subtitle">Gestion complète de la plateforme</p>
+    <div className="adm-overlay" onClick={onClose}>
+      <div className="adm-modal" role="dialog" aria-modal="true" aria-labelledby="adm-title"
+        onClick={(e) => e.stopPropagation()}>
+        <header className="adm-header">
+          <div className="adm-header__title">
+            <span className="adm-header__icon"><Icon name="shield" /></span>
+            <div>
+              <h2 id="adm-title">Administration</h2>
+              <p>Utilisateurs, combinaisons et alertes de la plateforme</p>
+            </div>
+          </div>
+          <button className="adm-close" onClick={onClose} aria-label="Fermer"><Icon name="close" /></button>
+        </header>
 
-        <div className="admin-tabs">
-          <button
-            className={`admin-tab ${activeTab === 'stats' ? 'active' : ''}`}
-            onClick={() => setActiveTab('stats')}
-          >
-            📊 Statistiques
-          </button>
-          <button
-            className={`admin-tab ${activeTab === 'users' ? 'active' : ''}`}
-            onClick={() => setActiveTab('users')}
-          >
-            👥 Utilisateurs
-          </button>
-          <button
-            className={`admin-tab ${activeTab === 'combinations' ? 'active' : ''}`}
-            onClick={() => setActiveTab('combinations')}
-          >
-            🎲 Combinaisons
-          </button>
-          <button
-            className={`admin-tab ${activeTab === 'alerts' ? 'active' : ''}`}
-            onClick={() => setActiveTab('alerts')}
-          >
-            🔔 Alertes
-          </button>
-        </div>
+        {!isAdmin ? (
+          <div className="adm-body">
+            <div className="adm-error">Accès refusé : droits administrateur requis.</div>
+          </div>
+        ) : (
+          <>
+            <nav className="adm-tabs" role="tablist">
+              {TABS.map((t) => (
+                <button key={t.key} role="tab" aria-selected={tab === t.key}
+                  className={`adm-tab ${tab === t.key ? 'is-active' : ''}`} onClick={() => setTab(t.key)}>
+                  {t.label}
+                  {counts[t.key] != null && <span className="adm-tab__count">{counts[t.key]}</span>}
+                </button>
+              ))}
+            </nav>
 
-        <div className="admin-content">
-          {loading && <div className="admin-loading">Chargement...</div>}
-          {error && <div className="admin-error">{error}</div>}
+            <div className="adm-body">
+              {error && <div className="adm-error">{error}</div>}
 
-          {!loading && !error && (
-            <>
-              {/* Statistiques avec graphiques */}
-              {activeTab === 'stats' && stats && (
-                <DashboardCharts stats={stats} />
+              {tab === 'stats' && (
+                loading && !stats ? <div className="adm-loading">Chargement des statistiques…</div>
+                  : stats && <DashboardCharts stats={stats} />
               )}
 
-              {/* Utilisateurs */}
-              {activeTab === 'users' && (
-                <div className="admin-users">
-                  <div className="users-header">
-                    <input
-                      type="text"
-                      placeholder="Rechercher un utilisateur..."
-                      value={userSearch}
-                      onChange={(e) => setUserSearch(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && loadUsers()}
-                      className="search-input"
-                    />
-                    <button onClick={() => loadUsers()} className="search-btn">🔍 Rechercher</button>
-                  </div>
+              {tab === 'users' && (
+                <section>
+                  <form className="adm-toolbar" onSubmit={(e) => { e.preventDefault(); loadUsers() }}>
+                    <label className="adm-search">
+                      <Icon name="search" />
+                      <input type="search" placeholder="Rechercher par nom ou email" value={userSearch}
+                        onChange={(e) => setUserSearch(e.target.value)} aria-label="Rechercher un utilisateur" />
+                    </label>
+                    <button type="submit" className="btn btn--primary btn--sm">Rechercher</button>
+                  </form>
+                  <p className="adm-meta">{total(users.pagination, users.data)} utilisateur(s)</p>
 
-                  <div className="users-table-container">
-                    <table className="admin-table">
+                  <div className={`adm-table-wrap ${loading ? 'is-loading' : ''}`}>
+                    <table className="adm-table">
                       <thead>
                         <tr>
-                          <th>Nom</th>
-                          <th>Email</th>
+                          <th>Utilisateur</th>
                           <th>Rôle</th>
                           <th>Statut</th>
-                          <th>Stats</th>
-                          <th>Actions</th>
+                          <th className="num">Combinaisons</th>
+                          <th className="num">Alertes</th>
+                          <th>Inscription</th>
+                          <th className="actions"><span className="sr-only">Actions</span></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {users.map(u => (
-                          <tr key={u._id}>
-                            <td>{u.name}</td>
-                            <td>{u.email}</td>
-                            <td>
-                              <span className={`role-badge ${u.role}`}>
-                                {u.role === 'admin' ? '👑 Admin' : '👤 User'}
-                              </span>
-                            </td>
-                            <td>
-                              <span className={`status-badge ${u.isActive ? 'active' : 'inactive'}`}>
-                                {u.isActive ? '✅ Actif' : '❌ Inactif'}
-                              </span>
-                            </td>
-                            <td>
-                              <small>
-                                {u.stats.combinations} combinaisons<br/>
-                                {u.stats.alerts} alertes
-                              </small>
-                            </td>
-                            <td>
-                              <div className="action-buttons">
-                                <button 
-                                  onClick={() => handleToggleUserRole(u._id, u.role)}
-                                  className="btn-small"
-                                  disabled={u._id === user._id}
-                                >
-                                  {u.role === 'admin' ? '👤' : '👑'}
-                                </button>
-                                <button 
-                                  onClick={() => handleToggleUserActive(u._id, u.isActive)}
-                                  className="btn-small"
-                                >
-                                  {u.isActive ? '🔒' : '🔓'}
-                                </button>
-                                <button 
-                                  onClick={() => handleDeleteUser(u._id)}
-                                  className="btn-small btn-danger"
-                                  disabled={u._id === user._id}
-                                >
-                                  🗑️
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                        {users.data.map((u) => {
+                          const self = u._id === user._id
+                          return (
+                            <tr key={u._id}>
+                              <td>
+                                <div className="adm-user">
+                                  <span className="adm-avatar">{initial(u.name)}</span>
+                                  <div>
+                                    <strong>{u.name}{self && <em className="adm-you"> (vous)</em>}</strong>
+                                    <small>{u.email}</small>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span className={`adm-badge ${u.role === 'admin' ? 'adm-badge--admin' : ''}`}>
+                                  {u.role === 'admin' ? 'Admin' : 'Utilisateur'}
+                                </span>
+                              </td>
+                              <td>
+                                <span className={`adm-status ${u.isActive ? 'is-on' : 'is-off'}`}>
+                                  {u.isActive ? 'Actif' : 'Désactivé'}
+                                </span>
+                              </td>
+                              <td className="num">{u.stats?.combinations ?? 0}</td>
+                              <td className="num">{u.stats?.alerts ?? 0}</td>
+                              <td className="muted">{formatDate(u.createdAt)}</td>
+                              <td className="actions">
+                                <div className="adm-actions">
+                                  <button className="adm-icon-btn" onClick={() => toggleRole(u)} disabled={self}
+                                    title={u.role === 'admin' ? 'Retirer les droits admin' : 'Promouvoir admin'}>
+                                    <Icon name={u.role === 'admin' ? 'user' : 'crown'} />
+                                  </button>
+                                  <button className="adm-icon-btn" onClick={() => toggleActive(u)} disabled={self}
+                                    title={u.isActive ? 'Désactiver le compte' : 'Réactiver le compte'}>
+                                    <Icon name={u.isActive ? 'lock' : 'unlock'} />
+                                  </button>
+                                  <button className="adm-icon-btn adm-icon-btn--danger" onClick={() => deleteUser(u)}
+                                    disabled={self} title="Supprimer l'utilisateur">
+                                    <Icon name="trash" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          )
+                        })}
                       </tbody>
                     </table>
+                    {!loading && users.data.length === 0 && <Empty>Aucun utilisateur trouvé.</Empty>}
                   </div>
-
-                  {usersPagination && usersPagination.pages > 1 && (
-                    <div className="pagination">
-                      {Array.from({ length: usersPagination.pages }, (_, i) => i + 1).map(page => (
-                        <button
-                          key={page}
-                          onClick={() => loadUsers(page)}
-                          className={page === usersPagination.page ? 'active' : ''}
-                        >
-                          {page}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  <Pagination pagination={users.pagination} onPage={loadUsers} />
+                </section>
               )}
 
-              {/* Combinaisons */}
-              {activeTab === 'combinations' && (
-                <div className="admin-combinations">
-                  <div className="combinations-table-container">
-                    <table className="admin-table">
+              {tab === 'combinations' && (
+                <section>
+                  <p className="adm-meta">{total(combinations.pagination, combinations.data)} combinaison(s) enregistrée(s)</p>
+                  <div className={`adm-table-wrap ${loading ? 'is-loading' : ''}`}>
+                    <table className="adm-table">
                       <thead>
                         <tr>
                           <th>Utilisateur</th>
                           <th>Jeu</th>
                           <th>Numéros</th>
-                          <th>Date</th>
-                          <th>Actions</th>
+                          <th>Créée le</th>
+                          <th className="actions"><span className="sr-only">Actions</span></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {combinations.map(c => (
+                        {combinations.data.map((c) => (
                           <tr key={c._id}>
-                            <td>{c.userId?.name || 'N/A'}</td>
-                            <td><span className="game-badge">{c.game.toUpperCase()}</span></td>
                             <td>
-                              <div className="numbers-display">
-                                {c.numbers.join(', ')}
-                                {c.stars && ` | ⭐ ${c.stars.join(', ')}`}
-                                {c.luckyNumber && ` | 🍀 ${c.luckyNumber}`}
-                                {c.dreamNumber && ` | 💜 ${c.dreamNumber}`}
+                              <div className="adm-user">
+                                <span className="adm-avatar">{initial(c.userId?.name)}</span>
+                                <div>
+                                  <strong>{c.userId?.name || 'Utilisateur supprimé'}</strong>
+                                  {c.userId?.email && <small>{c.userId.email}</small>}
+                                </div>
                               </div>
                             </td>
-                            <td><small>{new Date(c.createdAt).toLocaleDateString()}</small></td>
+                            <td><GameChip game={c.game} /></td>
                             <td>
-                              <button 
-                                onClick={() => handleDeleteCombination(c._id)}
-                                className="btn-small btn-danger"
-                              >
-                                🗑️
+                              {GAMES[c.game]
+                                ? <div className={`adm-balls adm-balls--${c.game}`}><DrawBalls game={c.game} draw={c} size="sm" /></div>
+                                : (c.numbers || []).join(' · ')}
+                            </td>
+                            <td className="muted">{formatDate(c.createdAt)}</td>
+                            <td className="actions">
+                              <button className="adm-icon-btn adm-icon-btn--danger" onClick={() => deleteCombination(c)}
+                                title="Supprimer la combinaison">
+                                <Icon name="trash" />
                               </button>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
+                    {!loading && combinations.data.length === 0 && <Empty>Aucune combinaison enregistrée.</Empty>}
                   </div>
-
-                  {combinationsPagination && combinationsPagination.pages > 1 && (
-                    <div className="pagination">
-                      {Array.from({ length: combinationsPagination.pages }, (_, i) => i + 1).map(page => (
-                        <button
-                          key={page}
-                          onClick={() => loadCombinations(page)}
-                          className={page === combinationsPagination.page ? 'active' : ''}
-                        >
-                          {page}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  <Pagination pagination={combinations.pagination} onPage={loadCombinations} />
+                </section>
               )}
 
-              {/* Alertes */}
-              {activeTab === 'alerts' && (
-                <div className="admin-alerts">
-                  <div className="alerts-table-container">
-                    <table className="admin-table">
+              {tab === 'alerts' && (
+                <section>
+                  <p className="adm-meta">{total(alerts.pagination, alerts.data)} alerte(s) configurée(s)</p>
+                  <div className={`adm-table-wrap ${loading ? 'is-loading' : ''}`}>
+                    <table className="adm-table">
                       <thead>
                         <tr>
                           <th>Utilisateur</th>
                           <th>Jeu</th>
                           <th>Type</th>
                           <th>Statut</th>
-                          <th>Date</th>
-                          <th>Actions</th>
+                          <th>Créée le</th>
+                          <th className="actions"><span className="sr-only">Actions</span></th>
                         </tr>
                       </thead>
                       <tbody>
-                        {alerts.map(a => (
-                          <tr key={a._id}>
-                            <td>{a.userId?.name || 'N/A'}</td>
-                            <td><span className="game-badge">{a.game.toUpperCase()}</span></td>
-                            <td><small>{a.type}</small></td>
-                            <td>
-                              <span className={`status-badge ${a.isActive ? 'active' : 'inactive'}`}>
-                                {a.isActive ? '✅' : '❌'}
-                              </span>
-                            </td>
-                            <td><small>{new Date(a.createdAt).toLocaleDateString()}</small></td>
-                            <td>
-                              <button 
-                                onClick={() => handleDeleteAlert(a._id)}
-                                className="btn-small btn-danger"
-                              >
-                                🗑️
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
+                        {alerts.data.map((a) => {
+                          const on = a.enabled ?? a.isActive ?? true
+                          return (
+                            <tr key={a._id}>
+                              <td>
+                                <div className="adm-user">
+                                  <span className="adm-avatar">{initial(a.userId?.name)}</span>
+                                  <div>
+                                    <strong>{a.userId?.name || 'Utilisateur supprimé'}</strong>
+                                    {a.userId?.email && <small>{a.userId.email}</small>}
+                                  </div>
+                                </div>
+                              </td>
+                              <td><GameChip game={a.game} /></td>
+                              <td>{ALERT_LABELS[a.type] || a.type}</td>
+                              <td>
+                                <span className={`adm-status ${on ? 'is-on' : 'is-off'}`}>{on ? 'Active' : 'En pause'}</span>
+                              </td>
+                              <td className="muted">{formatDate(a.createdAt)}</td>
+                              <td className="actions">
+                                <button className="adm-icon-btn adm-icon-btn--danger" onClick={() => deleteAlert(a)}
+                                  title="Supprimer l'alerte">
+                                  <Icon name="trash" />
+                                </button>
+                              </td>
+                            </tr>
+                          )
+                        })}
                       </tbody>
                     </table>
+                    {!loading && alerts.data.length === 0 && <Empty>Aucune alerte configurée.</Empty>}
                   </div>
-
-                  {alertsPagination && alertsPagination.pages > 1 && (
-                    <div className="pagination">
-                      {Array.from({ length: alertsPagination.pages }, (_, i) => i + 1).map(page => (
-                        <button
-                          key={page}
-                          onClick={() => loadAlerts(page)}
-                          className={page === alertsPagination.page ? 'active' : ''}
-                        >
-                          {page}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  <Pagination pagination={alerts.pagination} onPage={loadAlerts} />
+                </section>
               )}
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
+
+        {toast && (
+          <div key={toast.id} className={`adm-toast adm-toast--${toast.kind}`} role="status">{toast.message}</div>
+        )}
       </div>
     </div>
   )
 }
-

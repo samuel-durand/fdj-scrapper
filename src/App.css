@@ -6,6 +6,9 @@
 }
 .app--loto { --accent: var(--c-loto); }
 .app--eurodreams { --accent: var(--c-eurodreams); }
+.app--keno { --accent: var(--c-keno); }
+.app--crescendo { --accent: var(--c-crescendo); }
+.app--amigo { --accent: var(--c-amigo); }
 
 .main {
   flex: 1;
@@ -16,14 +19,15 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
+  background: var(--glass-strong);
+  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   transition: box-shadow .25s, background .25s;
 }
 .topbar.is-scrolled {
   box-shadow: 0 6px 24px rgba(27, 29, 58, .1);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: saturate(1.4) blur(10px);
+  background: var(--glass);
 }
 
 .brand__mark circle { transform-box: fill-box; transform-origin: center; transition: transform .35s cubic-bezier(.3, 1.6, .5, 1); }
@@ -67,7 +71,7 @@
   position: relative;
   border: 0;
   background: none;
-  padding: 0 14px;
+  padding: 0 11px;
   font-weight: 800;
   font-size: .95rem;
   color: var(--muted);
@@ -93,6 +97,9 @@
 .gamenav__item--euromillions.is-active::after { background: var(--c-euromillions); }
 .gamenav__item--loto.is-active::after { background: var(--c-loto); }
 .gamenav__item--eurodreams.is-active::after { background: var(--c-eurodreams); }
+.gamenav__item--keno.is-active::after { background: var(--c-keno); }
+.gamenav__item--crescendo.is-active::after { background: var(--c-crescendo); }
+.gamenav__item--amigo.is-active::after { background: var(--c-amigo); }
 [data-theme="dark"] .gamenav__item--euromillions.is-active::after { background: var(--c-euromillions-2); }
 [data-theme="dark"] .gamenav__item--eurodreams.is-active::after { background: var(--c-eurodreams-2); }
 
@@ -178,10 +185,12 @@
 /* ------------------------------------------------------------- Pied de page */
 .footer {
   margin-top: 48px;
-  background: var(--c-brand-strong);
+  background: color-mix(in srgb, var(--c-brand-strong) 92%, transparent);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   color: #d9dbf5;
 }
-[data-theme="dark"] .footer { background: #090a18; }
+[data-theme="dark"] .footer { background: rgba(6, 7, 20, .85); border-top: 1px solid var(--glass-border); }
 .footer__inner {
   max-width: 1160px;
   margin: 0 auto;
@@ -203,7 +212,7 @@
 .footer__note { opacity: .75; font-size: .82rem; }
 
 /* ------------------------------------------------------------- Responsive */
-@media (max-width: 860px) {
+@media (max-width: 1100px) {
   .topbar__inner {
     height: auto;
     flex-wrap: wrap;

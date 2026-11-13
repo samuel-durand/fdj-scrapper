@@ -6,6 +6,7 @@ import Register from './components/Auth/Register'
 import UserProfile from './components/Auth/UserProfile'
 import NotificationCenter from './components/Alerts/NotificationCenter'
 import AdminPanel from './components/Admin/AdminPanel'
+import Background from './components/Background/Background'
 import { useAuth } from './contexts/AuthContext'
 import { getUnreadCount } from './services/notificationService'
 import { GAMES, GAME_KEYS } from './games'
@@ -85,6 +86,7 @@ function App() {
 
   return (
     <div className={`app app--${activeTab}`}>
+      <Background game={activeTab} theme={theme} />
       <header className={`topbar ${scrolled ? 'is-scrolled' : ''}`}>
         <div className="topbar__inner">
           <a className="brand" href={`#${activeTab}`}>

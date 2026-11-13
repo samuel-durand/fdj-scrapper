@@ -14,7 +14,7 @@ from flask import Blueprint, jsonify, request
 from ..db import get_db
 from ..scraper.repository import DrawRepository
 from ..serialize import iso
-from . import GAME_KEYS, fail, int_arg
+from . import DRAW_GAME_KEYS, fail, int_arg
 
 bp = Blueprint("draws", __name__, url_prefix="/api/draws")
 
@@ -31,6 +31,11 @@ def _cached(payload: dict, meta: dict):
     return resp.make_conditional(request)
 
 
+def _slim(draws: list[dict]) -> list[dict]:
+    """Barème des gains (Keno, Amigo) identique d'un tirage à l'autre : envoyé avec le plus récent seulement."""
+    return [d if i == 0 else {k: v for k, v in d.items() if k != "payouts"} for i, d in enumerate(draws)]
+
+
 def _last_update(meta: dict) -> str | None:
     return iso(meta["lastUpdate"]) if meta.get("lastUpdate") else None
 
@@ -42,28 +47,28 @@ def all_games():
     meta = repo.meta()
     limit = int_arg("limit", 200, 1, 1000)
     payload = {"success": True, "lastUpdate": _last_update(meta), "nextDraws": meta.get("nextDraws", {})}
-    for game in GAME_KEYS:
-        payload[game] = repo.list(game, limit=limit)
+    for game in DRAW_GAME_KEYS:
+        payload[game] = _slim(repo.list(game, limit=limit))
     return _cached(payload, meta)
 
 
 @bp.get("/<game>")
 def one_game(game):
-    if game not in GAME_KEYS:
+    if game not in DRAW_GAME_KEYS:
         return fail("Jeu inconnu", 404)
     before = request.args.get("before")
     if before and not DATE_RE.match(before):
         return fail("Paramètre 'before' invalide (AAAA-MM-JJ)")
     repo = DrawRepository(get_db())
     meta = repo.meta()
-    draws = repo.list(game, limit=int_arg("limit", 200, 1, 1000), before=before)
+    draws = _slim(repo.list(game, limit=int_arg("limit", 200, 1, 1000), before=before))
     return _cached({"success": True, "data": draws, "nextDraw": meta.get("nextDraws", {}).get(game),
                     "lastUpdate": _last_update(meta)}, meta)
 
 
 @bp.get("/<game>/<date>")
 def one_draw(game, date):
-    if game not in GAME_KEYS or not DATE_RE.match(date):
+    if game not in DRAW_GAME_KEYS or not DATE_RE.match(date):
         return fail("Tirage introuvable", 404)
     repo = DrawRepository(get_db())
     draw = repo.get(game, date)

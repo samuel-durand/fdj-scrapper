@@ -1,546 +1,176 @@
-# 🎰 Résultats des Loteries
+# 🎰 Résultats des Loteries FDJ
 
-Application React moderne pour afficher les résultats des loteries françaises (EuroMillions, Loto et EuroDreams).
+Application web pour consulter les résultats de tous les jeux de tirage FDJ — **EuroMillions**,
+**Loto**, **EuroDreams**, **Keno**, **Crescendo** et **Amigo** : front React (Vite) + API Python (Flask)
++ MongoDB. Les tirages sont récupérés automatiquement depuis le site de la FDJ (requêtes HTTP,
+sans navigateur) et stockés en base.
 
-## 🌐 Démo en ligne
+## 🎲 Jeux couverts
 
-> **🎉 Prévisualisez l'application en direct !**  
-> 👉 **[http://resultat-fdj.soqe8286.odns.fr/](http://resultat-fdj.soqe8286.odns.fr/)**
-
-L'application est hébergée sur **o2switch** avec mise à jour automatique quotidienne via **GitHub Actions** ! 🚀
-
-## 📁 Structure du Projet
-
-```
-loterie/
-├── 📁 src/              # Frontend React
-│   ├── components/      # Composants React
-│   ├── services/        # Services API
-│   └── contexts/        # Contexts (Auth)
-├── 📁 backend/          # Backend Node.js + Express + MongoDB
-│   ├── models/          # Modèles Mongoose
-│   ├── routes/          # Routes API
-│   └── middleware/      # Middlewares (auth, admin)
-├── 📁 scrapers/         # Scrapers FDJ (Puppeteer)
-│   └── scraper-tirage-du-jour.js ⭐ (Principal)
-├── 📁 scripts/          # Scripts utilitaires (.bat, .ps1)
-├── 📁 utils/            # Utilitaires de cache
-├── 📁 docs/             # Documentation complète
-└── 📄 resultats-cache.json  # Cache des résultats
-```
+| Jeu | Tirages | Résultats affichés |
+|---|---|---|
+| **EuroMillions** | mardi et vendredi | 5 numéros + 2 étoiles, code My Million, répartition France / Europe, Étoile+ |
+| **Loto** | lundi, mercredi, samedi (+ Super / Grand Loto) | 5 numéros + numéro chance, 2ᵉ tirage, Joker+, codes gagnants |
+| **EuroDreams** | lundi et jeudi | 6 numéros + Dream Number, rente mensuelle |
+| **Keno** | chaque soir | 16 numéros sur 56, Multiplicateur, Joker+, barème des gains selon la mise |
+| **Crescendo** | samedi, chaque heure de 13h à 19h | 10 numéros sur 25 + lettre, jackpot, gagnants par rang |
+| **Amigo** | toutes les 5 minutes | 7 numéros bleus + 5 jaunes sur 28, barème des gains |
 
 ## ✨ Fonctionnalités
 
-### 🎰 Résultats des Loteries
-- ⭐ Affichage des résultats de l'**EuroMillions** avec My Million
-- 🍀 Affichage des résultats du **Loto** avec 2ème tirage et Joker+
-- 💤 Affichage des résultats d'**EuroDreams** (avec fond blanc élégant)
-- 📅 Calendrier interactif pour naviguer entre les résultats
-- 📊 **Répartition complète des gains** pour chaque tirage
-- 🔄 Navigation par onglets entre les 3 loteries
+### Résultats
+- Dernier tirage, **prochain tirage** avec jackpot et compte à rebours avant la fin des prises de jeu
+- Navigation entre les tirages (flèches, liste, **calendrier**, **historique**), heure affichée pour
+  Crescendo et Amigo
+- **Répartition des gains** (nombre de gagnants par rang) ou **barème** pour les jeux à gains fixes
+- **Statistiques** : graphiques Chart.js, numéros chauds / froids et générateur de combinaisons
+  (EuroMillions, Loto, EuroDreams) ; fréquences de sortie pour Keno, Crescendo et Amigo
 
-### 📊 Statistiques & Générateur (NOUVEAU!)
-- 📈 **Statistiques avancées** avec visualisations Chart.js :
-  - 📊 Graphique en barres : Top 15 numéros les plus fréquents
-  - 🍩 Graphique en donut : Répartition des numéros bonus (étoiles, chance, dream)
-  - 📈 Comparaison chaud/froid : Fréquences moyennes des numéros
-- 📊 **Statistiques détaillées** : Top 10 numéros chauds/froids pour chaque jeu
-- 🎲 **Générateur de numéros intelligent** avec 4 modes :
-  - 🔥 Numéros Chauds (les plus sortis)
-  - ❄️ Numéros Froids (les moins sortis)
-  - ⚖️ Équilibré (mix chauds/froids)
-  - 🎰 Aléatoire (pur hasard)
-- 💾 **Sauvegarde des combinaisons** dans votre compte
-- 📜 **Historique des combinaisons** avec vérification des gains
+### Interface
+- **Scène 3D (three.js)** propre à chaque jeu : ciel étoilé et étoiles dorées (EuroMillions), boules
+  qui rebondissent (Loto), boules en verre dans la brume (EuroDreams), etc. Transition animée entre
+  les jeux, parallaxe à la souris, la scène recule quand on descend vers les données
+- **Animation du tirage** : les boules quittent la scène et viennent se poser sur les numéros
+- **Interface en verre dépoli** au-dessus de la scène, **thème clair / sombre**, responsive
+- Sans WebGL, en mode « réduire les animations » ou économie de données : dégradé statique aux
+  couleurs du jeu. three.js n'est chargé qu'à la demande (chunk séparé) et la qualité du rendu
+  s'adapte à la puissance de l'appareil
 
-### 👤 Espace Utilisateur (NOUVEAU!)
-- 🔐 **Authentification sécurisée** (JWT + mots de passe hashés)
-- 👤 **Profil personnalisé** avec préférences de jeux
-- 🔔 **Alertes personnalisées** (stockées dans MongoDB) :
-  - 💰 Seuil de jackpot
-  - 🎯 Numéros favoris
-  - 🆕 Nouveau tirage
-  - ⭐ Numéro chance correspondant
-- 📬 **Centre de notifications** (API MongoDB) pour suivre les nouveaux tirages
-- 🎲 **Gestion des combinaisons** sauvegardées
-- 🔄 **Synchronisation en temps réel** via API backend
+### Espace utilisateur
+- Compte (JWT), profil, jeux favoris et onglet par défaut
+- **Combinaisons sauvegardées** avec vérification des gains
+- **Alertes** (jackpot, numéros favoris, nouveau tirage…) évaluées côté serveur à chaque tirage →
+  centre de notifications
 
-### 🔐 Panel Administrateur (NOUVEAU!)
-- 👥 **Gestion des utilisateurs** (activation, rôles, suppression)
-- 📊 **Statistiques globales** avec graphiques interactifs Chart.js :
-  - 📈 Graphique en ligne : évolution sur 30 jours (utilisateurs, combinaisons, alertes)
-  - 📊 Graphique en barres : statistiques mensuelles (6 derniers mois)
-  - 🍩 Graphique en donut : répartition des combinaisons par jeu
-- 🎲 **Consultation des combinaisons** de tous les utilisateurs
-- 🔔 **Gestion des alertes** système
+### Administration
+- Tableau de bord (indicateurs, activité sur 30 jours, statistiques mensuelles, répartition par jeu)
+- Gestion des utilisateurs (rôle, activation, suppression), des combinaisons et des alertes
+- Thème clair / sombre, comme le reste du site
 
-### ⚡ Scraping Intelligent
-- 🚀 **Scraper ultra-rapide** : ne scrape que les tirages du jour (95% plus rapide!)
-- 📡 **Récupération automatique** via GitHub Actions à 22h30
-- 🔄 **Mise à jour quotidienne** automatique sur o2switch
-- 📱 Interface responsive et moderne
-- 🎨 Design unique pour chaque jeu avec animations
+### Récupération des résultats
+- Scraper **sans navigateur** : lecture des données embarquées dans les pages fdj.fr
+- **Worker** calé sur le calendrier de chaque jeu (heure annoncée par la FDJ, nouvel essai tant que
+  le résultat n'est pas publié) ; Amigo est récupéré par passages groupés toutes les 15 min
+- Rattrapage automatique des tirages manquants ou incomplets
+- API avec cache HTTP (ETag) et **compression gzip** ; le front ne charge que le jeu affiché
+
+## 📁 Structure
+
+```
+├── src/                  Front React
+│   ├── components/       Results, Background (scène 3D), Statistics, Auth, Alerts, MyCombinations, Admin…
+│   ├── three/            Scène three.js (lotteryScene.js)
+│   ├── services/         Appels à l'API (/api)
+│   ├── contexts/         AuthContext
+│   └── games.js          Configuration des 6 jeux
+├── backend/              API Flask + MongoDB (voir backend/README.md)
+│   ├── app/routes/       auth, users, draws, combinations, alerts, notifications, admin
+│   ├── app/scraper/      Scraper FDJ (games.py : normalisation de chaque jeu)
+│   ├── app/worker.py     Mise à jour automatique après chaque tirage
+│   ├── manage.py         Commandes (run, scrape, worker, create-admin, import-json)
+│   └── tests/            Tests (MongoDB simulée)
+├── .github/workflows/    Scraping planifié via GitHub Actions
+├── render.yaml           Déploiement Render
+└── railway.json + nixpacks.toml   Déploiement Railway
+```
 
 ## 🚀 Installation
 
-### Prérequis
+Prérequis : **Node.js 18+**, **Python 3.11+** et une base **MongoDB** (ex. MongoDB Atlas).
 
-- Node.js (version 16 ou supérieure)
-- npm ou yarn
+Pour une base locale sous Windows :
 
-### Étapes d'installation
-
-1. Ouvrez un terminal dans le dossier du projet
-
-2. Installez les dépendances :
 ```bash
+winget install MongoDB.Server   # service Windows « MongoDB » sur le port 27017
+winget install MongoDB.Shell    # mongosh, pour consulter la base
+```
+
+puis `MONGODB_URI=mongodb://127.0.0.1:27017/loterie` dans `backend/.env`.
+
+```bash
+# Front
 npm install
+
+# Backend
+python -m venv .venv
+.venv\Scripts\activate              # Windows — sinon : source .venv/bin/activate
+pip install -r backend/requirements.txt
+copy backend\.env.example backend\.env   # puis renseigner MONGODB_URI et les secrets JWT
 ```
 
-3. Lancez le serveur de développement :
+### Variables d'environnement (`backend/.env`)
+
+| Variable | Rôle |
+|---|---|
+| `MONGODB_URI` | Connexion MongoDB (obligatoire) |
+| `MONGODB_DB` | Nom de la base si absent de l'URI (défaut `loterie`) |
+| `JWT_SECRET` / `JWT_REFRESH_SECRET` | Secrets de signature des jetons |
+| `JWT_EXPIRE` / `JWT_REFRESH_EXPIRE` | Durées de validité (défaut `7d` / `30d`) |
+| `APP_ENV` | `development` ou `production` |
+| `FRONTEND_URL` | Origines CORS autorisées (séparées par des virgules) |
+| `SERVE_FRONTEND` | Flask sert `dist/` : `auto`, `true` ou `false` |
+
+Côté front, `VITE_API_URL` permet de pointer vers une API externe (défaut : `/api`).
+
+## 🧑‍💻 Développement
+
+Dans deux terminaux :
+
 ```bash
-npm run dev
+npm run backend     # API sur http://127.0.0.1:5000
+npm run dev         # Front sur http://localhost:5173 (/api est redirigé vers Flask)
 ```
 
-4. Ouvrez votre navigateur et accédez à l'URL affichée dans le terminal (généralement http://localhost:5173)
+Premier lancement :
 
-## 📦 Scripts disponibles
-
-### Application Frontend
-- `npm run dev` - Lance le serveur de développement React
-- `npm run build` - Compile l'application pour la production
-- `npm run preview` - Prévisualise la version de production
-
-### Backend (dans le dossier backend/)
-- `npm run dev` - Lance le serveur backend (port 5000)
-- `npm run create-admin` - Crée un utilisateur administrateur
-- `npm run generate-alerts` - Génère des alertes automatiques pour toutes les combinaisons
-
-### Scraping
-- `npm run scrape-today` - 🆕 **Scraper intelligent** (tirage du jour uniquement - ULTRA RAPIDE!)
-- `npm run scrape-complet` - Scrape les 3 jeux sur plusieurs mois
-- `npm run scrape` - Scrape les derniers résultats (Puppeteer)
-- `npm run scrape-eurodreams` - Scrape uniquement EuroDreams
-- `npm run update-cache` - Met à jour le cache des 3 derniers mois
-- `npm run nettoyer-cache` - Nettoie le cache des données invalides
-
-## 🎯 Utilisation
-
-### Démarrage rapide (Frontend uniquement)
-
-1. **Récupérer les résultats** (première utilisation) :
-   ```bash
-   npm run scrape-today  # Scrape les tirages du jour (rapide!)
-   ```
-
-2. **Lancer l'application** :
-   ```bash
-   npm run dev
-   ```
-
-3. **Ouvrir dans le navigateur** : `http://localhost:5173`
-
-### Démarrage complet (avec Backend)
-
-1. **Installer les dépendances** :
-   ```bash
-   # Frontend
-   npm install
-   
-   # Backend
-   cd backend
-   npm install
-   ```
-
-2. **Configurer les variables d'environnement** :
-   - Créer le fichier `.env` à la racine pour le frontend :
-   ```env
-   VITE_API_URL=http://localhost:5000/api
-   ```
-   - Créer le fichier `backend/.env` pour le backend :
-   ```env
-   MONGODB_URI=mongodb://localhost:27017/loterie-fdj
-   # OU utiliser MongoDB Atlas (recommandé en production)
-   # MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/loterie
-   JWT_SECRET=votre_secret_super_securise_minimum_32_caracteres
-   JWT_REFRESH_SECRET=votre_refresh_secret_super_securise
-   PORT=5000
-   FRONTEND_URL=http://localhost:5173
-   ```
-   **Note** : `FRONTEND_URL` est optionnel en développement (localhost:5173 ajouté automatiquement)
-
-3. **Créer un utilisateur admin** :
-   ```bash
-   cd backend
-   npm run create-admin
-   ```
-
-4. **Démarrer le backend** :
-   ```bash
-   cd backend
-   npm run dev  # Démarre sur http://localhost:5000
-   ```
-
-5. **Démarrer le frontend** (dans un autre terminal) :
-   ```bash
-   npm run dev  # Démarre sur http://localhost:5173
-   ```
-
-6. **Accéder à l'application** :
-   - Frontend : `http://localhost:5173`
-   - Backend API : `http://localhost:5000`
-   - Panel Admin : Se connecter avec le compte admin → Cliquer sur 🔐
-
-### Navigation
-
-1. **3 onglets disponibles** :
-   - ⭐ **EuroMillions - My Million** (Mardi & Vendredi)
-   - 🍀 **Loto®** (Lundi, Mercredi & Samedi)
-   - 💤 **EuroDreams** (Lundi & Jeudi)
-
-2. **Calendrier interactif** :
-   - 🔵 Jours bleus = Jours de tirage
-   - 🟢 Jours verts = Résultats disponibles (cliquez !)
-   - Naviguez entre les mois avec ◀ ▶
-
-3. **Affichage par jeu** :
-   - **EuroMillions** : 5 nums + 2 étoiles + Code My Million
-   - **Loto** : 5 nums + N° Chance + 2ème tirage + Joker+
-   - **EuroDreams** : 6 nums + Dream Number
-
-4. **Modal de détails** :
-   - Cliquez sur "Voir les détails complets"
-   - Répartition complète des gains
-   - Tous les codes gagnants
-
-## 🔧 Configuration API
-
-### Mode par défaut - Parsing JSON Intelligent ✨
-
-L'application utilise maintenant un **système intelligent** avec plusieurs stratégies :
-
-1. **Multi-endpoints** : Teste automatiquement plusieurs URLs
-2. **Parsing JSON direct** : Si l'API JSON existe
-3. **Extraction HTML** : Parse le HTML pour trouver le JSON embarqué (`__NEXT_DATA__`, etc.)
-4. **Fallback** : Affiche des données de secours si tout échoue
-
-Si l'API n'est pas disponible (problème CORS ou autre), elle affiche des données de secours.
-
-### Utiliser le serveur proxy (Recommandé)
-
-Pour contourner les restrictions CORS et récupérer les vraies données :
-
-1. Installez les dépendances du proxy :
 ```bash
-npm install --save-dev express cors node-fetch
+npm run scrape                                                      # récupère les tirages
+python backend/manage.py create-admin "Nom" email@exemple.fr "motdepasse"
+python backend/manage.py import-json backend/data/ancien-resultats-cache.json   # historique (une fois)
 ```
 
-2. Lancez le serveur proxy :
-```bash
-node server-proxy-example.js
-```
+La FDJ ne publie qu'environ deux mois de résultats : `import-json` reprend l'historique
+de l'ancien fichier de cache.
 
-3. Modifiez `src/services/lotteryService.js` :
-```javascript
-const FDJ_API_BASE = 'http://localhost:3001/api';
-```
+Amigo compte environ 200 tirages par jour : son historique est limité à 7 jours
+(`history_days` dans `backend/app/scraper/games.py`).
 
-4. Dans un autre terminal, lancez l'application React :
-```bash
-npm run dev
-```
+## 📦 Scripts npm
 
-### Documentation complète
-
-Consultez :
-- **`GUIDE_PARSING_JSON.md`** - 🆕 Guide complet sur le parsing JSON et extraction HTML
-- **`INTEGRATION_API.md`** - Comprendre le fonctionnement de l'API
-- **`DEMARRAGE_RAPIDE.md`** - Guide de démarrage rapide
-
-Couvre :
-- Comment fonctionne le parsing JSON multi-format
-- Solutions aux problèmes CORS
-- Options d'intégration avancées
-- Formats de données supportés
-- Test des endpoints avec `test-api-fdj.js`
-
-### Modifier les couleurs
-
-Les couleurs principales sont définies dans `src/index.css` avec les variables CSS :
-- `--primary-blue` : Couleur principale bleue
-- `--primary-gold` : Couleur dorée
-- `--primary-green` : Couleur verte
-- etc.
-
-## 🎮 Jeux disponibles
-
-| Jeu | Tirages | Format | Caractéristiques |
-|-----|---------|--------|------------------|
-| ⭐ **EuroMillions** | Mar & Ven 20h30 | 5 nums (1-50) + 2 étoiles (1-12) | Code My Million inclus |
-| 🍀 **Loto** | Lun, Mer & Sam 20h30 | 5 nums (1-49) + N° Chance (1-10) | 2ème tirage + Joker+ |
-| 💤 **EuroDreams** | Lun & Jeu 21h00 | 6 nums (1-40) + Dream (1-5) | Rente 20 000€/mois |
-
-**📊 Total : 7 tirages par semaine** (~30 tirages/mois)
-
-Consultez **`JEUX_DISPONIBLES.md`** pour plus de détails sur chaque jeu.
-
-## 📁 Structure du projet
-
-```
-loterie/
-├── 📂 src/                        # Code source React
-│   ├── components/                # Composants React
-│   │   ├── Euromillions.jsx      # Composant EuroMillions
-│   │   ├── Loto.jsx              # Composant Loto
-│   │   ├── Eurodreams.jsx        # Composant EuroDreams
-│   │   ├── Calendar.jsx          # Calendrier interactif
-│   │   ├── Pagination.jsx        # Navigation entre pages
-│   │   ├── DrawDetailsModal.jsx  # Modal détails complets
-│   │   └── Lottery.css           # Styles des composants
-│   ├── services/                 # Services API
-│   │   └── lotteryService.js     # Récupération des résultats
-│   ├── App.jsx                   # Composant principal
-│   ├── App.css                   # Styles globaux
-│   ├── main.jsx                  # Point d'entrée
-│   └── index.css                 # Styles de base
-│
-├── 📂 docs/                       # Documentation (28 fichiers)
-│   ├── README.md                 # Index de la documentation
-│   ├── DEMARRAGE_RAPIDE.md      # Guide de démarrage
-│   ├── JEUX_DISPONIBLES.md      # Les 3 jeux
-│   ├── STRUCTURE_PROJET.md      # Architecture
-│   └── ... (24 autres guides)
-│
-├── 📂 scripts/                    # Scripts batch Windows (16 fichiers)
-│   ├── README.md                 # Guide des scripts
-│   ├── start-app.bat            # Lancer l'application
-│   ├── scrape-eurodreams.bat    # Scraper EuroDreams
-│   ├── push-to-github.bat       # Push vers GitHub
-│   └── ... (12 autres scripts)
-│
-├── 📂 utils/                      # Scripts utilitaires (7 fichiers)
-│   ├── README.md                 # Guide des utilitaires
-│   ├── fix-eurodreams-jackpot.js # Correction jackpots
-│   ├── nettoyer-cache.js        # Nettoyage cache
-│   ├── update-cache-3-mois.js   # Mise à jour cache
-│   └── ... (anciens scrapers)
-│
-├── 📄 scraper-urls-directes.js   # ⭐ Scraper principal (3 jeux)
-├── 📄 scraper-eurodreams.js      # Scraper EuroDreams
-├── 📄 scraper-puppeteer.js       # Scraper récents
-├── 📄 server-proxy-example.js    # Serveur proxy (optionnel)
-├── 📄 resultats-cache.json       # Cache des résultats
-├── 📄 package.json               # Dépendances npm
-├── 📄 vite.config.js             # Configuration Vite
-├── 📄 .gitignore                 # Fichiers à ignorer
-└── 📄 README.md                  # Ce fichier
-```
-
-## 🌐 Récupération des Résultats
-
-### Système de Scraping
-
-L'application utilise **Puppeteer** pour scraper les résultats officiels FDJ :
-
-1. **Scraper principal** (`scraper-urls-directes.js`) :
-   - Génère les URLs directes pour chaque tirage
-   - Scrape EuroMillions, Loto et EuroDreams
-   - Stocke dans `resultats-cache.json`
-
-2. **Données extraites** :
-   - Numéros gagnants complets
-   - Codes spéciaux (My Million, Joker+, Dream Number)
-   - Jackpots/Rentes
-   - Répartition complète des gains
-
-3. **Utilisation** :
-   ```bash
-   # Récupérer 3 mois de tous les jeux
-   node scraper-urls-directes.js 3
-   
-   # Seulement EuroDreams
-   npm run scrape-eurodreams
-   
-   # Avec fichier batch Windows
-   recuperer-historique-complet.bat
-   ```
-
-### Cache des résultats
-
-- **Fichier** : `resultats-cache.json`
-- **Format** : JSON structuré par jeu
-- **Mise à jour** : Manuelle via les scrapers
-- **Nettoyage** : `npm run nettoyer-cache`
+| Commande | Action |
+|---|---|
+| `npm run dev` | Serveur de développement Vite |
+| `npm run build` | Build du front dans `dist/` |
+| `npm run preview` | Prévisualise le build |
+| `npm run backend` | Lance l'API Flask en mode debug |
+| `npm run scrape` | Met à jour les tirages (+ alertes) |
+| `npm run worker` | Worker de mise à jour continue |
+| `npm run test:backend` | Tests du backend (`pip install -r backend/requirements-dev.txt`) |
 
 ## 🌐 Déploiement
 
-### Déploiement sur o2switch
-
-> 🚀 **Tu as déjà un serveur o2switch ?** → Suis le guide rapide : [`docs/DEPLOIEMENT-IMMEDIAT-O2SWITCH.md`](docs/DEPLOIEMENT-IMMEDIAT-O2SWITCH.md)
-
-Pour héberger ton application sur **o2switch** :
-
-#### 1. Build de production
+Un seul service suffit : Flask sert l'API **et** le front compilé.
 
 ```bash
 npm run build
+SERVE_FRONTEND=true gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --workers 2
 ```
 
-Cela crée un dossier `dist/` avec tous les fichiers optimisés.
+- **Render** : `render.yaml` déclare le service web et le worker.
+- **Railway** : `railway.json` + `nixpacks.toml` (le worker se lance comme second service avec
+  `python backend/manage.py worker`).
 
-#### 2. Upload vers o2switch
+**Mise à jour des tirages** : soit le worker tourne en continu, soit la GitHub Action
+[`update-fdj.yml`](.github/workflows/update-fdj.yml) lance le scraping chaque soir après les
+tirages (secret `MONGODB_URI` à définir dans *Settings → Secrets and variables → Actions*).
 
-**Via FTP/SFTP** (FileZilla ou WinSCP) :
-- Connecte-toi à o2switch
-- Upload le contenu de `dist/` vers `/home/ton-user/www/`
-- Ton site est en ligne ! 🎉
+Pensez à autoriser l'IP du serveur (ou `0.0.0.0/0`) dans *Network Access* sur MongoDB Atlas.
 
-#### 3. Mise à jour des résultats
+## 📚 Documentation
 
-**Option A - Manuelle** (recommandée) :
-```bash
-# Depuis ton PC Windows
-.\scripts\update-et-upload.bat
-```
-- Scrape les résultats
-- Upload `resultats-cache.json` via FTP
-
-**Option B - Automatique** (avec WinSCP configuré) :
-```bash
-# Mise à jour et upload automatique
-.\scripts\auto-update-o2switch.bat
-```
-
-**Option C - Tâche planifiée Windows** :
-- Configure le Planificateur de tâches
-- Exécute `auto-update-o2switch.bat` tous les jours à 22h
-- Les résultats se mettent à jour automatiquement !
-
-#### 4. Configuration o2switch
-
-- **SSL gratuit** : Active Let's Encrypt dans cPanel
-- **Compression** : Déjà configurée via `.htaccess`
-- **Cache** : Configuré pour CSS/JS (1 an)
-
-> 📖 **Guide complet** : Voir [`docs/DEPLOIEMENT-O2SWITCH.md`](docs/DEPLOIEMENT-O2SWITCH.md)
-
-### Autres hébergeurs
-
-L'application est **100% statique** après le build :
-- ✅ Netlify, Vercel, GitHub Pages
-- ✅ Apache, Nginx
-- ✅ Tout hébergeur supportant HTML/CSS/JS
-
-**Note** : Les scrapers Puppeteer doivent tourner sur ton PC ou un serveur dédié (pas sur hébergement mutualisé).
-
-## 🎨 Technologies utilisées
-
-### Frontend
-- **React 18** - Framework UI moderne
-- **Vite** - Build tool ultra-rapide
-- **CSS3** - Animations et gradients
-- **Context API** - Gestion d'état global
-- **Fetch API** - Communication avec l'API
-- **Chart.js + react-chartjs-2** - Graphiques interactifs pour statistiques
-- **API Service Layer** - Services dédiés (alerts, notifications, stats)
-
-### Backend (Optionnel)
-- **Node.js** - Runtime JavaScript
-- **Express** - Framework web
-- **MongoDB** - Base de données NoSQL
-- **Mongoose** - ODM pour MongoDB
-- **JWT** - Authentification sécurisée
-- **Bcrypt** - Hashage des mots de passe
-- **CORS** - Gestion des origines croisées avec configuration automatique
-- **Chart.js** - Graphiques et visualisations de données
-- **API RESTful** - Routes pour alertes, notifications, statistiques, admin
-
-### Scraping
-- **Puppeteer** - Scraping headless browser
-- **GitHub Actions** - Automatisation CI/CD
-- **FTP Deploy** - Déploiement automatique
-
-## 📝 Notes
-
-- ✅ L'application scrape les résultats **réels et officiels** depuis fdj.fr
-- 🎯 **3 jeux disponibles** : EuroMillions, Loto, EuroDreams
-- 📱 Interface **100% responsive** (mobile, tablette, desktop)
-- 🎨 **Design unique** pour chaque jeu avec animations
-- 📊 **Historique complet** disponible via scraping
-- ⚠️ Les données sont à titre **indicatif uniquement**
-- 🔞 Pour un usage en production, consultez les sources officielles
-- ✅ Respectez les conditions d'utilisation du site FDJ
-
-## ⚠️ Limitations
-
-- Le scraping nécessite Puppeteer (navigateur headless)
-- Les tirages du jour peuvent ne pas être disponibles avant 21h30
-- Le scraping de longues périodes peut prendre du temps
-- Pour un usage commercial, contactez la FDJ pour un accès officiel
-
-## 📚 Documentation complète
-
-Pour plus de détails, consultez le dossier **`docs/`** :
-
-- **[DEMARRAGE_RAPIDE.md](docs/DEMARRAGE_RAPIDE.md)** - Guide de démarrage rapide
-- **[JEUX_DISPONIBLES.md](docs/JEUX_DISPONIBLES.md)** - Détails sur les 3 jeux
-- **[AJOUT_EURODREAMS.md](docs/AJOUT_EURODREAMS.md)** - Guide complet EuroDreams
-- **[STRUCTURE_PROJET.md](docs/STRUCTURE_PROJET.md)** - Architecture détaillée
-- **[CHANGELOG_EURODREAMS.md](docs/CHANGELOG_EURODREAMS.md)** - Historique v2.0
-- **[GUIDE_UTILISATION.md](docs/GUIDE_UTILISATION.md)** - Guide d'utilisation
-- **[COMMENT_CA_MARCHE.md](docs/COMMENT_CA_MARCHE.md)** - Fonctionnement technique
-- **[DEPLOY-RENDER.md](DEPLOY-RENDER.md)** - 🚀 Déploiement sur Render (5 min)
-
-<details>
-<summary>📖 Voir toute la documentation disponible</summary>
-
-### Guides de démarrage
-- [DEMARRAGE_RAPIDE.md](docs/DEMARRAGE_RAPIDE.md) - Démarrage en 5 minutes
-- [GUIDE_UTILISATION.md](docs/GUIDE_UTILISATION.md) - Utilisation complète
-- [START_ICI.md](docs/START_ICI.md) - Point de départ
-
-### Jeux et fonctionnalités
-- [JEUX_DISPONIBLES.md](docs/JEUX_DISPONIBLES.md) - EuroMillions, Loto, EuroDreams
-- [AJOUT_EURODREAMS.md](docs/AJOUT_EURODREAMS.md) - Ajout d'EuroDreams
-- [INTERFACE_MISE_A_JOUR.md](docs/INTERFACE_MISE_A_JOUR.md) - Mises à jour UI
-
-### Technique
-- [STRUCTURE_PROJET.md](docs/STRUCTURE_PROJET.md) - Architecture du projet
-- [COMMENT_CA_MARCHE.md](docs/COMMENT_CA_MARCHE.md) - Fonctionnement du scraping
-- [GUIDE_PUPPETEER.md](docs/GUIDE_PUPPETEER.md) - Utilisation de Puppeteer
-- [COMPARAISON_SCRAPERS.md](docs/COMPARAISON_SCRAPERS.md) - Comparaison des solutions
-
-### Git et déploiement
-- [GUIDE_GIT_COMPLET.md](docs/GUIDE_GIT_COMPLET.md) - Guide Git complet
-- [SECURITE_GITHUB.md](docs/SECURITE_GITHUB.md) - Sécurité et bonnes pratiques
-- [DEPLOY-RENDER.md](DEPLOY-RENDER.md) - 🚀 Guide de déploiement sur Render
-- [backend/DEPLOY.md](backend/DEPLOY.md) - Guide de déploiement backend détaillé
-
-### Historique et changelog
-- [CHANGELOG_EURODREAMS.md](docs/CHANGELOG_EURODREAMS.md) - Version 2.0
-- [CORRECTIONS_APPLIQUEES.md](docs/CORRECTIONS_APPLIQUEES.md) - Corrections
-
-</details>
-
-## 📄 Licence
-
-Ce projet est libre d'utilisation pour un usage personnel ou éducatif.
+Détails de l'API, compatibilité avec l'ancien backend et commandes : [backend/README.md](backend/README.md).
 
 ---
 
-## 🎉 Version 2.0 - EuroDreams
-
-**Nouveauté** : EuroDreams est maintenant disponible ! 💤
-
-L'application propose désormais **3 jeux complets** :
-- ⭐ EuroMillions avec My Million
-- 🍀 Loto avec 2ème tirage et Joker+
-- 💤 EuroDreams avec rente mensuelle
-
-**7 tirages par semaine** pour ne rien manquer ! 🎰
-
----
-
-Fait avec ❤️ pour les amateurs de loteries
-
-"# fdj-scrapper" 
+⚠️ Projet non officiel, sans lien avec la FDJ. Jouer comporte des risques : endettement,
+dépendance… Appelez le 09 74 75 13 13 (appel non surtaxé).

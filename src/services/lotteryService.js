@@ -1,59 +1,48 @@
 /**
- * Service pour récupérer les résultats des loteries depuis l'API (GET /api/draws),
- * alimentée en base par le scraper/worker Python.
+ * Résultats des tirages depuis l'API (GET /api/draws/<jeu>), alimentée par le scraper/worker Python.
  *
- * Les données sont téléchargées une seule fois puis partagées entre tous les composants,
- * et rafraîchies au plus toutes les 5 min (le serveur gère aussi le cache HTTP / ETag).
+ * Chaque jeu n'est téléchargé que lorsqu'on l'affiche, puis gardé en mémoire et rafraîchi au plus
+ * toutes les 5 min (le serveur gère aussi le cache HTTP / ETag et la compression).
  */
 
 const API_URL = import.meta.env.VITE_API_URL || '/api'
 const TTL = 5 * 60 * 1000
-const EMPTY = { euromillions: [], loto: [], eurodreams: [], nextDraws: {} }
 
-let pending = null
-let loadedAt = 0
+const cache = new Map() // jeu -> { pending, loadedAt }
 
-async function fetchCache() {
-  const response = await fetch(`${API_URL}/draws`)
+async function fetchGame(game) {
+  const response = await fetch(`${API_URL}/draws/${game}`)
   if (!response.ok) throw new Error(`HTTP ${response.status}`)
-  return { ...EMPTY, ...(await response.json()) }
+  const body = await response.json()
+  return { draws: body.data || [], nextDraw: body.nextDraw || null, lastUpdate: body.lastUpdate || null }
 }
 
-function loadCache({ force = false } = {}) {
-  if (!pending || force || Date.now() - loadedAt > TTL) {
-    loadedAt = Date.now()
-    pending = fetchCache().catch((error) => {
-      console.error('❌ Erreur lors du chargement du cache:', error)
-      pending = null
-      throw error
-    })
-  }
+function load(game, { force = false } = {}) {
+  const entry = cache.get(game)
+  if (entry && !force && Date.now() - entry.loadedAt < TTL) return entry.pending
+  const pending = fetchGame(game).catch((error) => {
+    console.error(`❌ Erreur lors du chargement des tirages (${game}) :`, error)
+    cache.delete(game)
+    throw error
+  })
+  cache.set(game, { pending, loadedAt: Date.now() })
   return pending
 }
 
+export function getGameData(game, options) {
+  return load(game, options)
+}
+
 const take = (list, limit) => (limit ? list.slice(0, limit) : list)
+const drawsOf = async (game, limit) => take((await load(game).catch(() => ({ draws: [] }))).draws, limit)
 
-export async function getGameData(game, { force = false } = {}) {
-  const cache = await loadCache({ force })
-  return {
-    draws: cache[game] || [],
-    nextDraw: cache.nextDraws?.[game] || null,
-    lastUpdate: cache.lastUpdate || null,
-  }
-}
+export const getEuromillionsResults = (limit = null) => drawsOf('euromillions', limit)
+export const getLotoResults = (limit = null) => drawsOf('loto', limit)
+export const getEurodreamsResults = (limit = null) => drawsOf('eurodreams', limit)
 
-export async function getEuromillionsResults(limit = null) {
-  return take((await loadCache().catch(() => EMPTY)).euromillions || [], limit)
-}
-
-export async function getLotoResults(limit = null) {
-  return take((await loadCache().catch(() => EMPTY)).loto || [], limit)
-}
-
-export async function getEurodreamsResults(limit = null) {
-  return take((await loadCache().catch(() => EMPTY)).eurodreams || [], limit)
-}
-
+/** Les trois jeux à grille (statistiques globales) : { euromillions: [...], loto: [...], eurodreams: [...] }. */
 export async function getAllResults() {
-  return loadCache().catch(() => EMPTY)
+  const games = ['euromillions', 'loto', 'eurodreams']
+  const lists = await Promise.all(games.map((g) => drawsOf(g)))
+  return Object.fromEntries(games.map((g, i) => [g, lists[i]]))
 }

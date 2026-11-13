@@ -1,8 +1,14 @@
 .game { --accent: var(--c-euromillions); --accent-2: var(--c-euromillions-2); }
 .game--loto { --accent: var(--c-loto); --accent-2: var(--c-loto-2); }
 .game--eurodreams { --accent: var(--c-eurodreams); --accent-2: var(--c-eurodreams-2); }
+.game--keno { --accent: var(--c-keno); --accent-2: var(--c-keno-2); }
+.game--crescendo { --accent: var(--c-crescendo); --accent-2: var(--c-crescendo-2); }
+.game--amigo { --accent: var(--c-amigo); --accent-2: var(--c-amigo-2); }
 [data-theme="dark"] .game--euromillions { --accent: #4f62e6; }
 [data-theme="dark"] .game--eurodreams { --accent: var(--c-eurodreams-2); }
+[data-theme="dark"] .game--keno { --accent: var(--c-keno-2); }
+[data-theme="dark"] .game--crescendo { --accent: var(--c-crescendo-2); }
+[data-theme="dark"] .game--amigo { --accent: var(--c-amigo-2); }
 
 .container {
   max-width: 1160px;
@@ -13,20 +19,18 @@
 }
 
 /* ------------------------------------------------------------- Bandeau du jeu */
+/* Le bandeau est transparent : la couleur vient du fond de l'application (Background.css),
+   la scène 3D flotte derrière le texte. */
 .hero {
   position: relative;
   overflow: hidden;
   color: #fff;
-  background: linear-gradient(120deg, var(--hero-a), var(--hero-b), var(--hero-a));
-  background-size: 220% 220%;
-  animation: hero-shift 18s ease-in-out infinite alternate;
-}
-@keyframes hero-shift {
-  from { background-position: 0% 50%; }
-  to { background-position: 100% 50%; }
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .25);
 }
 
 .hero__bubbles { position: absolute; inset: 0; pointer-events: none; }
+/* Bulles CSS : uniquement en repli, quand la scène 3D n'est pas affichée */
+.has-3d .hero__bubbles { display: none; }
 .hero__bubble {
   position: absolute;
   border-radius: 50%;
@@ -49,9 +53,6 @@
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: none; }
 }
-.hero--euromillions { --hero-a: #141d6b; --hero-b: #2e40b8; }
-.hero--loto { --hero-a: #004f9e; --hero-b: #1c8bf0; }
-.hero--eurodreams { --hero-a: #3f1d6d; --hero-b: #8a3fc0; }
 
 .hero__inner {
   max-width: 1160px;
@@ -80,9 +81,11 @@
 .hero__tagline { opacity: .85; margin-top: 6px; }
 
 .next-draw {
-  background: rgba(255, 255, 255, .12);
+  background: rgba(255, 255, 255, .1);
   border: 1px solid rgba(255, 255, 255, .22);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .18), inset 0 1px 0 rgba(255, 255, 255, .2);
   border-radius: var(--radius);
   padding: 18px 22px;
   min-width: 280px;
@@ -158,7 +161,10 @@
   display: flex;
   gap: 4px;
   padding: 6px;
-  background: var(--surface);
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 999px;
   box-shadow: var(--shadow);
   overflow-x: auto;
@@ -205,7 +211,10 @@
 
 /* ------------------------------------------------------------- Cartes */
 .card {
-  background: var(--surface);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 24px;
@@ -273,7 +282,8 @@
 .result-card__balls {
   padding: 24px;
   border-radius: var(--radius);
-  background: var(--surface-2);
+  background: var(--glass-inset);
+  border: 1px solid var(--glass-border);
   display: grid;
   gap: 14px;
   justify-items: center;
@@ -329,6 +339,12 @@
 
 .ball--chance { background-color: var(--c-chance); }
 .ball--dream { background-color: var(--c-dream); }
+.ball--yellow { background-color: var(--c-yellow); color: #1b1d3a; }
+/* Lettre Crescendo : jeton arrondi plutôt que boule */
+.ball--letter { background-color: var(--c-letter); border-radius: 30%; }
+.dot--yellow { background: var(--c-yellow); }
+.dot--letter { background: var(--c-letter); border-radius: 3px; }
+.ball--md { --size: 44px; }
 .ball--outline {
   background-color: var(--surface);
   background-image: none;
@@ -377,6 +393,27 @@
   80% { transform: scale(.92) rotate(-6deg); }
   100% { transform: none; }
 }
+
+/* Tirage venu de la scène 3D : les boules traversent l'écran (lotteryScene.js, vol de 0,9 s
+   décalé de 120 ms par boule), puis la boule de la carte « atterrit » à leur place. */
+.from-scene .balls--anim .ball,
+.from-scene .balls--anim .ball--star {
+  animation-name: ball-land;
+  animation-duration: .5s;
+  animation-timing-function: cubic-bezier(.3, 1.5, .5, 1);
+  animation-delay: calc(var(--i, 0) * 120ms + 880ms);
+}
+.from-scene .balls--anim .ball__value {
+  animation-duration: .3s;
+  animation-delay: calc(var(--i, 0) * 120ms + 880ms);
+}
+@keyframes ball-land {
+  0% { opacity: 0; transform: scale(.85); }
+  35% { opacity: 1; }
+  55% { transform: scale(1.12); }
+  100% { transform: none; }
+}
+.from-scene .legend { animation-delay: 1.9s; }
 
 /* La zone des boules : léger halo à la couleur du jeu */
 .result-card__balls {
@@ -556,6 +593,39 @@
 .history__date .badge { margin: 0 0 0 8px; }
 .history__jackpot { text-align: right; color: var(--muted); font-weight: 700; font-size: .88rem; }
 .history .btn { margin-top: 16px; }
+
+/* Keno : 16 numéros -> plusieurs lignes dans l'historique */
+.history__row .balls--sm { flex-wrap: wrap; max-width: 480px; }
+
+/* ------------------------------------------------------------- Barème (Keno, Amigo) */
+.payouts td:first-child { white-space: nowrap; font-weight: 700; }
+.payouts .amount { font-weight: 800; }
+/* Keno 10/10 : « 200 000 € ou 10 000 € par an à vie » -> rente sur une 2e ligne */
+.payouts .amount small { display: block; font-size: .76rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.payouts__note { color: var(--muted); font-size: .8rem; }
+
+/* ------------------------------------------------------------- Fréquences */
+.freq__period { margin: -6px 0 18px; font-size: .88rem; }
+.freq__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+.freq__block h3 { font-size: 1rem; font-weight: 900; margin-bottom: 10px; }
+.freq__list { list-style: none; display: grid; gap: 8px; }
+.freq__list li { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; }
+.freq__bar { height: 8px; border-radius: 4px; background: color-mix(in srgb, var(--accent) 12%, transparent); overflow: hidden; }
+.freq__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transform-origin: left;
+  animation: bar-grow .7s cubic-bezier(.2, .7, .2, 1) backwards;
+}
+@keyframes bar-grow { from { transform: scaleX(0); } }
+.freq__count { font-weight: 900; font-variant-numeric: tabular-nums; min-width: 56px; text-align: right; }
+.freq__count small { color: var(--muted); font-weight: 600; }
 
 /* ------------------------------------------------------------- Divers */
 .rules p { color: var(--muted); }

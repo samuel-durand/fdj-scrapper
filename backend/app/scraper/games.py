@@ -74,6 +74,13 @@ def french_date(d: date) -> str:
     return f"{JOURS[d.weekday()]} {d.day} {MOIS[d.month - 1]} {d.year}"
 
 
+def _shares(raw: dict) -> list:
+    """Liste des gains. La FDJ remplace parfois une liste déjà envoyée dans la page par une
+    référence interne ("$…") : on la traite alors comme absente (voir Scraper._page_draws)."""
+    shares = raw.get("shares")
+    return shares if isinstance(shares, list) else []
+
+
 def _flat_shares(shares: Any) -> list[dict]:
     out: list[dict] = []
     for s in shares or []:
@@ -88,19 +95,41 @@ def _sorted_ints(values: Any) -> list[int]:
     return sorted(i for i in (_int(v) for v in values or []) if i is not None)
 
 
+def draw_id(game: "Game", dt: datetime) -> str:
+    """Id d'un tirage : "em-2026-11-10", ou "amigo-2026-11-13-1935" pour les jeux à plusieurs tirages par jour."""
+    base = f"{game.prefix}-{dt.date().isoformat()}"
+    return f"{base}-{dt.strftime('%H%M')}" if game.intraday else base
+
+
 def _base(game: "Game", raw: dict) -> dict:
-    d = draw_date(raw["date"])
+    dt = parse_dt(raw["date"])
+    d = dt.date()
     jackpot_cents = _int(raw.get("jackpotAmount"))
-    return {
-        "id": f"{game.prefix}-{d.isoformat()}",
+    out = {
+        "id": draw_id(game, dt),
         "date": d.isoformat(),
-        "drawTime": parse_dt(raw["date"]).isoformat(),
+        "drawTime": dt.isoformat(),
         "formattedDate": french_date(d),
         "day": JOURS[d.weekday()],
         "drawNumber": _val(raw.get("externalId")),
         "numbers": _sorted_ints(raw.get("numbers")),
         "jackpotAmount": jackpot_cents / 100 if jackpot_cents else None,
     }
+    if game.intraday:
+        out["time"] = dt.strftime("%H:%M")
+        out["intradayNumber"] = _int(raw.get("intraDayDrawNumber"))
+    return out
+
+
+def _clean_amount(v: Any) -> str | None:
+    """Montants déjà formatés par la FDJ ("200 000 €") : espaces insécables -> espaces."""
+    v = _val(v)
+    return " ".join(str(v).replace(" ", " ").replace("\xa0", " ").split()) if v is not None else None
+
+
+def _joker(v: Any) -> str | None:
+    s = str(_val(v) or "")
+    return f"{s[0]} {s[1:4]} {s[4:]}" if len(s) == 7 else (s or None)
 
 
 # --------------------------------------------------------------------------- jeux
@@ -149,8 +178,7 @@ def normalize_loto(game: "Game", raw: dict) -> dict:
     opts = raw.get("options") or {}
     second = _sorted_ints(opts.get("numbers"))
     out["secondDraw"] = second or None
-    joker = str(_val(opts.get("joker")) or "")
-    out["jokerPlus"] = f"{joker[0]} {joker[1:4]} {joker[4:]}" if len(joker) == 7 else (joker or None)
+    out["jokerPlus"] = _joker(opts.get("joker"))
     out["codesGagnants"] = list(raw.get("raffleCodes") or [])
     out["lotoType"] = _val(raw.get("lotoType")) or "loto"
     out["jackpot"] = fmt_jackpot(out["jackpotAmount"])
@@ -210,6 +238,98 @@ def normalize_eurodreams(game: "Game", raw: dict) -> dict:
     return out
 
 
+def normalize_keno(game: "Game", raw: dict) -> dict:
+    """Keno : 16 numéros sur 56, gains fixes selon la grille jouée et la mise (pas de nombre de gagnants)."""
+    out = _base(game, raw)
+    opts = raw.get("options") or {}
+    out["multiplier"] = _int(opts.get("multiplier"))
+    out["jokerPlus"] = _joker(opts.get("joker"))
+
+    stakes: set[str] = set()
+    for s in _shares(raw):
+        for b in s.get("winningBoards") or []:
+            stakes.update((b.get("betAmounts") or {}).keys())
+    stake_keys = sorted(stakes, key=lambda k: _int(k) or 0)
+
+    grids = []
+    for s in sorted(_shares(raw), key=lambda x: -(_int(x.get("numbersDrawn")) or 0)):
+        played = _int(s.get("numbersDrawn")) or 0
+        rows = []
+        for b in sorted(s.get("winningBoards") or [], key=lambda x: -(_int(x.get("numbersPlayed")) or 0)):
+            matched = _int(b.get("numbersPlayed")) or 0
+            bets = b.get("betAmounts") or {}
+            amounts = []
+            for k in stake_keys:
+                bet = bets.get(k) or {}
+                amount = _clean_amount(bet.get("amount")) or "—"
+                pension = _clean_amount(bet.get("pensionAmount"))
+                if pension:
+                    per = "par an" if bet.get("pensionPeriod") == "year" else "par mois"
+                    amount = f"{amount} ou {pension} {per} à vie"
+                amounts.append(amount)
+            rows.append({"combination": _plural(matched, "bon numéro").replace("bon numéros", "bons numéros"),
+                         "amounts": amounts})
+        grids.append({"id": str(played), "label": f"{played} numéros joués", "rows": rows})
+
+    if not grids:
+        out["payouts"] = None
+        return out
+    out["payouts"] = {"stakeTitle": "Gain pour une mise de", "stakes": [f"{k} €" for k in stake_keys], "grids": grids}
+    return out
+
+
+_CRESCENDO_LABELS = {"Lettre": "Lettre seule"}
+
+
+def _crescendo_label(name: str) -> str:
+    if name in _CRESCENDO_LABELS:
+        return _CRESCENDO_LABELS[name]
+    n, _, rest = name.partition("/")
+    good = _int(n.strip()) or 0
+    return _plural(good, "bon numéro").replace("bon numéros", "bons numéros") + (" + lettre" if "+ L" in rest else "")
+
+
+def normalize_crescendo(game: "Game", raw: dict) -> dict:
+    """Crescendo : 10 numéros sur 25 + 1 lettre, 7 tirages le samedi (13h → 19h)."""
+    out = _base(game, raw)
+    letters = [str(x) for x in raw.get("complementariesNumbers") or [] if _val(x)]
+    out["letter"] = letters[0] if letters else None
+    out["jackpot"] = fmt_jackpot(out["jackpotAmount"])
+    out["winningsDistribution"] = [
+        {
+            "rank": _int(s.get("divisionId")) or i + 1,
+            "combination": _crescendo_label(str(s.get("divisionName") or "")),
+            "winners": fmt_int(s.get("winners")),
+            "amount": fmt_money(s.get("winningAmount")),
+        }
+        for i, s in enumerate(sorted(_shares(raw), key=lambda x: _int(x.get("divisionId")) or 0))
+    ]
+    return out
+
+
+def normalize_amigo(game: "Game", raw: dict) -> dict:
+    """Amigo : 7 numéros bleus + 5 jaunes sur 28, un tirage toutes les 5 minutes, gains fixes."""
+    out = _base(game, raw)
+    out["yellowNumbers"] = _sorted_ints(raw.get("complementariesNumbers"))
+    grids = []
+    for s in sorted(_shares(raw), key=lambda x: -(_int(x.get("numbersDrawn")) or 0)):
+        good = _int(s.get("numbersDrawn")) or 0
+        rows = []
+        for b in s.get("board") or []:
+            blue, yellow = _int(b.get("blueNumbers")) or 0, _int(b.get("yellowNumbers")) or 0
+            parts = [p for p in (_plural(blue, "bleu") if blue else "", _plural(yellow, "jaune") if yellow else "") if p]
+            rows.append({"combination": " + ".join(parts), "amounts": [_clean_amount(w) or "—" for w in b.get("winnings") or []]})
+        if rows:
+            grids.append({"id": str(good), "label": _plural(good, "bon numéro").replace("bon numéros", "bons numéros"),
+                          "rows": rows})
+    if not grids:
+        out["payouts"] = None  # référence vers le barème d'un autre tirage de la page
+        return out
+    n = max((len(r["amounts"]) for g in grids for r in g["rows"]), default=0)
+    out["payouts"] = {"stakeTitle": "Gain selon la mise", "stakes": [f"Mise ×{i + 1}" for i in range(n)], "grids": grids}
+    return out
+
+
 @dataclass(frozen=True)
 class Game:
     key: str              # clé dans resultats-cache.json
@@ -219,6 +339,12 @@ class Game:
     label: str
     normalize: Callable[["Game", dict], dict]
     exclude_announce: tuple[str, ...] = ()
+    intraday: bool = False            # plusieurs tirages par jour (Crescendo, Amigo)
+    history_days: int | None = None   # limite du rattrapage de l'historique (None = tout ce que publie la FDJ)
+
+    def is_complete(self, draw: dict) -> bool:
+        """Tirage complet = répartition (ou barème) des gains connue."""
+        return bool(draw.get("winningsDistribution") or draw.get("payouts"))
 
     @property
     def results_path(self) -> str:
@@ -237,6 +363,10 @@ GAMES: dict[str, Game] = {
              normalize_euromillions, exclude_announce=("draw-30",)),  # draw-30 = annonce My Million
         Game("loto", "loto", "loto", "loto", "Loto", normalize_loto),
         Game("eurodreams", "ed", "eurodreams", "eurodreams", "EuroDreams", normalize_eurodreams),
+        Game("keno", "keno", "keno", "keno", "Keno", normalize_keno),
+        Game("crescendo", "cr", "crescendo", "crescendo", "Crescendo", normalize_crescendo, intraday=True),
+        # ~200 tirages par jour et 2 Mo par page : on se limite à une semaine d'historique.
+        Game("amigo", "amigo", "amigo", "amigo", "Amigo", normalize_amigo, intraday=True, history_days=7),
     )
 }
 
@@ -255,7 +385,7 @@ def parse_announce(game: Game, data: Any) -> dict | None:
     amount = _val(e.get("amount"))
     if amount and game.key == "eurodreams" and _int(e.get("duration")):
         amount = f"{amount} par mois pendant {e['duration']} ans"
-    return {
+    out = {
         "date": dt.date().isoformat(),
         "drawTime": dt.isoformat(),
         "wageringEndsAt": _val(e.get("wageringEndsAt")),
@@ -266,3 +396,6 @@ def parse_announce(game: Game, data: Any) -> dict | None:
         "suffix": suffix or None,
         "lotoType": _val(e.get("lotoType")),
     }
+    if game.intraday:
+        out["time"] = dt.strftime("%H:%M")
+    return out

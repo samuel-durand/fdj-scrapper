@@ -1,7 +1,8 @@
 """Stockage des tirages dans MongoDB.
 
 Collections :
-  draws : un document par tirage, `_id` = id du tirage ("em-2026-11-10"), champ `game`
+  draws : un document par tirage, `_id` = id du tirage ("em-2026-11-10",
+          "amigo-2026-11-13-1935" pour les jeux à plusieurs tirages par jour), champ `game`
   meta  : document `_id: "draws"` -> { nextDraws: {jeu: annonce}, lastUpdate }
 """
 
@@ -27,26 +28,45 @@ class DrawRepository:
         self.db = db
 
     # ------------------------------------------------------------------ lecture
+    # Plusieurs tirages par jour (Crescendo, Amigo) : on trie aussi sur l'heure.
+    ORDER = [("date", DESCENDING), ("drawTime", DESCENDING)]
+
     def list(self, game: str, limit: int | None = None, before: str | None = None) -> list[dict]:
         query: dict[str, Any] = {"game": game}
         if before:
             query["date"] = {"$lt": before}
-        cur = self.db.draws.find(query, INTERNAL).sort("date", DESCENDING)
+        cur = self.db.draws.find(query, INTERNAL).sort(self.ORDER)
         if limit:
             cur = cur.limit(limit)
         return list(cur)
 
     def get(self, game: str, date: str) -> dict | None:
-        return self.db.draws.find_one({"game": game, "date": date}, INTERNAL)
+        """Tirage d'une date (le dernier de la journée pour les jeux à plusieurs tirages)."""
+        return next(iter(self.db.draws.find({"game": game, "date": date}, INTERNAL).sort(self.ORDER).limit(1)), None)
 
     def known(self, game: str) -> dict[str, bool]:
-        """id -> True si la répartition des gains est connue."""
-        cur = self.db.draws.find({"game": game}, {"_id": 1, "winningsDistribution": 1})
-        return {d["_id"]: bool(d.get("winningsDistribution")) for d in cur}
+        """id -> True si la répartition (ou le barème) des gains est connue."""
+        cur = self.db.draws.find({"game": game}, {"_id": 1, "winningsDistribution": 1, "payouts": 1})
+        return {d["_id"]: bool(d.get("winningsDistribution") or d.get("payouts")) for d in cur}
+
+    def last_draw_times(self, game: str) -> dict[str, str]:
+        """Journée -> heure (ISO) du dernier tirage enregistré."""
+        out: dict[str, str] = {}
+        for d in self.db.draws.find({"game": game}, {"_id": 0, "date": 1, "drawTime": 1}):
+            if d.get("drawTime") and d["drawTime"] > out.get(d["date"], ""):
+                out[d["date"]] = d["drawTime"]
+        return out
+
+    def is_complete(self, draw_id: str) -> bool:
+        return self.db.draws.count_documents(
+            {"_id": draw_id, "$or": [{"winningsDistribution.0": {"$exists": True}}, {"payouts": {"$ne": None}}]},
+            limit=1,
+        ) > 0
 
     def has_complete(self, game: str, date: str) -> bool:
         return self.db.draws.count_documents(
-            {"game": game, "date": date, "winningsDistribution.0": {"$exists": True}}, limit=1
+            {"game": game, "date": date,
+             "$or": [{"winningsDistribution.0": {"$exists": True}}, {"payouts": {"$ne": None}}]}, limit=1
         ) > 0
 
     def meta(self) -> dict:

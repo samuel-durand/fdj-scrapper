@@ -250,7 +250,8 @@ def test_draws_endpoints_and_etag(client, db):
     assert one["data"][0]["luckyNumber"] == 8 and one["nextDraw"]["jackpot"] == "21 millions €"
     assert client.get("/api/draws/euromillions/2026-11-10").get_json()["data"]["myMillionCode"] == "SR 154 7343"
     assert client.get("/api/draws/euromillions/2026-01-01").status_code == 404
-    assert client.get("/api/draws/keno").status_code == 404
+    assert client.get("/api/draws/keno").status_code == 200
+    assert client.get("/api/draws/eurojackpot").status_code == 404
     assert client.get("/api/inconnue").get_json() == {"success": False, "message": "Route API non trouvée"}
 
 

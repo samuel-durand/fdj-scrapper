@@ -63,7 +63,12 @@ résultats). À lancer une fois ; le fichier peut ensuite être supprimé.
 | `GET /api/draws/<jeu>?limit=50&before=AAAA-MM-JJ` | `{ data: [...], nextDraw, lastUpdate }` |
 | `GET /api/draws/<jeu>/<AAAA-MM-JJ>` | `{ data: {...} }` |
 
-Réponses en cache 60 s + ETag (réponse 304 si rien n'a changé).
+Jeux : `euromillions`, `loto`, `eurodreams`, `keno`, `crescendo`, `amigo`. Crescendo et Amigo ont plusieurs
+tirages par jour : leur id contient l'heure (`amigo-2026-11-13-1935`) et chaque tirage a un champ `time`.
+Keno et Amigo ont des gains fixes : leur barème (`payouts`) n'est renvoyé qu'avec le tirage le plus récent.
+Les combinaisons, alertes et notifications concernent les trois jeux à grille (EuroMillions, Loto, EuroDreams).
+
+Réponses en cache 60 s + ETag (réponse 304 si rien n'a changé), compressées en gzip.
 
 ## Production
 

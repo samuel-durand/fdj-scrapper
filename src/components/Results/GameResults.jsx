@@ -3,7 +3,8 @@ import { GAMES, LOTO_TYPES, formatDrawDate, formatShortDate } from '../../games'
 import { getGameData } from '../../services/lotteryService'
 import { Ball, DrawBalls } from './Balls'
 import NextDrawHero from './NextDrawHero'
-import WinningsTable from './WinningsTable'
+import WinningsTable, { PayoutTable } from './WinningsTable'
+import FrequencyStats from './FrequencyStats'
 import Calendar from '../Calendar'
 import Statistics from '../Statistics'
 import GameStatistics from '../GameStatistics'
@@ -16,9 +17,18 @@ const VIEWS = [
   { id: 'stats', label: 'Statistiques' },
   { id: 'charts', label: 'Graphiques' },
 ]
+// Keno, Crescendo, Amigo : statistiques de fréquence simples (pas de générateur ni de graphiques par grille)
+const SIMPLE_VIEWS = [
+  { id: 'results', label: 'Résultats' },
+  { id: 'history', label: 'Historique' },
+  { id: 'calendar', label: 'Calendrier' },
+  { id: 'freq', label: 'Statistiques' },
+]
+const viewsFor = (game) => (GAMES[game].simple ? SIMPLE_VIEWS : VIEWS)
 
 function Extras({ game, draw }) {
   const items = []
+  if (draw.multiplier) items.push(['Multiplicateur', `×${draw.multiplier}`])
   if (draw.myMillionCode && draw.myMillionCode !== 'Non disponible') {
     items.push(['Code My Million', draw.myMillionCode])
   }
@@ -40,11 +50,24 @@ function Extras({ game, draw }) {
 }
 
 function DrawCard({ game, draw, draws, onSelect }) {
+  const cfg = GAMES[game]
   const idx = draws.findIndex((d) => d.id === draw.id)
   const older = draws[idx + 1]
   const newer = draws[idx - 1]
   const special = draw.lotoType && LOTO_TYPES[draw.lotoType]
   const comp = GAMES[game].complementary
+
+  // Si la scène 3D tourne, les boules du tirage partent du fond et viennent se poser ici.
+  const ballsRef = useRef(null)
+  const fromScene = useMemo(
+    () => document.documentElement.classList.contains('has-3d'),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [draw.id]
+  )
+  useEffect(() => {
+    if (!fromScene || !ballsRef.current) return
+    window.dispatchEvent(new CustomEvent('lottery:draw', { detail: { game, container: ballsRef.current } }))
+  }, [draw.id, game, fromScene])
 
   return (
     <article className="card result-card">
@@ -75,11 +98,15 @@ function DrawCard({ game, draw, draws, onSelect }) {
         </div>
       </header>
 
-      <div className="result-card__balls" key={`balls-${draw.id}`}>
-        <DrawBalls game={game} draw={draw} size="lg" animated />
+      <div
+        className={`result-card__balls ${fromScene ? 'from-scene' : ''}`}
+        key={`balls-${draw.id}`}
+        ref={ballsRef}
+      >
+        <DrawBalls game={game} draw={draw} size={(draw.numbers?.length || 0) > 8 ? 'md' : 'lg'} animated />
         <p className="legend">
-          <span><i className="dot dot--main" /> Numéros</span>
-          <span><i className={`dot dot--${comp.variant}`} /> {comp.label}</span>
+          <span><i className="dot dot--main" /> {cfg.mainLabel || 'Numéros'}</span>
+          {comp && <span><i className={`dot dot--${comp.variant}`} /> {comp.label}</span>}
         </p>
       </div>
 
@@ -106,6 +133,8 @@ function DrawCard({ game, draw, draws, onSelect }) {
       )}
 
       <WinningsTable key={`gains-${draw.id}`} draw={draw} />
+      {/* Barème (Keno, Amigo) : l'API ne l'envoie qu'avec le tirage le plus récent */}
+      <PayoutTable key={`bareme-${game}`} payouts={draw.payouts || draws[0]?.payouts} title="Barème des gains" />
     </article>
   )
 }
@@ -137,7 +166,7 @@ function History({ game, draws, onSelect }) {
 }
 
 /** Sous-navigation avec un indicateur qui glisse sous l'onglet actif. */
-function SubNav({ view, onChange }) {
+function SubNav({ game, view, onChange }) {
   const navRef = useRef(null)
   const [indicator, setIndicator] = useState(null)
 
@@ -150,7 +179,7 @@ function SubNav({ view, onChange }) {
     document.fonts?.ready.then(update)
     window.addEventListener('resize', update)
     return () => window.removeEventListener('resize', update)
-  }, [view])
+  }, [view, game])
 
   return (
     <nav className="subnav" aria-label="Affichage" ref={navRef}>
@@ -161,7 +190,7 @@ function SubNav({ view, onChange }) {
           aria-hidden="true"
         />
       )}
-      {VIEWS.map((v) => (
+      {viewsFor(game).map((v) => (
         <button
           key={v.id}
           className={`subnav__item ${view === v.id ? 'is-active' : ''}`}
@@ -208,7 +237,7 @@ function GameResults({ game }) {
       <NextDrawHero key={`${game}-${nextDraw?.date || ''}`} game={game} nextDraw={nextDraw} />
 
       <div className="container">
-        <SubNav view={view} onChange={setView} />
+        <SubNav game={game} view={view} onChange={setView} />
 
         {loading && (
           <div className="card state"><div className="spinner" /> Chargement des résultats…</div>
@@ -228,6 +257,7 @@ function GameResults({ game }) {
               <div className="card"><Calendar gameType={game} draws={draws} onDateSelect={(d) => select(d.id)} /></div>
             )}
             {view === 'stats' && <div className="card"><Statistics draws={draws} gameType={game} /></div>}
+            {view === 'freq' && <div className="card"><FrequencyStats game={game} draws={draws} /></div>}
             {view === 'charts' && <div className="card"><GameStatistics gameType={game} /></div>}
           </div>
         )}

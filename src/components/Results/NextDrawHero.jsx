@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { GAMES, LOTO_TYPES, capitalize } from '../../games'
+import { GAMES, LOTO_TYPES, capitalize, formatTime } from '../../games'
 import AnimatedAmount from './AnimatedAmount'
 
 function useNow(intervalMs = 30000) {
@@ -33,11 +33,14 @@ const BUBBLES = [
 function NextDrawHero({ game, nextDraw }) {
   const cfg = GAMES[game]
   const now = useNow()
-  const closesAt = nextDraw?.wageringEndsAt ? new Date(nextDraw.wageringEndsAt).getTime() : null
+  // Amigo n'annonce pas d'heure de fin des prises de jeu : on prend l'heure du tirage
+  const closesIso = nextDraw?.wageringEndsAt || (nextDraw?.time ? nextDraw.drawTime : null)
+  const closesAt = closesIso ? new Date(closesIso).getTime() : null
   const remaining = closesAt ? closesAt - now : 0
   const isOpen = closesAt && remaining > 0
   const urgent = isOpen && remaining < 60 * 60 * 1000
   const special = nextDraw?.lotoType && LOTO_TYPES[nextDraw.lotoType]
+  const drawPassed = nextDraw?.drawTime ? new Date(nextDraw.drawTime).getTime() < now : false
 
   return (
     <section className={`hero hero--${game}`}>
@@ -66,6 +69,7 @@ function NextDrawHero({ game, nextDraw }) {
             <p className="next-draw__label">
               {special ? <span className="badge badge--special badge--pulse">{special}</span> : null}
               Prochain tirage · {capitalize(nextDraw.formattedDate || '')}
+              {nextDraw.time && !drawPassed && ` à ${formatTime(nextDraw.time)}`}
             </p>
             {nextDraw.prefix && <p className="next-draw__prefix">{nextDraw.prefix}</p>}
             <p className="next-draw__amount">
@@ -75,7 +79,7 @@ function NextDrawHero({ game, nextDraw }) {
             {isOpen && (
               <p className={`next-draw__countdown ${urgent ? 'is-urgent' : ''}`}>
                 <span className="live-dot" aria-hidden="true" />
-                Fin des prises de jeu dans <strong>{formatCountdown(remaining)}</strong>
+                {nextDraw.wageringEndsAt ? 'Fin des prises de jeu dans' : 'Tirage dans'} <strong>{formatCountdown(remaining)}</strong>
               </p>
             )}
           </div>

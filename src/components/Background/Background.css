@@ -1,0 +1,88 @@
+/* Fond de l'application : dégradé du jeu (toujours présent, sert aussi de repli sans 3D),
+   scène three.js, puis voile qui s'épaissit au défilement. */
+
+/* Couleurs animables : le fond glisse en douceur d'un jeu à l'autre. */
+@property --bd-top { syntax: '<color>'; inherits: true; initial-value: #10175a; }
+@property --bd-mid { syntax: '<color>'; inherits: true; initial-value: #2e40b8; }
+@property --bd-glow { syntax: '<color>'; inherits: true; initial-value: #6f80ff; }
+@property --bd-base { syntax: '<color>'; inherits: true; initial-value: #f2f3f8; }
+
+.app {
+  --bd-top: #10175a;
+  --bd-mid: #2e40b8;
+  --bd-glow: #6f80ff;
+  --bd-base: #f2f3f8;
+  --bd-deep: 300px; /* hauteur de la zone sombre (bandeau) */
+  --bd-fade: 560px; /* fin du fondu vers le fond de page */
+  transition: --bd-top 1s ease, --bd-mid 1s ease, --bd-glow 1s ease, --bd-base .4s ease;
+}
+.app--loto { --bd-top: #00356b; --bd-mid: #1580e6; --bd-glow: #7cc4ff; }
+.app--eurodreams { --bd-top: #2a0f4d; --bd-mid: #8a3fc0; --bd-glow: #ff6fc0; }
+.app--keno { --bd-top: #033d2c; --bd-mid: #0c8f68; --bd-glow: #6fe3b8; }
+.app--crescendo { --bd-top: #5a1d02; --bd-mid: #d4560c; --bd-glow: #ffb36b; }
+.app--amigo { --bd-top: #032c47; --bd-mid: #0b78b5; --bd-glow: #ffd84d; }
+
+[data-theme="dark"] .app { --bd-top: #060920; --bd-mid: #141d6b; --bd-glow: #2e40b8; --bd-base: #0d0f22; }
+[data-theme="dark"] .app--loto { --bd-top: #02142a; --bd-mid: #004f9e; --bd-glow: #1c8bf0; }
+[data-theme="dark"] .app--eurodreams { --bd-top: #10051d; --bd-mid: #3f1d6d; --bd-glow: #8a3fc0; }
+[data-theme="dark"] .app--keno { --bd-top: #021a13; --bd-mid: #05513b; --bd-glow: #0c8f68; }
+[data-theme="dark"] .app--crescendo { --bd-top: #1f0a01; --bd-mid: #6b2a05; --bd-glow: #c94a06; }
+[data-theme="dark"] .app--amigo { --bd-top: #01131f; --bd-mid: #053d5e; --bd-glow: #b38f00; }
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 80% 0%, color-mix(in srgb, var(--bd-glow) 55%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 0% 30%, color-mix(in srgb, var(--bd-glow) 25%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--bd-top) 0, var(--bd-mid) var(--bd-deep), var(--bd-base) var(--bd-fade));
+}
+[data-theme="dark"] .backdrop {
+  background:
+    radial-gradient(ellipse 70% 55% at 80% 0%, color-mix(in srgb, var(--bd-glow) 45%, transparent), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 10% 85%, color-mix(in srgb, var(--bd-glow) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--bd-top) 0, var(--bd-mid) var(--bd-deep), var(--bd-base) var(--bd-fade));
+}
+
+.backdrop__scene,
+.scene-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.scene-canvas {
+  display: block;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.scene-canvas.is-ready { opacity: calc(1 - var(--scroll, 0) * .45); }
+
+/* Voile : quand on descend vers les données, la scène recule et s'estompe. */
+.backdrop__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--bd-base);
+  opacity: calc(var(--scroll, 0) * .86);
+}
+[data-theme="dark"] .backdrop__veil { opacity: calc(var(--scroll, 0) * .7); }
+
+/* Boules en vol pendant l'animation du tirage : au-dessus de l'interface, sous l'en-tête. */
+.scene-fx {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* Le contenu passe au-dessus du fond */
+.app > .main,
+.app > .footer { position: relative; z-index: 1; }
+
+@media (max-width: 640px) {
+  .app { --bd-deep: 440px; --bd-fade: 720px; }
+}

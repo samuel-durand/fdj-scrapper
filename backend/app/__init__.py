@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gzip
 import logging
 from pathlib import Path
 
@@ -54,8 +55,31 @@ def create_app(config: Config | None = None, db: Database | None = None) -> Flas
         message = str(exc) if not config.is_production else "Erreur interne du serveur"
         return jsonify(success=False, message=message), 500
 
+    _setup_compression(app)
     _setup_frontend(app, config)
     return app
+
+
+def _setup_compression(app: Flask) -> None:
+    """Compresse les réponses JSON (les listes de tirages se réduisent d'environ 90 %)."""
+
+    @app.after_request
+    def gzip_json(resp):
+        if (
+            resp.status_code != 200
+            or resp.direct_passthrough
+            or resp.mimetype != "application/json"
+            or "gzip" not in request.headers.get("Accept-Encoding", "").lower()
+            or "Content-Encoding" in resp.headers
+        ):
+            return resp
+        data = resp.get_data()
+        if len(data) < 1024:
+            return resp
+        resp.set_data(gzip.compress(data, compresslevel=6))
+        resp.headers["Content-Encoding"] = "gzip"
+        resp.vary.add("Accept-Encoding")
+        return resp
 
 
 def _setup_cors(app: Flask, config: Config) -> None:

@@ -9,6 +9,8 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    // three.js (~525 ko, 136 ko gzip) est isolé dans un chunk chargé à la demande (scène 3D de fond)
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: {
