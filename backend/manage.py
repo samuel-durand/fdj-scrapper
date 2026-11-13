@@ -45,6 +45,11 @@ def get_db():
 def cmd_run(args) -> int:
     from app import create_app
     app = create_app()
+    # Avec --debug, Flask relance le serveur dans un processus enfant : on ne démarre la mise à
+    # jour automatique que dans celui-ci (sinon elle tournerait deux fois).
+    if args.auto_update and (not args.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true"):
+        from app import autoupdate
+        autoupdate.start(app.extensions["mongo_db"])
     port = args.port or int(os.environ.get("PORT", 5000))
     app.run(host=args.host, port=port, debug=args.debug)
     return 0
@@ -117,6 +122,8 @@ def main() -> int:
     s.add_argument("--host", default="127.0.0.1")
     s.add_argument("--port", type=int)
     s.add_argument("--debug", action="store_true")
+    s.add_argument("--auto-update", action="store_true",
+                   help="mettre à jour les tirages en arrière-plan (comme en production)")
     s.set_defaults(func=cmd_run)
 
     from app.scraper.games import GAMES

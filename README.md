@@ -49,8 +49,9 @@ sans navigateur) et stockés en base.
 
 ### Récupération des résultats
 - Scraper **sans navigateur** : lecture des données embarquées dans les pages fdj.fr
-- **Worker** calé sur le calendrier de chaque jeu (heure annoncée par la FDJ, nouvel essai tant que
-  le résultat n'est pas publié) ; Amigo est récupéré par passages groupés toutes les 15 min
+- **Mise à jour automatique dans le serveur web** (pas de worker ni de cron externe) : calendrier de
+  chaque jeu (heure annoncée par la FDJ, nouvel essai tant que le résultat n'est pas publié),
+  Amigo par passages groupés toutes les 15 min, rattrapage au démarrage
 - Rattrapage automatique des tirages manquants ou incomplets
 - API avec cache HTTP (ETag) et **compression gzip** ; le front ne charge que le jeu affiché
 
@@ -69,7 +70,6 @@ sans navigateur) et stockés en base.
 │   ├── app/worker.py     Mise à jour automatique après chaque tirage
 │   ├── manage.py         Commandes (run, scrape, worker, create-admin, import-json)
 │   └── tests/            Tests (MongoDB simulée)
-├── .github/workflows/    Scraping planifié via GitHub Actions
 ├── render.yaml           Déploiement Render
 └── railway.json + nixpacks.toml   Déploiement Railway
 ```
@@ -142,7 +142,7 @@ Amigo compte environ 200 tirages par jour : son historique est limité à 7 jour
 | `npm run dev` | Serveur de développement Vite |
 | `npm run build` | Build du front dans `dist/` |
 | `npm run preview` | Prévisualise le build |
-| `npm run backend` | Lance l'API Flask en mode debug |
+| `npm run backend` | Lance l'API Flask en mode debug (`-- --auto-update` : mise à jour des tirages en arrière-plan) |
 | `npm run scrape` | Met à jour les tirages (+ alertes) |
 | `npm run worker` | Worker de mise à jour continue |
 | `npm run test:backend` | Tests du backend (`pip install -r backend/requirements-dev.txt`) |
@@ -162,21 +162,25 @@ SERVE_FRONTEND=true gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --wor
    *Network Access* et copier l'URI de connexion.
 2. **Render** : *New → Blueprint* sur ce dépôt. [`render.yaml`](render.yaml) crée le service web
    (offre gratuite, branche `main`) ; renseigner `MONGODB_URI`, les secrets JWT sont générés.
-3. **GitHub** : ajouter le secret `MONGODB_URI` (*Settings → Secrets and variables → Actions*).
-   La GitHub Action [`update-fdj.yml`](.github/workflows/update-fdj.yml) met à jour les tirages
-   toutes les 15 min (remplace le worker, payant sur Render).
-4. **Premier remplissage** : lancer l'action à la main (onglet *Actions* → *Run workflow*), puis en
-   local avec `MONGODB_URI` pointant vers Atlas : `import-json` (historique) et `create-admin`.
+3. **Compte admin** : en local, avec `MONGODB_URI` pointant vers Atlas,
+   `python backend/manage.py create-admin …` (et `import-json` pour l'ancien historique).
 
-Sur l'offre gratuite, le service s'endort après ~15 min sans visite : le premier chargement suivant
-prend 30 à 60 s.
+**Mise à jour des tirages** : elle tourne dans le service web lui-même (`backend/app/autoupdate.py`),
+sans worker ni GitHub Action. Une boucle en arrière-plan suit le calendrier de chaque jeu ; au
+démarrage, un passage complet remplit ou rattrape la base. Un verrou MongoDB évite que les processus
+gunicorn scrapent en même temps.
+
+Sur l'offre gratuite, le service s'endort après ~15 min sans visite et ne met plus rien à jour
+pendant ce temps ; la visite suivante le réveille (30 à 60 s) et les tirages manquants sont
+rattrapés aussitôt. Pour des alertes toujours à l'heure, un service de « ping » gratuit (UptimeRobot,
+cron-job.org…) qui appelle `/api/health` toutes les 10 min le garde éveillé.
 
 ### Autres hébergeurs
 
 - **Railway** : `railway.json` + `nixpacks.toml` (le worker se lance comme second service avec
   `python backend/manage.py worker`).
-- Tout hébergeur avec un process permanent peut lancer `python backend/manage.py worker` à la place
-  de la GitHub Action.
+- Avec un process permanent séparé : `python backend/manage.py worker`, et `AUTO_UPDATE=false`
+  sur le service web.
 
 ## 📚 Documentation
 

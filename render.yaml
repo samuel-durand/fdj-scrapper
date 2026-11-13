@@ -1,11 +1,12 @@
 # Déploiement Render (offre gratuite) : un seul service web.
 # Flask sert l'API et le front compilé (dist/).
 #
-# La mise à jour des tirages n'utilise pas de worker Render (payant) : elle est faite par
-# la GitHub Action .github/workflows/update-fdj.yml, qui écrit directement dans MongoDB.
+# La mise à jour des tirages tourne dans le service web lui-même (backend/app/autoupdate.py) :
+# ni worker (payant sur Render) ni GitHub Action. Au premier démarrage, la base se remplit seule.
 #
-# Offre gratuite : le service s'endort après ~15 min sans visite ; la visite suivante
-# le réveille (premier chargement ~30-60 s).
+# Offre gratuite : le service s'endort après ~15 min sans visite et ne met alors plus rien à jour ;
+# la visite suivante le réveille (premier chargement ~30-60 s) et il rattrape aussitôt les tirages
+# publiés entre-temps.
 services:
   - type: web
     name: loterie-resultats

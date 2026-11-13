@@ -78,8 +78,10 @@ Un seul service suffit : Flask sert l'API **et** le front (`npm run build` puis 
 gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --workers 2
 ```
 
-Le worker tourne à part (`python backend/manage.py worker`), ou bien via la GitHub Action
-`.github/workflows/update-fdj.yml` (secret `MONGODB_URI`) si l'hébergeur n'accepte pas de process permanent.
+La mise à jour des tirages tourne dans le serveur web (`app/autoupdate.py`, démarré par `wsgi.py`) :
+boucle en arrière-plan sur le calendrier de chaque jeu, passage complet au démarrage et toutes les 12 h,
+verrou MongoDB entre les processus gunicorn. Pour un process séparé à la place :
+`python backend/manage.py worker` et `AUTO_UPDATE=false` sur le service web.
 
 ## Tests
 
