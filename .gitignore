@@ -1,14 +1,9 @@
 # Dependencies
 node_modules/
-package-lock.json
 
-# Production
+# Build
 dist/
 build/
-
-# Cache et données locales
-resultats-cache.json
-*.json.backup
 
 # IDE
 .vscode/
@@ -25,8 +20,6 @@ desktop.ini
 # Logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Environment
 .env
@@ -42,8 +35,4 @@ yarn-error.log*
 .venv/
 __pycache__/
 *.pyc
-
-# Puppeteer
-.local-chromium/
-
-.ORGANISATION.txt
+.pytest_cache/
