@@ -1,103 +1,127 @@
-* {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 :root {
-  /* Couleurs FDJ officielles */
-  --fdj-blue: #0052CC;
-  --fdj-dark-blue: #003D99;
-  --fdj-light-blue: #4A90E2;
-  --fdj-gold: #FFB800;
-  --fdj-green: #00C389;
-  --fdj-pink: #FF006E;
-  --fdj-purple: #6B46C1;
-  
-  /* Gradients FDJ */
-  --bg-gradient: linear-gradient(135deg, #0052CC 0%, #003D99 50%, #6B46C1 100%);
-  --euromillions-gradient: linear-gradient(135deg, #0052CC 0%, #4A90E2 100%);
-  --loto-gradient: linear-gradient(135deg, #00C389 0%, #059669 100%);
-  --gold-gradient: linear-gradient(135deg, #FFB800 0%, #FF8C00 100%);
-  
-  /* Ombres modernes */
-  --card-shadow: 0 10px 40px rgba(0, 82, 204, 0.15);
-  --card-hover-shadow: 0 20px 60px rgba(0, 82, 204, 0.25);
-  --glow-shadow: 0 0 30px rgba(255, 184, 0, 0.4);
+  /* ---- Palette ---- */
+  --c-brand: #282d87;
+  --c-brand-strong: #1b1f66;
+  --c-euromillions: #1f2b8f;
+  --c-euromillions-2: #3346c4;
+  --c-star: #ffc800;
+  --c-loto: #0067c8;
+  --c-loto-2: #1c8bf0;
+  --c-chance: #e4002b;
+  --c-eurodreams: #5a2d91;
+  --c-eurodreams-2: #8a3fc0;
+  --c-dream: #e6007e;
+  --c-success: #0a8a5c;
 
-  /* Thème clair (par défaut) */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --border-color: #e5e7eb;
-  --card-bg: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
-  --header-bg: linear-gradient(135deg, #0052CC 0%, #003D99 100%);
+  /* ---- Surfaces (clair) ---- */
+  --bg: #f2f3f8;
+  --surface: #ffffff;
+  --surface-2: #f7f8fc;
+  --text: #1b1d3a;
+  --muted: #5c6184;
+  --line: #e1e3ee;
+  --shadow: 0 1px 2px rgba(27, 29, 58, .06), 0 6px 20px rgba(27, 29, 58, .06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* ---- Alias des anciennes variables (composants existants) ---- */
+  --bg-primary: var(--surface);
+  --bg-secondary: var(--surface-2);
+  --bg-color: var(--surface-2);
+  --text-primary: var(--text);
+  --text-secondary: var(--muted);
+  --border-color: var(--line);
+  --card-bg: var(--surface);
+  --card-shadow: var(--shadow);
+  --card-hover-shadow: 0 10px 30px rgba(27, 29, 58, .12);
+  --glow-shadow: 0 0 0 3px rgba(255, 200, 0, .35);
+  --fdj-blue: var(--c-brand);
+  --fdj-dark-blue: var(--c-brand-strong);
+  --fdj-light-blue: var(--c-loto-2);
+  --fdj-gold: var(--c-star);
+  --fdj-green: var(--c-success);
+  --fdj-pink: var(--c-dream);
+  --fdj-purple: var(--c-eurodreams);
+  --euromillions-gradient: linear-gradient(135deg, var(--c-euromillions), var(--c-euromillions-2));
+  --loto-gradient: linear-gradient(135deg, var(--c-loto), var(--c-loto-2));
+  --gold-gradient: linear-gradient(135deg, #ffd43b, #ffb300);
+  --bg-gradient: linear-gradient(135deg, var(--c-brand), var(--c-eurodreams));
+  --header-bg: var(--c-brand);
+
+  color-scheme: light;
 }
 
-/* Thème sombre */
 [data-theme="dark"] {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-color: #334155;
-  --card-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  --header-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  --card-hover-shadow: 0 20px 60px rgba(0, 82, 204, 0.4);
+  --bg: #0d0f22;
+  --surface: #161936;
+  --surface-2: #1d2143;
+  --text: #eceefa;
+  --muted: #a4a9c9;
+  --line: #2b3058;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .35);
+  --card-hover-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  --c-brand: #8f96ff;
+  color-scheme: dark;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(0, 82, 204, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(255, 184, 0, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(0, 195, 137, 0.02) 0%, transparent 50%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  color: var(--text-primary);
   overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Animation de fond subtile */
-@keyframes gradientShift {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-20px) scale(1.05);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 15% 30%, rgba(0, 82, 204, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 70%, rgba(255, 184, 0, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 90%, rgba(0, 195, 137, 0.06) 0%, transparent 40%);
-  animation: gradientShift 20s ease-in-out infinite;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.6;
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--c-star);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

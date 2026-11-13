@@ -1,20 +1,21 @@
-# Configuration Nixpacks pour Railways
-# Ce fichier indique à Railways comment builder et démarrer l'application frontend
+# Déploiement Railway (Nixpacks) : un seul service = front compilé + API Flask.
+# Le worker se lance comme un 2e service avec la commande : python backend/manage.py worker
 
 [phases.setup]
-nixPkgs = ["nodejs-18_x"]
+nixPkgs = ["nodejs_20", "python312", "python312Packages.pip"]
 
 [phases.install]
-cmds = ["npm ci --include=dev"]
-
-[phases.build]
 cmds = [
-  "npm run build"
+  "npm ci --include=dev",
+  "python -m venv /opt/venv && . /opt/venv/bin/activate && pip install -r backend/requirements.txt"
 ]
 
+[phases.build]
+cmds = ["npm run build"]
+
 [start]
-cmd = "npm start"
+cmd = ". /opt/venv/bin/activate && gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 60"
 
 [variables]
-NODE_ENV = "production"
-
+APP_ENV = "production"
+SERVE_FRONTEND = "true"

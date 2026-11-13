@@ -139,16 +139,12 @@
   color: white;
 }
 
-.stat-number.euromillions {
-  background: linear-gradient(135deg, #0052CC 0%, #4A90E2 100%);
-}
-
-.stat-number.loto {
-  background: linear-gradient(135deg, #00C389 0%, #059669 100%);
-}
-
+.stat-number.euromillions,
+.stat-number.loto,
 .stat-number.eurodreams {
-  background: linear-gradient(135deg, #FF006E 0%, #FF4081 100%);
+  background-color: var(--accent, var(--c-brand));
+  background-image: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .38), rgba(255, 255, 255, 0) 46%);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .15);
 }
 
 .stat-number.cold {

@@ -11,9 +11,14 @@ function Calendar({ gameType, draws, onDateSelect }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   
   // Jours de tirage selon le jeu
-  const drawDays = gameType === 'euromillions' 
-    ? [2, 5]  // Mardi (2), Vendredi (5)
-    : [1, 3, 6];  // Lundi (1), Mercredi (3), Samedi (6)
+  const DRAW_DAYS = {
+    euromillions: { days: [2, 5], info: 'Tirages : mardi et vendredi' },
+    loto: { days: [1, 3, 6], info: 'Tirages : lundi, mercredi et samedi (+ Super Loto exceptionnels)' },
+    eurodreams: { days: [1, 4], info: 'Tirages : lundi et jeudi' },
+  };
+  const drawDays = (DRAW_DAYS[gameType] || DRAW_DAYS.loto).days;
+  // "AAAA-MM-JJ" lu en heure locale (new Date("AAAA-MM-JJ") serait en UTC)
+  const parseLocal = (s) => new Date(`${s}T12:00:00`);
   
   // Obtenir le premier et dernier jour du mois
   const year = currentDate.getFullYear();
@@ -75,7 +80,7 @@ function Calendar({ gameType, draws, onDateSelect }) {
   // Vérifier si on a des résultats pour cette date
   const hasResults = (date) => {
     return draws.some(draw => {
-      const drawDate = new Date(draw.date);
+      const drawDate = parseLocal(draw.date);
       return drawDate.toDateString() === date.toDateString();
     });
   };
@@ -83,7 +88,7 @@ function Calendar({ gameType, draws, onDateSelect }) {
   // Obtenir les résultats pour une date
   const getResultsForDate = (date) => {
     return draws.find(draw => {
-      const drawDate = new Date(draw.date);
+      const drawDate = parseLocal(draw.date);
       return drawDate.toDateString() === date.toDateString();
     });
   };
@@ -175,10 +180,7 @@ function Calendar({ gameType, draws, onDateSelect }) {
       
       <div className="calendar-info">
         <p className="draw-days-info">
-          {gameType === 'euromillions' 
-            ? '📅 Tirages : Mardi et Vendredi à 21h00'
-            : '📅 Tirages : Lundi, Mercredi et Samedi à 20h30'
-          }
+          {(DRAW_DAYS[gameType] || DRAW_DAYS.loto).info}
         </p>
       </div>
     </div>

@@ -1,473 +1,84 @@
-# 🔐 Backend API - Loterie FDJ
+# Backend Python (Flask + MongoDB)
 
-Backend sécurisé avec **JWT** et **Bcrypt** pour l'application de résultats FDJ.
+Remplace l'ancien backend Express **et** le fichier `resultats-cache.json` :
+tout (comptes, combinaisons, alertes, notifications **et tirages**) est dans MongoDB.
 
----
+```
+backend/
+├── app/
+│   ├── __init__.py        create_app() : API + service du front compilé (dist/)
+│   ├── config.py          variables d'environnement (.env)
+│   ├── db.py              connexion MongoDB + index
+│   ├── security.py        bcrypt + JWT, décorateurs login_required / admin_required
+│   ├── routes/            auth, users, alerts, notifications, combinations, admin, draws
+│   ├── scraper/           scraper FDJ (HTTP + JSON embarqué, pas de navigateur)
+│   ├── services/alerts.py alertes évaluées côté serveur -> notifications
+│   └── worker.py          mise à jour automatique après chaque tirage
+├── manage.py              commandes (run, scrape, worker, create-admin, import-json)
+├── wsgi.py                point d'entrée production (gunicorn / waitress)
+└── tests/                 tests (base MongoDB simulée, aucune connexion requise)
+```
 
-## 🚀 Installation
+## Compatibilité avec l'ancien backend
 
-### 1. Installer MongoDB
+- **Mêmes collections MongoDB** (`users`, `combinations`, `alerts`, `notifications`) : aucune migration.
+- **Mots de passe** : les hachages bcryptjs (`$2a$…`) sont acceptés tels quels.
+- **JWT** : même format (`{id}`, HS256). Avec les mêmes `JWT_SECRET` / `JWT_REFRESH_SECRET`,
+  les utilisateurs déjà connectés le restent.
+- **Mêmes routes et réponses** `/api/auth`, `/api/users`, `/api/alerts`, `/api/notifications`,
+  `/api/combinations`, `/api/admin`. Chaque document expose `_id` **et** `id`.
 
-#### Option A : MongoDB Local
+Nouveautés : `/api/draws` (résultats), alertes déclenchées par le serveur (plus besoin d'ouvrir le site),
+vérification des gains avec les vrais rangs FDJ (+ montant si le tirage est en base),
+correction du compteur « alertes actives » de l'admin.
+
+## Installation
+
 ```bash
-# Windows : Télécharger depuis https://www.mongodb.com/try/download/community
-# Mac : brew install mongodb-community
-# Linux : sudo apt-get install mongodb
+python -m venv .venv
+.venv\Scripts\activate                      # Windows (source .venv/bin/activate ailleurs)
+pip install -r backend/requirements.txt
+copy backend\.env.example backend\.env      # puis remplir MONGODB_URI et les secrets JWT
 ```
 
-#### Option B : MongoDB Atlas (Cloud - Recommandé)
-1. Créez un compte sur [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Créez un cluster gratuit
-3. Récupérez votre connection string
+## Commandes
 
-### 2. Installer les dépendances
 ```bash
-cd backend
-npm install
+python backend/manage.py run --debug        # API sur http://127.0.0.1:5000 (+ npm run dev pour le front)
+python backend/manage.py scrape             # met à jour les tirages (+ alertes)
+python backend/manage.py worker             # worker continu
+python backend/manage.py worker --once      # un passage (tâche planifiée / cron)
+python backend/manage.py create-admin "Nom" email@exemple.fr "motdepasse"
+python backend/manage.py import-json backend/data/ancien-resultats-cache.json
 ```
 
-### 3. Configuration
+`import-json` reprend l'historique de l'ancien fichier (la FDJ ne publie qu'environ 2 mois de
+résultats). À lancer une fois ; le fichier peut ensuite être supprimé.
+
+## API des tirages
+
+| Route | Réponse |
+|---|---|
+| `GET /api/draws?limit=200` | `{ euromillions: [...], loto: [...], eurodreams: [...], nextDraws, lastUpdate }` |
+| `GET /api/draws/<jeu>?limit=50&before=AAAA-MM-JJ` | `{ data: [...], nextDraw, lastUpdate }` |
+| `GET /api/draws/<jeu>/<AAAA-MM-JJ>` | `{ data: {...} }` |
+
+Réponses en cache 60 s + ETag (réponse 304 si rien n'a changé).
+
+## Production
+
+Un seul service suffit : Flask sert l'API **et** le front (`npm run build` puis `SERVE_FRONTEND=true`).
+
 ```bash
-# Copier le fichier d'exemple
-cp .env.example .env
-
-# Éditer .env avec vos valeurs
+gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --workers 2
 ```
 
-**Important** : Changez les secrets JWT en production !
+Le worker tourne à part (`python backend/manage.py worker`), ou bien via la GitHub Action
+`.github/workflows/update-fdj.yml` (secret `MONGODB_URI`) si l'hébergeur n'accepte pas de process permanent.
 
----
+## Tests
 
-## ⚙️ Configuration (.env)
-
-```env
-# Server
-PORT=5000
-NODE_ENV=development
-
-# Frontend (CORS)
-FRONTEND_URL=http://localhost:5173
-
-# MongoDB
-MONGODB_URI=mongodb://localhost:27017/loterie-fdj
-# ou Atlas:
-# MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/loterie-fdj
-
-# JWT Secrets (CHANGEZ EN PRODUCTION!)
-JWT_SECRET=votre_secret_ici_minimum_32_caracteres
-JWT_EXPIRE=7d
-
-JWT_REFRESH_SECRET=votre_refresh_secret_different
-JWT_REFRESH_EXPIRE=30d
-```
-
----
-
-## 🏃 Lancement
-
-### Mode développement (avec auto-reload)
 ```bash
-npm run dev
+pip install -r backend/requirements-dev.txt
+python -m pytest backend -q
 ```
-
-### Mode production
-```bash
-npm start
-```
-
-Le serveur démarre sur `http://localhost:5000`
-
-### Créer un compte administrateur
-
-#### Mode interactif (recommandé si le terminal supporte readline)
-```bash
-npm run create-admin
-```
-
-Le script vous demandera :
-- Nom de l'administrateur
-- Email
-- Mot de passe (min. 6 caractères)
-
-#### Mode non-interactif (si le mode interactif ne fonctionne pas)
-```bash
-node scripts/create-admin.js "Nom Admin" "admin@example.com" "motdepasse123"
-```
-
-**Note** : Le mode non-interactif est automatiquement détecté lorsque vous passez 3 arguments.
-
-### Générer des alertes pour toutes les combinaisons
-```bash
-npm run generate-alerts
-```
-
-Ce script :
-- ✅ Vérifie toutes les combinaisons des utilisateurs
-- ✅ Compare avec les tirages du jour
-- ✅ Crée des alertes et notifications automatiquement
-- ✅ Met à jour les résultats des combinaisons gagnantes
-- ✅ Affiche un résumé des gains
-
-**Note** : Le script utilise des tirages simulés par défaut. Vous pouvez les modifier dans le script pour utiliser de vrais tirages.
-
----
-
-## 📚 API Endpoints
-
-### 🔐 Authentification
-
-#### POST `/api/auth/register`
-Créer un nouveau compte
-
-**Body:**
-```json
-{
-  "name": "Jean Dupont",
-  "email": "jean@example.com",
-  "password": "motdepasse123"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Inscription réussie",
-  "data": {
-    "user": { ... },
-    "token": "eyJhbGc...",
-    "refreshToken": "eyJhbGc..."
-  }
-}
-```
-
-#### POST `/api/auth/login`
-Se connecter
-
-**Body:**
-```json
-{
-  "email": "jean@example.com",
-  "password": "motdepasse123"
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Connexion réussie",
-  "data": {
-    "user": { ... },
-    "token": "eyJhbGc...",
-    "refreshToken": "eyJhbGc..."
-  }
-}
-```
-
-#### POST `/api/auth/refresh`
-Rafraîchir le token d'accès
-
-**Body:**
-```json
-{
-  "refreshToken": "eyJhbGc..."
-}
-```
-
-#### POST `/api/auth/logout` 🔒
-Se déconnecter
-
-**Headers:**
-```
-Authorization: Bearer {token}
-```
-
-#### GET `/api/auth/me` 🔒
-Récupérer le profil utilisateur
-
----
-
-### 👤 Utilisateur
-
-#### PUT `/api/users/preferences` 🔒
-Mettre à jour les préférences
-
-**Body:**
-```json
-{
-  "favoriteGames": ["euromillions", "loto"],
-  "defaultTab": "euromillions",
-  "notifications": true,
-  "theme": "dark"
-}
-```
-
-#### PUT `/api/users/profile` 🔒
-Mettre à jour le profil
-
-**Body:**
-```json
-{
-  "name": "Jean Nouveau Nom",
-  "email": "nouveau@email.com"
-}
-```
-
-#### PUT `/api/users/password` 🔒
-Changer le mot de passe
-
-**Body:**
-```json
-{
-  "currentPassword": "ancien",
-  "newPassword": "nouveau123"
-}
-```
-
----
-
-### 🔔 Alertes
-
-#### GET `/api/alerts` 🔒
-Récupérer toutes les alertes
-
-**Response:**
-```json
-{
-  "success": true,
-  "count": 3,
-  "data": [ ... ]
-}
-```
-
-#### POST `/api/alerts` 🔒
-Créer une nouvelle alerte
-
-**Body:**
-```json
-{
-  "name": "Gros jackpot",
-  "type": "jackpot_threshold",
-  "game": "euromillions",
-  "config": {
-    "threshold": 100000000
-  }
-}
-```
-
-#### PUT `/api/alerts/:id` 🔒
-Mettre à jour une alerte
-
-#### DELETE `/api/alerts/:id` 🔒
-Supprimer une alerte
-
-#### PATCH `/api/alerts/:id/toggle` 🔒
-Activer/désactiver une alerte
-
----
-
-## 🔒 Authentification
-
-Toutes les routes marquées 🔒 nécessitent un token JWT dans le header :
-
-```
-Authorization: Bearer {votre_token_jwt}
-```
-
-### Cycle de vie des tokens
-
-1. **Login/Register** → Reçoit `token` + `refreshToken`
-2. **Requêtes** → Utilise le `token` (expire en 7 jours)
-3. **Token expiré** → Utilise `refreshToken` pour obtenir un nouveau `token`
-4. **RefreshToken expiré** → Redemande login
-
----
-
-## 🔐 Sécurité
-
-### Hashage des mots de passe
-- Algorithme : **bcrypt**
-- Salt rounds : **12**
-- Mots de passe **JAMAIS** stockés en clair
-
-### JWT
-- **Access Token** : 7 jours (configurable)
-- **Refresh Token** : 30 jours (configurable)
-- Secrets différents pour access et refresh
-- Tokens signés et vérifiés
-
-### Protection CORS
-- Seules les origines autorisées peuvent accéder à l'API
-- Configurable via `FRONTEND_URL`
-
----
-
-## 📊 Modèles de données
-
-### User
-```javascript
-{
-  _id: ObjectId,
-  name: String,
-  email: String (unique, lowercase),
-  password: String (hashed),
-  preferences: {
-    favoriteGames: [String],
-    defaultTab: String,
-    notifications: Boolean,
-    theme: String
-  },
-  refreshToken: String,
-  isActive: Boolean,
-  lastLogin: Date,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Alert
-```javascript
-{
-  _id: ObjectId,
-  userId: ObjectId (ref: User),
-  name: String,
-  type: String (enum),
-  game: String (enum),
-  enabled: Boolean,
-  config: {
-    threshold: Number,
-    numbers: [Number],
-    minMatches: Number,
-    luckyNumber: Number
-  },
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Notification
-```javascript
-{
-  _id: ObjectId,
-  userId: ObjectId (ref: User),
-  alertId: ObjectId (ref: Alert),
-  alertName: String,
-  message: String,
-  gameType: String,
-  draw: Object,
-  read: Boolean,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
----
-
-## 🧪 Test de l'API
-
-### Avec cURL
-```bash
-# Register
-curl -X POST http://localhost:5000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test","email":"test@test.com","password":"test123"}'
-
-# Login
-curl -X POST http://localhost:5000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"test@test.com","password":"test123"}'
-
-# Get profile (remplacez TOKEN)
-curl http://localhost:5000/api/auth/me \
-  -H "Authorization: Bearer TOKEN"
-```
-
-### Avec Postman
-1. Importer la collection (à venir)
-2. Tester les endpoints
-3. Les tokens sont gérés automatiquement
-
----
-
-## 🐛 Débogage
-
-### Vérifier MongoDB
-```bash
-# Local
-mongosh
-> show dbs
-> use loterie-fdj
-> show collections
-> db.users.find()
-```
-
-### Logs serveur
-Les logs sont affichés dans la console en mode développement.
-
-### Erreurs communes
-
-#### "MongoDB connection error"
-- Vérifiez que MongoDB est démarré
-- Vérifiez `MONGODB_URI` dans `.env`
-
-#### "JWT Error"
-- Vérifiez que `JWT_SECRET` est défini
-- Vérifiez que le token n'est pas expiré
-
-#### "CORS Error"
-- Vérifiez `FRONTEND_URL` dans `.env`
-- Assurez-vous que l'origine correspond
-
----
-
-## 📦 Déploiement
-
-### Heroku
-```bash
-heroku create nom-app
-heroku config:set JWT_SECRET=...
-heroku config:set MONGODB_URI=...
-git push heroku main
-```
-
-### Render / Railway
-1. Connectez votre repo GitHub
-2. Ajoutez les variables d'environnement
-3. Déployez
-
-### VPS (Linux)
-```bash
-# Installer Node.js et MongoDB
-# Cloner le repo
-# npm install
-# pm2 start server.js
-# nginx reverse proxy
-```
-
----
-
-## 🔮 Prochaines fonctionnalités
-
-- [ ] Rate limiting
-- [ ] Email verification
-- [ ] Password reset
-- [ ] 2FA (Two-Factor Authentication)
-- [ ] Social login (Google, Facebook)
-- [ ] Admin dashboard
-- [ ] Logs avancés
-- [ ] Tests unitaires
-- [ ] CI/CD
-
----
-
-## 📞 Support
-
-- Documentation : `/docs`
-- Issues : GitHub Issues
-- Questions : GitHub Discussions
-
----
-
-**Backend créé avec ❤️ pour la sécurité et les performances**
-

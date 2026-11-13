@@ -1,93 +1,59 @@
 /**
- * Service pour récupérer les résultats des loteries
- * Fonctionne en développement ET en production sur o2switch
+ * Service pour récupérer les résultats des loteries depuis l'API (GET /api/draws),
+ * alimentée en base par le scraper/worker Python.
+ *
+ * Les données sont téléchargées une seule fois puis partagées entre tous les composants,
+ * et rafraîchies au plus toutes les 5 min (le serveur gère aussi le cache HTTP / ETag).
  */
 
-// Chemin relatif vers le cache JSON
-// En production, ce fichier sera à la racine du site (dist/resultats-cache.json)
-const CACHE_URL = '/resultats-cache.json'
+const API_URL = import.meta.env.VITE_API_URL || '/api'
+const TTL = 5 * 60 * 1000
+const EMPTY = { euromillions: [], loto: [], eurodreams: [], nextDraws: {} }
 
-/**
- * Charge les données depuis le cache JSON
- */
-async function loadCache() {
-  try {
-    // Ajouter un timestamp pour éviter le cache du navigateur
-    const timestamp = new Date().getTime()
-    const response = await fetch(`${CACHE_URL}?t=${timestamp}`, {
-      cache: 'no-cache',
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
+let pending = null
+let loadedAt = 0
+
+async function fetchCache() {
+  const response = await fetch(`${API_URL}/draws`)
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  return { ...EMPTY, ...(await response.json()) }
+}
+
+function loadCache({ force = false } = {}) {
+  if (!pending || force || Date.now() - loadedAt > TTL) {
+    loadedAt = Date.now()
+    pending = fetchCache().catch((error) => {
+      console.error('❌ Erreur lors du chargement du cache:', error)
+      pending = null
+      throw error
     })
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-    
-    const data = await response.json()
-    return data
-  } catch (error) {
-    console.error('❌ Erreur lors du chargement du cache:', error)
-    
-    // Fallback : retourner des données vides
-    return {
-      euromillions: [],
-      loto: [],
-      eurodreams: []
-    }
+  }
+  return pending
+}
+
+const take = (list, limit) => (limit ? list.slice(0, limit) : list)
+
+export async function getGameData(game, { force = false } = {}) {
+  const cache = await loadCache({ force })
+  return {
+    draws: cache[game] || [],
+    nextDraw: cache.nextDraws?.[game] || null,
+    lastUpdate: cache.lastUpdate || null,
   }
 }
 
-/**
- * Récupère les résultats Euromillions
- * @param {number} limit - Nombre de résultats à retourner (défaut: tous)
- */
 export async function getEuromillionsResults(limit = null) {
-  const cache = await loadCache()
-  const results = cache.euromillions || []
-  
-  if (limit) {
-    return results.slice(0, limit)
-  }
-  
-  return results
+  return take((await loadCache().catch(() => EMPTY)).euromillions || [], limit)
 }
 
-/**
- * Récupère les résultats Loto
- * @param {number} limit - Nombre de résultats à retourner (défaut: tous)
- */
 export async function getLotoResults(limit = null) {
-  const cache = await loadCache()
-  const results = cache.loto || []
-  
-  if (limit) {
-    return results.slice(0, limit)
-  }
-  
-  return results
+  return take((await loadCache().catch(() => EMPTY)).loto || [], limit)
 }
 
-/**
- * Récupère les résultats EuroDreams
- * @param {number} limit - Nombre de résultats à retourner (défaut: tous)
- */
 export async function getEurodreamsResults(limit = null) {
-  const cache = await loadCache()
-  const results = cache.eurodreams || []
-  
-  if (limit) {
-    return results.slice(0, limit)
-  }
-  
-  return results
+  return take((await loadCache().catch(() => EMPTY)).eurodreams || [], limit)
 }
 
-/**
- * Récupère tous les résultats
- */
 export async function getAllResults() {
-  return await loadCache()
+  return loadCache().catch(() => EMPTY)
 }
-

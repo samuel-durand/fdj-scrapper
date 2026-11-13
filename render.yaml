@@ -1,13 +1,37 @@
 services:
+  # Site + API (Flask sert aussi le front compilé)
   - type: web
-    name: loterie-fdj-backend
-    runtime: node
+    name: loterie-resultats
+    runtime: python
     plan: free
     region: frankfurt
-    buildCommand: npm install && npm run build && cd backend && npm install
-    startCommand: cd backend && npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
+    buildCommand: pip install -r backend/requirements.txt && npm ci --include=dev && npm run build
+    startCommand: gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 60
     healthCheckPath: /api/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SERVE_FRONTEND
+        value: "true"
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
 
+  # Mise à jour automatique des tirages + alertes
+  - type: worker
+    name: loterie-worker
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python backend/manage.py worker
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: MONGODB_URI
+        sync: false

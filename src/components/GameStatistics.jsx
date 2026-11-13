@@ -14,7 +14,12 @@ import {
 } from 'chart.js'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import { getGameStats } from '../services/statsService'
+import useTheme from '../hooks/useTheme'
 import './GameStatistics.css'
+
+// Police du site pour tous les graphiques
+ChartJS.defaults.font.family = "'Nunito Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+ChartJS.defaults.font.weight = 600
 
 // Enregistrer les composants Chart.js
 ChartJS.register(
@@ -63,28 +68,22 @@ export default function GameStatistics({ gameType }) {
     }
   }
 
-  // Configuration des couleurs selon le thème
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
-  const textColor = isDark ? '#f1f5f9' : '#1f2937'
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+  // Couleurs selon le thème (mises à jour en direct quand on bascule clair/sombre)
+  const isDark = useTheme() === 'dark'
+  const textColor = isDark ? '#eceefa' : '#1b1d3a'
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(27, 29, 58, 0.08)'
 
-  // Couleurs selon le jeu
+  // Couleurs selon le jeu (palette du site)
   const gameColors = {
-    euromillions: {
-      primary: '#0052CC',
-      secondary: '#4A90E2',
-      accent: '#FFB800'
-    },
-    loto: {
-      primary: '#00C389',
-      secondary: '#059669',
-      accent: '#10B981'
-    },
-    eurodreams: {
-      primary: '#FF006E',
-      secondary: '#FF4081',
-      accent: '#E91E63'
-    }
+    euromillions: isDark
+      ? { primary: '#6f80ff', secondary: '#ffc800', accent: '#ffc800' }
+      : { primary: '#1f2b8f', secondary: '#ffc800', accent: '#ffc800' },
+    loto: isDark
+      ? { primary: '#3d9df5', secondary: '#ff4d6a', accent: '#ff4d6a' }
+      : { primary: '#0067c8', secondary: '#e4002b', accent: '#e4002b' },
+    eurodreams: isDark
+      ? { primary: '#b47ae6', secondary: '#ff4fae', accent: '#ff4fae' }
+      : { primary: '#5a2d91', secondary: '#e6007e', accent: '#e6007e' },
   }
 
   const colors = gameColors[gameType] || gameColors.euromillions

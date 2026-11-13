@@ -38,6 +38,11 @@ yarn-error.log*
 *.temp
 .cache/
 
+# Python
+.venv/
+__pycache__/
+*.pyc
+
 # Puppeteer
 .local-chromium/
 

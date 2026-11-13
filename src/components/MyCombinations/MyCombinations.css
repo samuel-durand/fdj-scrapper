@@ -468,7 +468,7 @@
   color: var(--text-secondary);
 }
 
-.rank {
+.result-display .rank {
   font-size: 24px;
   font-weight: 700;
   color: #06d6a0 !important;

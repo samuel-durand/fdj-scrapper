@@ -1,382 +1,172 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './App.css'
-import Euromillions from './components/Euromillions'
-import Loto from './components/Loto'
-import Eurodreams from './components/Eurodreams'
+import GameResults from './components/Results/GameResults'
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import UserProfile from './components/Auth/UserProfile'
 import NotificationCenter from './components/Alerts/NotificationCenter'
 import AdminPanel from './components/Admin/AdminPanel'
-import { getEuromillionsResults, getLotoResults } from './services/lotteryService'
-import { getEurodreamsResults } from './services/lotteryService'
 import { useAuth } from './contexts/AuthContext'
-import { checkNewDraws } from './services/alertService'
 import { getUnreadCount } from './services/notificationService'
+import { GAMES, GAME_KEYS } from './games'
 
-// Fonction pour calculer le prochain jour de tirage
-function getNextDrawDate(gameType) {
-  const today = new Date()
-  const currentDay = today.getDay() // 0 = Dimanche, 1 = Lundi, ..., 6 = Samedi
-  
-  let daysUntilNext = 0
-  
-  if (gameType === 'euromillions') {
-    // Euromillions : Mardi (2) et Vendredi (5)
-    if (currentDay === 0 || currentDay === 1) {
-      // Dimanche ou Lundi → prochain tirage Mardi
-      daysUntilNext = 2 - currentDay
-    } else if (currentDay === 2) {
-      // Mardi → vérifier l'heure (si avant 20h15, c'est aujourd'hui, sinon vendredi)
-      const hour = today.getHours()
-      daysUntilNext = hour < 20 ? 0 : 3
-    } else if (currentDay === 3 || currentDay === 4) {
-      // Mercredi ou Jeudi → prochain tirage Vendredi
-      daysUntilNext = 5 - currentDay
-    } else if (currentDay === 5) {
-      // Vendredi → vérifier l'heure
-      const hour = today.getHours()
-      daysUntilNext = hour < 20 ? 0 : 4
-    } else {
-      // Samedi → prochain tirage Mardi
-      daysUntilNext = 3
-    }
-  } else if (gameType === 'eurodreams') {
-    // Eurodreams : Lundi (1) et Jeudi (4)
-    if (currentDay === 0) {
-      // Dimanche → prochain tirage Lundi
-      daysUntilNext = 1
-    } else if (currentDay === 1) {
-      // Lundi → vérifier l'heure
-      const hour = today.getHours()
-      daysUntilNext = hour < 21 ? 0 : 3
-    } else if (currentDay === 2 || currentDay === 3) {
-      // Mardi ou Mercredi → prochain tirage Jeudi
-      daysUntilNext = 4 - currentDay
-    } else if (currentDay === 4) {
-      // Jeudi → vérifier l'heure
-      const hour = today.getHours()
-      daysUntilNext = hour < 21 ? 0 : 4
-    } else {
-      // Vendredi ou Samedi → prochain tirage Lundi
-      daysUntilNext = (8 - currentDay) % 7
-    }
-  } else {
-    // Loto : Lundi (1), Mercredi (3) et Samedi (6)
-    if (currentDay === 0) {
-      // Dimanche → prochain tirage Lundi
-      daysUntilNext = 1
-    } else if (currentDay === 1) {
-      // Lundi → vérifier l'heure
-      const hour = today.getHours()
-      daysUntilNext = hour < 20 ? 0 : 2
-    } else if (currentDay === 2) {
-      // Mardi → prochain tirage Mercredi
-      daysUntilNext = 1
-    } else if (currentDay === 3) {
-      // Mercredi → vérifier l'heure
-      const hour = today.getHours()
-      daysUntilNext = hour < 20 ? 0 : 3
-    } else if (currentDay === 4 || currentDay === 5) {
-      // Jeudi ou Vendredi → prochain tirage Samedi
-      daysUntilNext = 6 - currentDay
-    } else {
-      // Samedi → vérifier l'heure
-      const hour = today.getHours()
-      daysUntilNext = hour < 20 ? 0 : 2
-    }
-  }
-  
-  const nextDate = new Date(today)
-  nextDate.setDate(today.getDate() + daysUntilNext)
-  
-  const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
-  const months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 
-                  'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
-  
-  const dayName = days[nextDate.getDay()]
-  const day = nextDate.getDate()
-  const month = months[nextDate.getMonth()]
-  const year = nextDate.getFullYear()
-  
-  return {
-    day: dayName,
-    date: `${day} ${month} ${year}`
-  }
+const gameFromHash = () => {
+  const h = window.location.hash.replace('#', '')
+  return GAME_KEYS.includes(h) ? h : null
+}
+
+function Logo() {
+  return (
+    <svg className="brand__mark" width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+      <circle cx="11" cy="20" r="9" fill="var(--c-euromillions)" />
+      <circle cx="23" cy="20" r="9" fill="var(--c-loto)" opacity=".92" />
+      <circle cx="17" cy="10" r="8" fill="var(--c-star)" />
+    </svg>
+  )
 }
 
 function App() {
   const { user } = useAuth()
-  const [activeTab, setActiveTab] = useState('euromillions')
-  const [euromillionsData, setEuromillionsData] = useState(null)
-  const [lotoData, setLotoData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [nextEuroDrawDate, setNextEuroDrawDate] = useState(null)
-  const [nextLotoDrawDate, setNextLotoDrawDate] = useState(null)
+  const [activeTab, setActiveTab] = useState(() => gameFromHash() || 'euromillions')
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light'
+    try { return localStorage.getItem('theme') || 'light' } catch { return 'light' }
   })
-  const [showLogin, setShowLogin] = useState(false)
-  const [showRegister, setShowRegister] = useState(false)
-  const [showProfile, setShowProfile] = useState(false)
-  const [showNotifications, setShowNotifications] = useState(false)
-  const [showAdminPanel, setShowAdminPanel] = useState(false)
+  const [modal, setModal] = useState(null) // 'login' | 'register' | 'profile' | 'notifications' | 'admin'
   const [unreadCount, setUnreadCount] = useState(0)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    localStorage.setItem('theme', theme)
+    try { localStorage.setItem('theme', theme) } catch { /* stockage indisponible */ }
   }, [theme])
 
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+  // Onglet <-> URL (#euromillions, #loto, #eurodreams)
+  useEffect(() => {
+    const onHash = () => { const g = gameFromHash(); if (g) setActiveTab(g) }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  const selectTab = (key) => {
+    setActiveTab(key)
+    history.replaceState(null, '', `#${key}`)
   }
 
-  // Appliquer l'onglet par défaut de l'utilisateur
   useEffect(() => {
-    if (user?.preferences?.defaultTab) {
-      setActiveTab(user.preferences.defaultTab)
+    if (user?.preferences?.defaultTab && !gameFromHash()) setActiveTab(user.preferences.defaultTab)
+    if (user?.preferences?.theme) setTheme(user.preferences.theme)
+  }, [user])
+
+  const updateUnreadCount = useCallback(async () => {
+    if (!user?.id) return
+    try {
+      setUnreadCount(await getUnreadCount())
+    } catch (error) {
+      console.error('Erreur lors de la récupération des notifications:', error)
     }
   }, [user])
 
-  // Appliquer le thème de l'utilisateur
-  useEffect(() => {
-    if (user?.preferences?.theme) {
-      setTheme(user.preferences.theme)
-    }
-  }, [user])
-
-  useEffect(() => {
-    async function fetchJackpots() {
-      try {
-        setLoading(true)
-        const [euroResults, lotoResults, edResults] = await Promise.all([
-          getEuromillionsResults(10),
-          getLotoResults(10),
-          getEurodreamsResults(10).catch(() => [])
-        ])
-        
-        // Trouver le premier tirage avec un jackpot disponible pour Euromillions
-        const euroWithJackpot = euroResults.find(draw => 
-          draw.jackpot && draw.jackpot !== 'Non disponible'
-        )
-        setEuromillionsData(euroWithJackpot || euroResults[0])
-        
-        // Trouver le premier tirage avec un jackpot disponible pour Loto
-        const lotoWithJackpot = lotoResults.find(draw => 
-          draw.jackpot && draw.jackpot !== 'Non disponible'
-        )
-        setLotoData(lotoWithJackpot || lotoResults[0])
-        
-        // Calculer les vraies dates des prochains tirages
-        setNextEuroDrawDate(getNextDrawDate('euromillions'))
-        setNextLotoDrawDate(getNextDrawDate('loto'))
-
-        // Vérifier les alertes pour l'utilisateur connecté
-        if (user?.id) {
-          const allDraws = {
-            euromillions: euroResults,
-            loto: lotoResults,
-            eurodreams: edResults
-          }
-          checkNewDraws(user.id, allDraws)
-          updateUnreadCount()
-        }
-      } catch (error) {
-        console.error('Erreur lors du chargement des jackpots:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchJackpots()
-  }, [user])
-
-  // Mettre à jour le compteur de notifications non lues
-  const updateUnreadCount = async () => {
-    if (user?.id) {
-      try {
-        const count = await getUnreadCount()
-        setUnreadCount(count)
-      } catch (error) {
-        console.error('Erreur lors de la récupération du nombre de notifications:', error)
-      }
-    }
-  }
-
-  // Rafraîchir les notifications toutes les 5 minutes
+  // Compteur de notifications (toutes les 5 min). Les alertes sont évaluées par le
+  // worker côté serveur dès qu'un tirage arrive : rien à calculer dans le navigateur.
   useEffect(() => {
     if (!user?.id) return
-
-    updateUnreadCount() // Charger immédiatement
-    const interval = setInterval(() => {
-      updateUnreadCount()
-    }, 5 * 60 * 1000) // 5 minutes
-
+    updateUnreadCount()
+    const interval = setInterval(updateUnreadCount, 5 * 60 * 1000)
     return () => clearInterval(interval)
-  }, [user])
+  }, [user, updateUnreadCount])
+
+  const close = () => { setModal(null); updateUnreadCount() }
 
   return (
-    <div className="app">
-      <header className="header">
-        <div className="header-content">
-          <div className="header-text">
-            <h1>🎰 Résultats Loterie FDJ</h1>
-            <p className="subtitle">Consultez les derniers tirages de l'Euromillions et du Loto en temps réel</p>
-          </div>
-          <div className="header-actions">
-            <button className="theme-toggle" onClick={toggleTheme} title={`Passer au thème ${theme === 'light' ? 'sombre' : 'clair'}`}>
-              {theme === 'light' ? '🌙' : '☀️'}
+    <div className={`app app--${activeTab}`}>
+      <header className={`topbar ${scrolled ? 'is-scrolled' : ''}`}>
+        <div className="topbar__inner">
+          <a className="brand" href={`#${activeTab}`}>
+            <Logo />
+            <span className="brand__text">Résultats <strong>Loterie</strong></span>
+          </a>
+
+          <nav className="gamenav" aria-label="Jeux">
+            {GAME_KEYS.map((key) => (
+              <button
+                key={key}
+                className={`gamenav__item gamenav__item--${key} ${activeTab === key ? 'is-active' : ''}`}
+                aria-current={activeTab === key ? 'page' : undefined}
+                onClick={() => selectTab(key)}
+              >
+                {GAMES[key].name}
+              </button>
+            ))}
+          </nav>
+
+          <div className="topbar__actions">
+            <button
+              className="icon-btn"
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              title={`Thème ${theme === 'light' ? 'sombre' : 'clair'}`}
+              aria-label="Changer de thème"
+            >
+              {theme === 'light' ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor" /></svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor" /><g stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" /></g></svg>
+              )}
             </button>
-            
+
             {user ? (
               <>
-                <button 
-                  className="notification-btn" 
-                  onClick={() => {
-                    setShowNotifications(true)
-                    updateUnreadCount()
-                  }}
-                  title="Notifications"
-                >
-                  🔔
-                  {unreadCount > 0 && (
-                    <span className="notification-badge">{unreadCount}</span>
-                  )}
+                <button className="icon-btn notif" onClick={() => setModal('notifications')} aria-label="Notifications">
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                  {unreadCount > 0 && <span className="notif__badge">{unreadCount}</span>}
                 </button>
                 {user.role === 'admin' && (
-                  <button 
-                    className="admin-btn" 
-                    onClick={() => setShowAdminPanel(true)}
-                    title="Panel Administrateur"
-                  >
-                    🔐
-                  </button>
+                  <button className="btn btn--ghost btn--sm" onClick={() => setModal('admin')}>Admin</button>
                 )}
-                <button className="user-menu-btn" onClick={() => setShowProfile(true)}>
-                  <span>👤</span>
-                  <span>{user.name}</span>
+                <button className="btn btn--primary btn--sm" onClick={() => setModal('profile')}>
+                  <span className="avatar">{(user.name || '?').charAt(0).toUpperCase()}</span>
+                  <span className="hide-sm">{user.name}</span>
                 </button>
               </>
             ) : (
-              <div className="auth-buttons">
-                <button className="login-btn" onClick={() => setShowLogin(true)}>
-                  Connexion
-                </button>
-                <button className="register-btn" onClick={() => setShowRegister(true)}>
-                  Inscription
-                </button>
-              </div>
+              <>
+                <button className="btn btn--ghost btn--sm hide-sm" onClick={() => setModal('register')}>Inscription</button>
+                <button className="btn btn--primary btn--sm" onClick={() => setModal('login')}>Connexion</button>
+              </>
             )}
           </div>
         </div>
       </header>
 
-      <div className="tabs">
-        <button 
-          className={`tab ${activeTab === 'euromillions' ? 'active' : ''}`}
-          onClick={() => setActiveTab('euromillions')}
-        >
-          ⭐ EuroMillions - My Million
-        </button>
-        <button 
-          className={`tab ${activeTab === 'loto' ? 'active' : ''}`}
-          onClick={() => setActiveTab('loto')}
-        >
-          🍀 Loto®
-        </button>
-        <button 
-          className={`tab ${activeTab === 'eurodreams' ? 'active' : ''}`}
-          onClick={() => setActiveTab('eurodreams')}
-        >
-          💤 EuroDreams
-        </button>
-      </div>
-
-      {!loading && (
-        <>
-          {activeTab === 'euromillions' && euromillionsData?.jackpot && euromillionsData.jackpot !== 'Non disponible' && nextEuroDrawDate && (
-            <div className="top-jackpot-banner">
-              <div className="top-jackpot-info">
-                <span className="top-jackpot-icon">💰</span>
-                <div className="top-jackpot-details">
-                  <span className="top-jackpot-title">Prochain Jackpot Euromillions</span>
-                  <span className="top-jackpot-value">{euromillionsData.jackpot}</span>
-                </div>
-                <span className="top-next-draw-info">Prochain tirage : {nextEuroDrawDate.day} {nextEuroDrawDate.date}</span>
-              </div>
-            </div>
-          )}
-          {activeTab === 'loto' && lotoData?.jackpot && lotoData.jackpot !== 'Non disponible' && nextLotoDrawDate && (
-            <div className="top-jackpot-banner">
-              <div className="top-jackpot-info">
-                <span className="top-jackpot-icon">💰</span>
-                <div className="top-jackpot-details">
-                  <span className="top-jackpot-title">Prochain Jackpot Loto</span>
-                  <span className="top-jackpot-value">{lotoData.jackpot}</span>
-                </div>
-                <span className="top-next-draw-info">Prochain tirage : {nextLotoDrawDate.day} {nextLotoDrawDate.date}</span>
-              </div>
-            </div>
-          )}
-        </>
-      )}
-
-      <main className="main-content">
-        {activeTab === 'euromillions' && <Euromillions />}
-        {activeTab === 'loto' && <Loto />}
-        {activeTab === 'eurodreams' && <Eurodreams />}
+      <main className="main">
+        <GameResults game={activeTab} />
       </main>
 
       <footer className="footer">
-        <p>✅ Résultats officiels FDJ® - Mis à jour en temps réel</p>
-        <p style={{ marginTop: '12px', fontSize: '0.85em', opacity: 0.8 }}>
-          🔞 Interdit aux mineurs · ♠️ Jouer comporte des risques : endettement, isolement, dépendance
-        </p>
+        <div className="footer__inner">
+          <p className="footer__warning">
+            <strong>18+</strong> Jouer comporte des risques : endettement, isolement, dépendance.
+            Pour être aidé, appelez le 09 74 75 13 13 (appel non surtaxé).
+          </p>
+          <p className="footer__note">
+            Site indépendant, non affilié à La Française des Jeux. Résultats repris des publications
+            officielles — en cas de différence, seuls les résultats officiels font foi.
+          </p>
+        </div>
       </footer>
 
-      {showLogin && (
-        <Login
-          onClose={() => setShowLogin(false)}
-          onSwitchToRegister={() => {
-            setShowLogin(false)
-            setShowRegister(true)
-          }}
-        />
-      )}
-
-      {showRegister && (
-        <Register
-          onClose={() => setShowRegister(false)}
-          onSwitchToLogin={() => {
-            setShowRegister(false)
-            setShowLogin(true)
-          }}
-        />
-      )}
-
-      {showProfile && (
-        <UserProfile onClose={() => {
-          setShowProfile(false)
-          updateUnreadCount()
-        }} />
-      )}
-
-      {showNotifications && (
-        <NotificationCenter 
-          userId={user?.id}
-          onClose={() => {
-            setShowNotifications(false)
-            updateUnreadCount()
-          }}
-        />
-      )}
-
-      {showAdminPanel && (
-        <AdminPanel onClose={() => setShowAdminPanel(false)} />
-      )}
+      {modal === 'login' && <Login onClose={close} onSwitchToRegister={() => setModal('register')} />}
+      {modal === 'register' && <Register onClose={close} onSwitchToLogin={() => setModal('login')} />}
+      {modal === 'profile' && <UserProfile onClose={close} />}
+      {modal === 'notifications' && <NotificationCenter userId={user?.id} onClose={close} />}
+      {modal === 'admin' && <AdminPanel onClose={close} />}
     </div>
   )
 }
 
 export default App
-
