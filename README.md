@@ -156,15 +156,27 @@ npm run build
 SERVE_FRONTEND=true gunicorn --chdir backend wsgi:app --bind 0.0.0.0:$PORT --workers 2
 ```
 
-- **Render** : `render.yaml` déclare le service web et le worker.
+### Render + MongoDB Atlas (gratuit)
+
+1. **MongoDB Atlas** : créer un cluster gratuit (M0), un utilisateur, autoriser `0.0.0.0/0` dans
+   *Network Access* et copier l'URI de connexion.
+2. **Render** : *New → Blueprint* sur ce dépôt. [`render.yaml`](render.yaml) crée le service web
+   (offre gratuite, branche `main`) ; renseigner `MONGODB_URI`, les secrets JWT sont générés.
+3. **GitHub** : ajouter le secret `MONGODB_URI` (*Settings → Secrets and variables → Actions*).
+   La GitHub Action [`update-fdj.yml`](.github/workflows/update-fdj.yml) met à jour les tirages
+   toutes les 15 min (remplace le worker, payant sur Render).
+4. **Premier remplissage** : lancer l'action à la main (onglet *Actions* → *Run workflow*), puis en
+   local avec `MONGODB_URI` pointant vers Atlas : `import-json` (historique) et `create-admin`.
+
+Sur l'offre gratuite, le service s'endort après ~15 min sans visite : le premier chargement suivant
+prend 30 à 60 s.
+
+### Autres hébergeurs
+
 - **Railway** : `railway.json` + `nixpacks.toml` (le worker se lance comme second service avec
   `python backend/manage.py worker`).
-
-**Mise à jour des tirages** : soit le worker tourne en continu, soit la GitHub Action
-[`update-fdj.yml`](.github/workflows/update-fdj.yml) lance le scraping chaque soir après les
-tirages (secret `MONGODB_URI` à définir dans *Settings → Secrets and variables → Actions*).
-
-Pensez à autoriser l'IP du serveur (ou `0.0.0.0/0`) dans *Network Access* sur MongoDB Atlas.
+- Tout hébergeur avec un process permanent peut lancer `python backend/manage.py worker` à la place
+  de la GitHub Action.
 
 ## 📚 Documentation
 

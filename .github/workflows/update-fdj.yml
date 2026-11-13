@@ -1,15 +1,27 @@
 name: 🎰 Mise à jour des résultats FDJ
 
-# Écrit directement dans MongoDB : plus de fichier JSON ni d'upload FTP.
-# Utile si le worker ne tourne pas en continu sur le serveur (hébergement sans process permanent).
+# Écrit directement dans MongoDB (remplace le worker, payant sur Render).
 # Secret requis : MONGODB_URI (Settings > Secrets and variables > Actions).
+#
+# Toutes les 15 min : Amigo (un tirage toutes les 5 min) et Crescendo (tirages horaires du samedi)
+# restent à jour ; pour les autres jeux, un passage sans nouveau tirage ne fait que 6 requêtes.
+# GitHub peut retarder les tâches planifiées de quelques minutes aux heures chargées.
 
 on:
   schedule:
-    - cron: '45 20 * * *'   # ~21h45 / 22h45 heure de Paris
-    - cron: '30 21 * * *'   # ~22h30 / 23h30
-    - cron: '30 7 * * *'    # rattrapage du matin (répartitions publiées tard)
+    - cron: '*/15 * * * *'
+    - cron: '30 7 * * *'    # rattrapage du matin : répartitions des gains publiées tard
   workflow_dispatch:
+    inputs:
+      refresh:
+        description: 'Re-télécharger tous les tirages disponibles'
+        type: boolean
+        default: false
+
+# Pas deux passages en même temps (le suivant attend la fin du précédent)
+concurrency:
+  group: scrape-fdj
+  cancel-in-progress: false
 
 jobs:
   scrape:
@@ -29,4 +41,4 @@ jobs:
       - name: 🎯 Scraping + alertes
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        run: python backend/manage.py scrape
+        run: python backend/manage.py scrape ${{ inputs.refresh && '--refresh' || '' }}
