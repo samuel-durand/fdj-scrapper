@@ -16,7 +16,7 @@ from pymongo.database import Database
 
 META_ID = "draws"
 # Champs techniques jamais renvoyés au front
-INTERNAL = {"_id": 0, "game": 0, "updatedAt": 0}
+INTERNAL = {"_id": 0, "game": 0, "updatedAt": 0, "source": 0}
 
 
 def _now() -> datetime:
@@ -31,11 +31,20 @@ class DrawRepository:
     # Plusieurs tirages par jour (Crescendo, Amigo) : on trie aussi sur l'heure.
     ORDER = [("date", DESCENDING), ("drawTime", DESCENDING)]
 
-    def list(self, game: str, limit: int | None = None, before: str | None = None) -> list[dict]:
+    def list(self, game: str, limit: int | None = None, before: str | None = None,
+             fields: tuple[str, ...] | None = None) -> list[dict]:
+        """Tirages du plus récent au plus ancien.
+
+        before : "AAAA-MM-JJ" (jours précédents) ou heure ISO d'un tirage (tirages antérieurs).
+        fields : ne renvoyer que ces champs."""
         query: dict[str, Any] = {"game": game}
-        if before:
+        if before and len(before) > 10:
+            day = before[:10]
+            query["$or"] = [{"date": {"$lt": day}}, {"date": day, "drawTime": {"$lt": before}}]
+        elif before:
             query["date"] = {"$lt": before}
-        cur = self.db.draws.find(query, INTERNAL).sort(self.ORDER)
+        projection = {"_id": 0, **{f: 1 for f in fields}} if fields else INTERNAL
+        cur = self.db.draws.find(query, projection).sort(self.ORDER)
         if limit:
             cur = cur.limit(limit)
         return list(cur)

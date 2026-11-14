@@ -33,6 +33,34 @@ export function getGameData(game, options) {
   return load(game, options)
 }
 
+/** Tirages plus anciens qu'un tirage donné (pagination de l'historique et du calendrier). */
+export async function getOlderDraws(game, beforeDrawTime, limit = 200) {
+  const params = new URLSearchParams({ before: beforeDrawTime, limit: String(limit) })
+  const response = await fetch(`${API_URL}/draws/${game}?${params}`)
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  return (await response.json()).data || []
+}
+
+const history = new Map() // jeu -> Promise (tout l'historique, numéros seulement)
+
+/** Tout l'historique d'un jeu, numéros seulement (statistiques). Téléchargé une fois. */
+export function getHistorySummary(game) {
+  if (!history.has(game)) {
+    const pending = fetch(`${API_URL}/draws/${game}?summary=1&limit=10000`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then((body) => body.data || [])
+      .catch((error) => {
+        history.delete(game)
+        throw error
+      })
+    history.set(game, pending)
+  }
+  return history.get(game)
+}
+
 const take = (list, limit) => (limit ? list.slice(0, limit) : list)
 const drawsOf = async (game, limit) => take((await load(game).catch(() => ({ draws: [] }))).draws, limit)
 

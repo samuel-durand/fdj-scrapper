@@ -158,7 +158,7 @@ function analyzeGameStats(draws, gameType) {
  * @param {string} gameType - Type de jeu ('euromillions', 'loto', 'eurodreams')
  * @returns {Promise<Object>} Statistiques du jeu
  */
-export async function getGameStats(gameType) {
+export async function getGameStats(gameType, providedDraws = null) {
   try {
     const validGames = ['euromillions', 'loto', 'eurodreams']
     
@@ -166,8 +166,8 @@ export async function getGameStats(gameType) {
       throw new Error('Type de jeu invalide. Utilisez: euromillions, loto, ou eurodreams')
     }
 
-    const cache = await getAllResults()
-    const draws = cache[gameType] || []
+    // Tirages fournis (ex. tout l'historique) ou, par défaut, les derniers tirages chargés
+    const draws = providedDraws || (await getAllResults())[gameType] || []
     
     if (draws.length === 0) {
       return {

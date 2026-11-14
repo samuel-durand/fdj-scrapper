@@ -17,6 +17,8 @@ def calls(monkeypatch):
     """Remplace le vrai scraping (réseau) par un enregistreur d'appels."""
     seen = []
     monkeypatch.setattr(autoupdate, "run_once", lambda db, games=None: seen.append(games))
+    monkeypatch.setattr(autoupdate, "import_archives",
+                        lambda db: seen.append("archives") or type("R", (), {"added": {}})())
     return seen
 
 
@@ -36,7 +38,7 @@ def test_lock_expires(db):
 def test_first_run_is_full_then_nothing_due(db, calls):
     # Démarrage (ou réveil après la veille) : passage complet
     assert autoupdate.refresh(db, NOW) == list(GAMES)
-    assert calls == [None]
+    assert calls == [None, "archives"]           # + historique officiel, une seule fois
     state = db.meta.find_one({"_id": autoupdate.STATE_ID})
     assert set(state["lastRun"]) == set(GAMES) and state["lastFull"]
 
@@ -81,3 +83,18 @@ def test_full_pass_every_12h(db, calls):
 def test_tick_skips_when_locked(db, calls):
     assert autoupdate.acquire(db, "autre-processus")
     assert autoupdate.tick(db, "moi") == [] and calls == []
+
+
+def test_archives_imported_once(db, calls):
+    assert autoupdate.import_archives_once(db) is True
+    assert autoupdate.import_archives_once(db) is False   # déjà fait
+    assert calls == ["archives"]
+
+
+def test_archives_retry_after_failure(db, monkeypatch):
+    def boom(db):
+        raise RuntimeError("fdj.fr indisponible")
+    monkeypatch.setattr(autoupdate, "import_archives", boom)
+    assert autoupdate.import_archives_once(db) is False
+    state = db.meta.find_one({"_id": autoupdate.STATE_ID}) or {}
+    assert "archivesImported" not in state                 # sera retenté au prochain passage complet

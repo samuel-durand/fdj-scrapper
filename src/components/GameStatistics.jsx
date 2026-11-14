@@ -35,7 +35,7 @@ ChartJS.register(
   Filler
 )
 
-export default function GameStatistics({ gameType }) {
+export default function GameStatistics({ gameType, draws = null }) {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -48,13 +48,14 @@ export default function GameStatistics({ gameType }) {
 
   useEffect(() => {
     loadStats()
-  }, [gameType])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameType, draws])
 
   const loadStats = async () => {
     try {
       setLoading(true)
       setError(null)
-      const response = await getGameStats(gameType)
+      const response = await getGameStats(gameType, draws)
       if (response.success) {
         setStats(response.data)
       } else {

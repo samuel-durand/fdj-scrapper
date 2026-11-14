@@ -19,6 +19,10 @@ from . import DRAW_GAME_KEYS, fail, int_arg
 bp = Blueprint("draws", __name__, url_prefix="/api/draws")
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+DATETIME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?([+-]\d{2}:\d{2}|Z)?$")
+# Champs renvoyés avec summary=1
+SUMMARY_FIELDS = ("id", "date", "time", "drawTime", "numbers", "stars", "luckyNumber", "dreamNumber",
+                  "letter", "yellowNumbers", "lotoType")
 
 
 def _cached(payload: dict, meta: dict):
@@ -56,14 +60,19 @@ def all_games():
 def one_game(game):
     if game not in DRAW_GAME_KEYS:
         return fail("Jeu inconnu", 404)
+    # before : AAAA-MM-JJ (tirages des jours précédents) ou heure ISO d'un tirage (pagination,
+    # y compris au sein d'une même journée pour Crescendo / Amigo)
     before = request.args.get("before")
-    if before and not DATE_RE.match(before):
-        return fail("Paramètre 'before' invalide (AAAA-MM-JJ)")
+    if before and not (DATE_RE.match(before) or DATETIME_RE.match(before)):
+        return fail("Paramètre 'before' invalide (AAAA-MM-JJ ou date-heure ISO)")
+    # summary=1 : numéros seulement (statistiques sur tout l'historique, réponse légère)
+    summary = request.args.get("summary") in ("1", "true")
     repo = DrawRepository(get_db())
     meta = repo.meta()
-    draws = _slim(repo.list(game, limit=int_arg("limit", 200, 1, 1000), before=before))
-    return _cached({"success": True, "data": draws, "nextDraw": meta.get("nextDraws", {}).get(game),
-                    "lastUpdate": _last_update(meta)}, meta)
+    limit = int_arg("limit", 200, 1, 10000 if summary else 1000)
+    draws = repo.list(game, limit=limit, before=before, fields=SUMMARY_FIELDS if summary else None)
+    return _cached({"success": True, "data": draws if summary else _slim(draws),
+                    "nextDraw": meta.get("nextDraws", {}).get(game), "lastUpdate": _last_update(meta)}, meta)
 
 
 @bp.get("/<game>/<date>")

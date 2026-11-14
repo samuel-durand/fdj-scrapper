@@ -91,6 +91,25 @@ def cmd_create_admin(args) -> int:
     return 0
 
 
+def cmd_import_archives(args) -> int:
+    """Importe l'historique officiel FDJ (archives CSV) sans toucher aux tirages déjà en base."""
+    from app.scraper.archives import ARCHIVE_GAMES, import_archives
+    from app.scraper import GAMES
+    report = import_archives(get_db(), args.games or ARCHIVE_GAMES, check=args.check)
+    for f in report.files:
+        log.info("📦 %s", f)
+    for s in report.skipped:
+        log.info("⏭  %s", s)
+    for key, n in report.added.items():
+        log.info("%-12s %s %d tirages, %d à corriger, %d déjà en base (comparés)", GAMES[key].label,
+                 "à ajouter :" if args.check else "+", n, report.fixed.get(key, 0), report.checked.get(key, 0))
+        for m in report.mismatches.get(key, [])[:5]:
+            log.warning("   ≠ %s", m)
+        if len(report.mismatches.get(key, [])) > 5:
+            log.warning("   … %d différences au total", len(report.mismatches[key]))
+    return 0
+
+
 def cmd_import_json(args) -> int:
     """Importe un ancien resultats-cache.json (garde l'historique que la FDJ ne publie plus)."""
     from app.scraper import GAMES, DrawRepository
@@ -141,6 +160,11 @@ def main() -> int:
     s.add_argument("email")
     s.add_argument("password")
     s.set_defaults(func=cmd_create_admin)
+
+    s = sub.add_parser("import-archives", help="importer l'historique officiel FDJ (archives CSV)")
+    s.add_argument("--games", nargs="+", choices=["euromillions", "loto", "eurodreams", "keno", "crescendo"])
+    s.add_argument("--check", action="store_true", help="analyser sans rien écrire en base")
+    s.set_defaults(func=cmd_import_archives)
 
     s = sub.add_parser("import-json", help="importer un ancien resultats-cache.json")
     s.add_argument("path")

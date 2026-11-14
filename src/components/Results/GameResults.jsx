@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { GAMES, LOTO_TYPES, formatDrawDate, formatShortDate } from '../../games'
-import { getGameData } from '../../services/lotteryService'
+import { getGameData, getHistorySummary, getOlderDraws } from '../../services/lotteryService'
 import { Ball, DrawBalls } from './Balls'
 import NextDrawHero from './NextDrawHero'
 import WinningsTable, { PayoutTable } from './WinningsTable'
@@ -49,7 +49,19 @@ function Extras({ game, draw }) {
   )
 }
 
-function DrawCard({ game, draw, draws, onSelect }) {
+/** Tirages groupés par année (liste déroulante). Le tirage affiché y figure toujours. */
+function byYear(list, current) {
+  const all = list.some((d) => d.id === current.id) ? list : [current, ...list]
+  const groups = new Map()
+  for (const d of all) {
+    const year = d.date.slice(0, 4)
+    if (!groups.has(year)) groups.set(year, [])
+    groups.get(year).push(d)
+  }
+  return [...groups.entries()]
+}
+
+function DrawCard({ game, draw, draws, onSelect, allDraws, onPick, picking }) {
   const cfg = GAMES[game]
   const idx = draws.findIndex((d) => d.id === draw.id)
   const older = draws[idx + 1]
@@ -84,11 +96,13 @@ function DrawCard({ game, draw, draws, onSelect }) {
           <button className="icon-btn" disabled={!older} onClick={() => onSelect(older.id)} aria-label="Tirage précédent">
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
           </button>
-          <label className="select">
+          <label className={`select ${picking ? 'is-busy' : ''}`}>
             <span className="sr-only">Choisir une date de tirage</span>
-            <select value={draw.id} onChange={(e) => onSelect(e.target.value)}>
-              {draws.map((d) => (
-                <option key={d.id} value={d.id}>{formatShortDate(d)}</option>
+            <select value={draw.id} onChange={(e) => onPick(e.target.value)} disabled={picking}>
+              {byYear(allDraws?.length ? allDraws : draws, draw).map(([year, list]) => (
+                <optgroup key={year} label={year}>
+                  {list.map((d) => <option key={d.id} value={d.id}>{formatShortDate(d)}</option>)}
+                </optgroup>
               ))}
             </select>
           </label>
@@ -139,7 +153,7 @@ function DrawCard({ game, draw, draws, onSelect }) {
   )
 }
 
-function History({ game, draws, onSelect }) {
+function History({ game, draws, onSelect, hasMore, loadOlder, loadingOlder }) {
   const [limit, setLimit] = useState(20)
   return (
     <div className="card history">
@@ -158,9 +172,40 @@ function History({ game, draws, onSelect }) {
           </li>
         ))}
       </ul>
-      {limit < draws.length && (
-        <button className="btn btn--ghost" onClick={() => setLimit(limit + 20)}>Voir plus de tirages</button>
+      {(limit < draws.length || hasMore) && (
+        <button
+          className="btn btn--ghost"
+          disabled={loadingOlder}
+          onClick={() => {
+            if (limit + 20 > draws.length && hasMore) loadOlder()
+            setLimit(limit + 20)
+          }}
+        >
+          {loadingOlder ? 'Chargement…' : 'Voir plus de tirages'}
+        </button>
       )}
+    </div>
+  )
+}
+
+/** Période des statistiques : derniers tirages chargés ou tout l'historique (archives FDJ comprises). */
+function ScopeSwitch({ scope, onChange, recentCount, history }) {
+  const first = history?.draws?.[history.draws.length - 1]
+  const since = first ? new Date(`${first.date}T12:00:00`).getFullYear() : null
+  return (
+    <div className="scope">
+      <div className="pills" role="tablist" aria-label="Période analysée">
+        <button role="tab" aria-selected={scope === 'recent'} className={`pill ${scope === 'recent' ? 'is-active' : ''}`}
+          onClick={() => onChange('recent')}>
+          {recentCount} derniers tirages
+        </button>
+        <button role="tab" aria-selected={scope === 'all'} className={`pill ${scope === 'all' ? 'is-active' : ''}`}
+          onClick={() => onChange('all')}>
+          Tout l'historique{history?.draws ? ` (${history.draws.length.toLocaleString('fr-FR')} tirages depuis ${since})` : ''}
+        </button>
+      </div>
+      {scope === 'all' && history?.loading && <span className="muted">Chargement de l'historique…</span>}
+      {scope === 'all' && history?.error && <span className="muted">{history.error}</span>}
     </div>
   )
 }
@@ -208,14 +253,26 @@ function GameResults({ game }) {
   const [state, setState] = useState({ loading: true, error: null, draws: [], nextDraw: null })
   const [selectedId, setSelectedId] = useState(null)
   const [view, setView] = useState('results')
+  const [hasMore, setHasMore] = useState(false)
+  const [loadingOlder, setLoadingOlder] = useState(false)
+  const [calendarMonth, setCalendarMonth] = useState(null)
+  const [statsScope, setStatsScope] = useState('recent') // 'recent' | 'all'
+  const [fullHistory, setFullHistory] = useState({ game: null, draws: null, loading: false, error: null })
 
   useEffect(() => {
     let alive = true
     setState((s) => ({ ...s, loading: true, error: null }))
     setSelectedId(null)
     setView('results')
+    setHasMore(false)
+    setCalendarMonth(null)
+    setStatsScope('recent')
     getGameData(game)
-      .then(({ draws, nextDraw }) => alive && setState({ loading: false, error: null, draws, nextDraw }))
+      .then(({ draws, nextDraw }) => {
+        if (!alive) return
+        setState({ loading: false, error: null, draws, nextDraw })
+        setHasMore(draws.length >= 200) // l'API renvoie 200 tirages par page
+      })
       .catch(() => alive && setState({ loading: false, error: 'Impossible de charger les résultats.', draws: [], nextDraw: null }))
     return () => { alive = false }
   }, [game])
@@ -225,6 +282,76 @@ function GameResults({ game }) {
     () => draws.find((d) => d.id === selectedId) || draws[0],
     [draws, selectedId]
   )
+
+  // Tirages plus anciens (historique, calendrier) : page suivante de 200
+  const olderRef = useRef(false)
+  const loadOlder = useCallback(async () => {
+    const oldest = state.draws[state.draws.length - 1]
+    if (olderRef.current || !oldest?.drawTime) return
+    olderRef.current = true
+    setLoadingOlder(true)
+    try {
+      const older = await getOlderDraws(game, oldest.drawTime)
+      setState((s) => {
+        const known = new Set(s.draws.map((d) => d.id))
+        return { ...s, draws: [...s.draws, ...older.filter((d) => !known.has(d.id))] }
+      })
+      setHasMore(older.length >= 200)
+    } catch {
+      setHasMore(false)
+    } finally {
+      olderRef.current = false
+      setLoadingOlder(false)
+    }
+  }, [game, state.draws])
+
+  // Calendrier : on charge jusqu'à couvrir le mois affiché
+  useEffect(() => {
+    const oldest = state.draws[state.draws.length - 1]
+    if (view !== 'calendar' || !calendarMonth || !hasMore || loadingOlder || !oldest) return
+    const monthStart = `${calendarMonth.getFullYear()}-${String(calendarMonth.getMonth() + 1).padStart(2, '0')}-01`
+    if (oldest.date > monthStart) loadOlder()
+  }, [view, calendarMonth, hasMore, loadingOlder, state.draws, loadOlder])
+
+  // Statistiques sur tout l'historique : numéros seulement, téléchargés une fois par jeu
+  const historyGame = useRef(null) // jeu dont l'historique est chargé ou en cours de chargement
+  useEffect(() => {
+    if (!(statsScope === 'all' || view === 'results') || loading || historyGame.current === game) return
+    historyGame.current = game
+    setFullHistory({ game, draws: null, loading: true, error: null })
+    getHistorySummary(game)
+      .then((all) => historyGame.current === game && setFullHistory({ game, draws: all, loading: false, error: null }))
+      .catch(() => {
+        if (historyGame.current !== game) return
+        historyGame.current = null // nouvel essai au prochain clic
+        setFullHistory({ game, draws: null, loading: false, error: 'Historique indisponible.' })
+      })
+  }, [statsScope, view, loading, game])
+
+  const statsDraws = statsScope === 'all' && fullHistory.game === game && fullHistory.draws ? fullHistory.draws : null
+
+  const [picking, setPicking] = useState(false)
+  const pick = async (id) => {
+    if (state.draws.some((d) => d.id === id)) return select(id)
+    setPicking(true)
+    let list = state.draws
+    let more = true
+    try {
+      while (more && !list.some((d) => d.id === id)) {
+        const page = await getOlderDraws(game, list[list.length - 1].drawTime, 500)
+        const known = new Set(list.map((d) => d.id))
+        list = [...list, ...page.filter((d) => !known.has(d.id))]
+        more = page.length >= 500
+      }
+      setState((s) => ({ ...s, draws: list }))
+      setHasMore(more)
+      if (list.some((d) => d.id === id)) select(id)
+    } catch {
+      /* réseau : on reste sur le tirage affiché */
+    } finally {
+      setPicking(false)
+    }
+  }
 
   const select = (id) => {
     setSelectedId(id)
@@ -251,14 +378,31 @@ function GameResults({ game }) {
 
         {!loading && !error && draw && (
           <div className="view-anim" key={`${game}-${view}`}>
-            {view === 'results' && <DrawCard game={game} draw={draw} draws={draws} onSelect={select} />}
-            {view === 'history' && <History game={game} draws={draws} onSelect={select} />}
-            {view === 'calendar' && (
-              <div className="card"><Calendar gameType={game} draws={draws} onDateSelect={(d) => select(d.id)} /></div>
+            {view === 'results' && (
+              <DrawCard game={game} draw={draw} draws={draws} onSelect={select} onPick={pick} picking={picking}
+                allDraws={fullHistory.game === game ? fullHistory.draws : null} />
             )}
-            {view === 'stats' && <div className="card"><Statistics draws={draws} gameType={game} /></div>}
-            {view === 'freq' && <div className="card"><FrequencyStats game={game} draws={draws} /></div>}
-            {view === 'charts' && <div className="card"><GameStatistics gameType={game} /></div>}
+            {view === 'history' && (
+              <History game={game} draws={draws} onSelect={select}
+                hasMore={hasMore} loadOlder={loadOlder} loadingOlder={loadingOlder} />
+            )}
+            {view === 'calendar' && (
+              <div className="card">
+                <Calendar gameType={game} draws={draws} onDateSelect={(d) => select(d.id)} onMonthChange={setCalendarMonth} />
+                {loadingOlder && <p className="muted calendar-loading">Chargement des tirages plus anciens…</p>}
+              </div>
+            )}
+            {['stats', 'freq', 'charts'].includes(view) && (
+              <ScopeSwitch
+                scope={statsScope}
+                onChange={setStatsScope}
+                recentCount={draws.length}
+                history={fullHistory.game === game ? fullHistory : null}
+              />
+            )}
+            {view === 'stats' && <div className="card"><Statistics draws={statsDraws || draws} gameType={game} /></div>}
+            {view === 'freq' && <div className="card"><FrequencyStats game={game} draws={statsDraws || draws} /></div>}
+            {view === 'charts' && <div className="card"><GameStatistics gameType={game} draws={statsDraws} /></div>}
           </div>
         )}
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Calendar.css';
 
 /**
@@ -7,8 +7,10 @@ import './Calendar.css';
  * @param {Array} draws - Liste des tirages
  * @param {Function} onDateSelect - Callback quand une date est sélectionnée
  */
-function Calendar({ gameType, draws, onDateSelect }) {
+function Calendar({ gameType, draws, onDateSelect, onMonthChange }) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  // Le parent charge les tirages plus anciens quand on remonte dans le temps
+  useEffect(() => { onMonthChange?.(currentDate) }, [currentDate, onMonthChange]);
   
   // Jours de tirage selon le jeu
   const DRAW_DAYS = {

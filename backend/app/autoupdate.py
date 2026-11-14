@@ -10,6 +10,7 @@ Pensé pour les hébergements gratuits où il n'y a qu'un service web, qui peut 
     publié pendant la veille ; il est renouvelé toutes les 12 h ;
   * plusieurs processus gunicorn : un verrou dans MongoDB garantit un seul scraping à la fois ;
   * l'état (dernier passage par jeu) est stocké en base : il survit aux redémarrages.
+  * au premier passage complet, l'historique officiel FDJ (archives CSV) est importé une fois.
 """
 
 from __future__ import annotations
@@ -26,6 +27,7 @@ from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError, PyMongoError
 
 from .scraper import GAMES, DrawRepository
+from .scraper.archives import import_archives
 from .scraper.games import PARIS
 from .worker import SCHEDULES, plan, run_once
 
@@ -88,6 +90,21 @@ def due_games(db: Database, now: datetime | None = None) -> tuple[list[str] | No
     return due, False
 
 
+def import_archives_once(db: Database) -> bool:
+    """Historique officiel FDJ (archives CSV) : importé une seule fois, au premier passage complet.
+    Retourne True si l'import a eu lieu."""
+    if (db.meta.find_one({"_id": STATE_ID}) or {}).get("archivesImported"):
+        return False
+    try:
+        report = import_archives(db)
+    except Exception:  # noqa: BLE001 — réessayé au prochain passage complet
+        log.exception("Import des archives FDJ impossible pour le moment")
+        return False
+    log.info("📚 Historique FDJ importé : %s", ", ".join(f"{GAMES[k].label} +{n}" for k, n in report.added.items()))
+    db.meta.update_one({"_id": STATE_ID}, {"$set": {"archivesImported": _utc()}}, upsert=True)
+    return True
+
+
 def refresh(db: Database, now: datetime | None = None) -> list[str]:
     """Un passage si nécessaire. Retourne les jeux mis à jour (vide si rien à faire)."""
     games, full = due_games(db, now)
@@ -95,6 +112,8 @@ def refresh(db: Database, now: datetime | None = None) -> list[str]:
         return []
     log.info("🔄 Mise à jour %s", "complète" if full else "de " + ", ".join(GAMES[g].label for g in games))
     run_once(db, games)
+    if full:
+        import_archives_once(db)
     stamp = _utc()
     updated = list(GAMES) if full else games
     fields = {f"lastRun.{g}": stamp for g in updated}

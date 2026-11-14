@@ -14,7 +14,7 @@ backend/
 │   ├── scraper/           scraper FDJ (HTTP + JSON embarqué, pas de navigateur)
 │   ├── services/alerts.py alertes évaluées côté serveur -> notifications
 │   └── worker.py          mise à jour automatique après chaque tirage
-├── manage.py              commandes (run, scrape, worker, create-admin, import-json)
+├── manage.py              commandes (run, scrape, worker, create-admin, import-archives, import-json)
 ├── wsgi.py                point d'entrée production (gunicorn / waitress)
 └── tests/                 tests (base MongoDB simulée, aucune connexion requise)
 ```
@@ -49,11 +49,15 @@ python backend/manage.py scrape             # met à jour les tirages (+ alertes
 python backend/manage.py worker             # worker continu
 python backend/manage.py worker --once      # un passage (tâche planifiée / cron)
 python backend/manage.py create-admin "Nom" email@exemple.fr "motdepasse"
-python backend/manage.py import-json backend/data/ancien-resultats-cache.json
+python backend/manage.py import-archives --check   # historique officiel FDJ : analyse
+python backend/manage.py import-archives           # historique officiel FDJ : import
 ```
 
-`import-json` reprend l'historique de l'ancien fichier (la FDJ ne publie qu'environ 2 mois de
-résultats). À lancer une fois ; le fichier peut ensuite être supprimé.
+La FDJ ne publie qu'environ 2 mois de résultats sur ses pages, mais met l'historique complet à
+disposition en archives CSV : `import-archives` les importe (EuroMillions depuis 2004, Loto depuis
+2008…), automatiquement au premier démarrage du serveur web. `import-json` (ancien
+`resultats-cache.json`) n'est plus nécessaire : ce fichier contenait des erreurs, que l'import des
+archives corrige.
 
 ## API des tirages
 
