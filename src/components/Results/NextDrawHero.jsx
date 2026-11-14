@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { GAMES, LOTO_TYPES, capitalize, formatTime } from '../../games'
 import AnimatedAmount from './AnimatedAmount'
+import useTilt from '../../hooks/useTilt'
 
 function useNow(intervalMs = 30000) {
   const [now, setNow] = useState(() => Date.now())
@@ -40,6 +41,11 @@ function NextDrawHero({ game, nextDraw }) {
   const isOpen = closesAt && remaining > 0
   const urgent = isOpen && remaining < 60 * 60 * 1000
   const special = nextDraw?.lotoType && LOTO_TYPES[nextDraw.lotoType]
+  const panelRef = useRef(null)
+  const amountRef = useRef(null)
+  useTilt(panelRef)
+  // Survol ou appui sur le jackpot : pluie de pièces d'or (scène 3D, si elle tourne)
+  const rain = () => window.dispatchEvent(new CustomEvent('lottery:jackpot', { detail: { el: amountRef.current } }))
   const drawPassed = nextDraw?.drawTime ? new Date(nextDraw.drawTime).getTime() < now : false
 
   return (
@@ -65,14 +71,15 @@ function NextDrawHero({ game, nextDraw }) {
         </div>
 
         {nextDraw?.jackpot && (
-          <div className="next-draw reveal" style={{ '--d': '120ms' }}>
+          <div className="next-draw reveal tilt" style={{ '--d': '120ms' }} ref={panelRef}
+            onPointerEnter={(e) => e.pointerType !== 'touch' && rain()} onClick={rain}>
             <p className="next-draw__label">
               {special ? <span className="badge badge--special badge--pulse">{special}</span> : null}
               Prochain tirage · {capitalize(nextDraw.formattedDate || '')}
               {nextDraw.time && !drawPassed && ` à ${formatTime(nextDraw.time)}`}
             </p>
             {nextDraw.prefix && <p className="next-draw__prefix">{nextDraw.prefix}</p>}
-            <p className="next-draw__amount">
+            <p className="next-draw__amount" ref={amountRef}>
               <AnimatedAmount text={nextDraw.jackpot} />
             </p>
             {nextDraw.suffix && <p className="next-draw__suffix">{nextDraw.suffix}</p>}

@@ -13,7 +13,11 @@
  *  - `fx` (au-dessus de l'interface, sans clic) : uniquement pendant l'animation du tirage,
  *    quand les boules quittent le fond pour se poser sur les numéros de la carte résultat.
  *
- * API : createLotteryScene(host, { game, theme }) -> { setGame, setTheme, playDraw, dispose } | null
+ * Interactions : les boules s'écartent du curseur (ou du doigt) et s'entrechoquent ; le boulier
+ * tourbillonne quand un tirage est lancé ; des pièces d'or jaillissent du jackpot ; la scène suit
+ * l'inclinaison du téléphone (gyroscope).
+ *
+ * API : createLotteryScene(host, { game, theme }) -> { setGame, setTheme, playDraw, burst, dispose } | null
  */
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
@@ -232,8 +236,12 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
       mesh, n, kind, home, baseScale: s, dir,
       phase: rand(0, Math.PI * 2), speed: rand(0.6, 1.3), spin: new THREE.Vector3(rand(-0.3, 0.3), rand(-0.4, 0.4), 0),
       delay: rand(0, 0.5), appear: 1, flying: false,
+      // Physique légère : décalage par rapport à la trajectoire « idéale » + vitesse
+      base: new THREE.Vector3(), off: new THREE.Vector3(), vel: new THREE.Vector3(),
+      radius: (kind === 'star' ? STAR_R : BALL_R) * s, opacity: 1,
     }
   }
+
 
   function buildAmbience(type, tint) {
     const group = new THREE.Group()
@@ -323,7 +331,7 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     root.add(ambience.group)
     root.visible = false
     scene.add(root)
-    groups[key] = { key, def, root, balls, ambience, state: 'idle', t0: 0, fade: 0 }
+    groups[key] = { key, def, root, balls, ambience, state: 'idle', t0: 0, fade: 0, swirlAt: -10 }
     return groups[key]
   }
 
@@ -334,7 +342,8 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
   let clock = 0
   // Horloge réelle pour le vol des boules : reste synchrone avec l'animation CSS même si la 3D rame
   const wall = () => performance.now() / 1000
-  const mouse = { x: 0, y: 0, tx: 0, ty: 0 }
+  // tx/ty : cible lissée pour la caméra ; px/py : position brute pour repousser les boules
+  const mouse = { x: 0, y: 0, tx: 0, ty: 0, px: 0, py: 0, activeUntil: -1 }
   let scrollDepth = 0
 
   function setGame(key) {
@@ -416,6 +425,8 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     const b = f.ball
     b.flying = false
     b.appear = 0 // réapparaît en douceur dans le boulier
+    b.off.set(0, 0, 0)
+    b.vel.set(0, 0, 0)
     b.mesh.quaternion.copy(f.fromQuat)
     b.mesh.material.opacity = 0
     f.group.root.add(b.mesh)
@@ -433,6 +444,7 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     while (flights.length) returnHome(flights.pop())
 
     const group = groups[key]
+    group.swirlAt = clock // le boulier tourbillonne pendant que les boules gagnantes s'échappent
     container.querySelectorAll('.ball').forEach((el, idx) => {
       const n = el.textContent.trim()
       const kind = el.classList.contains('ball--star') ? 'star'
@@ -531,6 +543,152 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     return Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * (CAM_Z - z)
   }
 
+  // ------------------------------------------------------------ Physique (curseur, chocs, brassage)
+  const SPRING = 7     // rappel vers la trajectoire idéale
+  const DAMPING = 3.2  // amortissement
+  const ray = { origin: new THREE.Vector3(), dir: new THREE.Vector3(), on: false }
+  const tmpA = new THREE.Vector3()
+  const tmpB = new THREE.Vector3()
+
+  function updateRay() {
+    ray.on = clock < mouse.activeUntil
+    if (!ray.on) return
+    ray.origin.copy(camera.position)
+    ray.dir.set(mouse.px, mouse.py, 0.5).unproject(camera).sub(camera.position).normalize()
+  }
+
+  function stepPhysics(g, dt) {
+    const swirlAge = clock - g.swirlAt
+    const swirl = swirlAge >= 0 && swirlAge < 1.8 ? Math.sin((Math.PI * swirlAge) / 1.8) : 0
+    const balls = g.balls
+    for (const b of balls) {
+      if (b.flying) continue
+      // Ressort amorti vers la trajectoire idéale
+      b.vel.addScaledVector(b.off, -SPRING * dt)
+      b.vel.multiplyScalar(Math.exp(-DAMPING * dt))
+      // Le curseur (ou le doigt) repousse les boules proches de son rayon de visée
+      if (ray.on) {
+        tmpA.copy(b.base).add(b.off).sub(ray.origin)
+        const along = tmpA.dot(ray.dir)
+        if (along > 0) {
+          tmpB.copy(ray.dir).multiplyScalar(along).sub(tmpA).negate() // rayon -> boule
+          const d = tmpB.length()
+          const reach = 1.6 + b.radius * 2.2
+          if (d < reach && d > 1e-4) {
+            const k = 1 - d / reach
+            b.vel.addScaledVector(tmpB.multiplyScalar(1 / d), k * k * 55 * dt)
+          }
+        }
+      }
+      // Brassage : tourbillon autour de l'axe de la caméra
+      if (swirl > 0) {
+        const px = b.base.x + b.off.x
+        const py = b.base.y + b.off.y
+        const len = Math.hypot(px, py) || 1
+        b.vel.x += (-py / len) * swirl * 26 * dt - (px / len) * swirl * 4 * dt
+        b.vel.y += (px / len) * swirl * 26 * dt - (py / len) * swirl * 4 * dt
+        b.vel.z += Math.sin(b.phase + clock * 6) * swirl * 6 * dt
+      }
+    }
+    // Chocs entre boules proches (les lointaines, à peine visibles, sont ignorées)
+    for (let i = 0; i < balls.length; i++) {
+      const a = balls[i]
+      if (a.flying || a.base.z < -13) continue
+      for (let j = i + 1; j < balls.length; j++) {
+        const c = balls[j]
+        if (c.flying || c.base.z < -13) continue
+        tmpA.copy(a.base).add(a.off)
+        tmpB.copy(c.base).add(c.off)
+        const dx = tmpB.x - tmpA.x
+        const dy = tmpB.y - tmpA.y
+        const dz = tmpB.z - tmpA.z
+        const min = a.radius + c.radius
+        const d2 = dx * dx + dy * dy + dz * dz
+        if (d2 >= min * min || d2 < 1e-8) continue
+        const d = Math.sqrt(d2)
+        const push = (min - d) * 0.5
+        const nx = dx / d
+        const ny = dy / d
+        const nz = dz / d
+        a.off.x -= nx * push; a.off.y -= ny * push; a.off.z -= nz * push
+        c.off.x += nx * push; c.off.y += ny * push; c.off.z += nz * push
+        // Rebond : échange de la composante des vitesses le long du choc
+        const rel = (c.vel.x - a.vel.x) * nx + (c.vel.y - a.vel.y) * ny + (c.vel.z - a.vel.z) * nz
+        if (rel < 0) {
+          const imp = rel * 0.9
+          a.vel.x += nx * imp; a.vel.y += ny * imp; a.vel.z += nz * imp
+          c.vel.x -= nx * imp; c.vel.y -= ny * imp; c.vel.z -= nz * imp
+        }
+      }
+    }
+    for (const b of balls) {
+      if (b.flying) continue
+      b.off.addScaledVector(b.vel, dt)
+      if (b.off.lengthSq() > 25) b.off.setLength(5) // jamais trop loin de sa place
+    }
+  }
+
+  // ------------------------------------------------------------ Pièces d'or (jackpot)
+  const coins = []
+  let coinGeo = null
+  let coinMat = null
+  let lastBurst = -10
+  const tmpC = new THREE.Vector3()
+
+  /** Pluie de pièces d'or depuis un élément du DOM (montant du jackpot). */
+  function burst(el) {
+    if (!el?.isConnected || clock - lastBurst < 2.2 || !ensureFx()) return
+    lastBurst = clock
+    if (!coinGeo) {
+      coinGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.028, 32)
+      coinGeo.rotateX(Math.PI / 2) // face à la caméra
+      coinMat = new THREE.MeshStandardMaterial({
+        color: '#ffcf3f', metalness: 1, roughness: 0.26, emissive: '#6b4700', emissiveIntensity: 0.35,
+      })
+      disposables.push(coinGeo, coinMat)
+    }
+    domTarget(el, 1, tmpC)
+    const r = el.getBoundingClientRect()
+    const worldPerPx = (2 * 6 * Math.tan(THREE.MathUtils.degToRad(FOV / 2))) / window.innerHeight
+    const spread = (r.width / 2) * worldPerPx
+    const count = mobile ? 12 : 22
+    for (let i = 0; i < count; i++) {
+      const mesh = new THREE.Mesh(coinGeo, coinMat)
+      mesh.position.copy(tmpC)
+      mesh.position.x += rand(-spread, spread) * 0.8
+      mesh.position.y += (r.height / 2) * worldPerPx // part du haut du montant, sans le masquer
+      mesh.rotation.set(rand(0, 6), rand(0, 6), 0)
+      mesh.visible = false
+      fx.scene.add(mesh)
+      coins.push({
+        mesh, age: -i * 0.025,
+        vel: new THREE.Vector3(rand(-1.3, 1.3), rand(2, 3.6), rand(-0.3, 0.8)),
+        spin: new THREE.Vector3(rand(4, 9), rand(-3, 3), rand(-2, 2)),
+        life: rand(1.5, 2.1), size: rand(0.75, 1.15),
+      })
+    }
+  }
+
+  function updateCoins(dt) {
+    for (let i = coins.length - 1; i >= 0; i--) {
+      const c = coins[i]
+      c.age += dt
+      if (c.age < 0) continue
+      c.mesh.visible = true
+      c.vel.y -= 5.5 * dt
+      c.mesh.position.addScaledVector(c.vel, dt)
+      c.mesh.rotation.x += c.spin.x * dt
+      c.mesh.rotation.y += c.spin.y * dt
+      const t = c.age / c.life
+      // apparition rapide, disparition en rétrécissant
+      c.mesh.scale.setScalar(c.size * Math.min(1, c.age * 8) * (t > 0.7 ? 1 - (t - 0.7) / 0.3 : 1))
+      if (t >= 1) {
+        fx.scene.remove(c.mesh)
+        coins.splice(i, 1)
+      }
+    }
+  }
+
   function updateGroup(g, dt) {
     const age = clock - g.t0
     const ambience = g.def.ambience
@@ -581,12 +739,18 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
         b.appear = Math.min(1, b.appear + dt / 1.4)
         opacity *= b.appear
       }
-      b.mesh.position.set(x, y, z)
+      b.base.set(x, y, z)
+      b.opacity = opacity
       b.mesh.rotation.x += b.spin.x * dt
       b.mesh.rotation.y += b.spin.y * dt
       if (b.kind === 'star') b.mesh.rotation.z += dt * 0.3
       b.mesh.scale.setScalar(b.baseScale * (b.appear < 1 ? 0.6 + 0.4 * easeOut(b.appear) : 1))
       b.mesh.material.opacity = opacity * groupFade * (g.def.glass && b.kind === 'main' ? 0.82 : 1)
+    }
+
+    if (g.state !== 'out') stepPhysics(g, dt)
+    for (const b of g.balls) {
+      if (!b.flying) b.mesh.position.copy(b.base).add(b.off)
     }
 
     if (g.state === 'in' && age > 1.7) g.state = 'idle'
@@ -688,16 +852,18 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     camera.lookAt(mouse.x * 0.25, -scrollDepth * 0.8 - mouse.y * 0.15, 0)
     camera.updateMatrixWorld()
 
+    updateRay()
     if (leaving) {
       updateGroup(leaving, dt)
       if (leaving.state === 'idle') leaving = null
     }
     if (current) updateGroup(current, dt)
     updateFlights()
+    if (coins.length) updateCoins(dt)
 
     renderer.render(scene, camera)
     if (fx) {
-      if (flights.length) {
+      if (flights.length || coins.length) {
         fx.renderer.render(fx.scene, camera)
         fx.active = true
       } else if (fx.active) {
@@ -707,10 +873,26 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     }
   }
 
+  const setPointer = (e, holdFor) => {
+    mouse.px = (e.clientX / window.innerWidth) * 2 - 1
+    mouse.py = -(e.clientY / window.innerHeight) * 2 + 1
+    mouse.activeUntil = clock + holdFor
+  }
   const onPointer = (e) => {
     if (e.pointerType === 'touch') return
     mouse.tx = (e.clientX / window.innerWidth) * 2 - 1
     mouse.ty = (e.clientY / window.innerHeight) * 2 - 1
+    setPointer(e, 2)
+  }
+  // Mobile : un appui repousse les boules autour du doigt pendant un court instant
+  const onTouch = (e) => { if (e.pointerType === 'touch') setPointer(e, 0.6) }
+  const onLeave = () => { mouse.activeUntil = -1 }
+  // Mobile : la scène suit l'inclinaison du téléphone (Android ; sur iOS l'événement n'arrive
+  // pas sans autorisation explicite, la scène reste alors fixe)
+  const onTilt = (e) => {
+    if (e.gamma == null || e.beta == null) return
+    mouse.tx = Math.max(-1, Math.min(1, e.gamma / 25))
+    mouse.ty = Math.max(-1, Math.min(1, (e.beta - 45) / 25))
   }
   const onVisibility = () => {
     if (document.hidden && running) {
@@ -725,6 +907,9 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
 
   window.addEventListener('resize', resize)
   window.addEventListener('pointermove', onPointer, { passive: true })
+  window.addEventListener('pointerdown', onTouch, { passive: true })
+  document.documentElement.addEventListener('pointerleave', onLeave)
+  if (mobile) window.addEventListener('deviceorientation', onTilt, { passive: true })
   document.addEventListener('visibilitychange', onVisibility)
 
   // ------------------------------------------------------------ Préchauffage
@@ -795,6 +980,7 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
     setGame,
     setTheme,
     playDraw,
+    burst,
     dispose() {
       disposed = true
       cancelIdle()
@@ -802,6 +988,9 @@ export function createLotteryScene(host, { game = 'euromillions', theme = 'light
       clearTimeout(resizeTimer)
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onPointer)
+      window.removeEventListener('pointerdown', onTouch)
+      document.documentElement.removeEventListener('pointerleave', onLeave)
+      window.removeEventListener('deviceorientation', onTilt)
       document.removeEventListener('visibilitychange', onVisibility)
       disposables.forEach((d) => d.dispose())
       scene.environment?.dispose()

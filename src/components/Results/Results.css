@@ -152,6 +152,28 @@
   50% { transform: scale(1.07); }
 }
 
+/* Relief : le panneau s'incline vers le curseur, un reflet suit la souris (hooks/useTilt.js) */
+.tilt {
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform .6s cubic-bezier(.2, .7, .2, 1);
+  will-change: transform;
+}
+.tilt.is-tilting { transition: transform .12s ease-out; }
+.tilt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .26), transparent 55%);
+  opacity: 0;
+  transition: opacity .35s;
+  pointer-events: none;
+}
+.tilt.is-tilting::after { opacity: 1; }
+.next-draw { cursor: default; }
+.has-3d .next-draw { cursor: pointer; } /* un clic fait pleuvoir des pièces */
+
 /* ------------------------------------------------------------- Sous-navigation */
 .subnav {
   position: relative;
@@ -626,6 +648,14 @@
 @keyframes bar-grow { from { transform: scaleX(0); } }
 .freq__count { font-weight: 900; font-variant-numeric: tabular-nums; min-width: 56px; text-align: right; }
 .freq__count small { color: var(--muted); font-weight: 600; }
+
+/* Période des statistiques */
+.scope { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.scope .pill { background: var(--glass-strong); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); }
+.scope .pill.is-active { background: var(--accent); }
+.calendar-loading { margin-top: 12px; font-size: .88rem; }
+/* Chargement d'un tirage ancien choisi dans la liste */
+.select.is-busy select { cursor: progress; opacity: .6; }
 
 /* ------------------------------------------------------------- Divers */
 .rules p { color: var(--muted); }

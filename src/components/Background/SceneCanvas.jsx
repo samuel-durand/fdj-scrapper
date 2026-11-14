@@ -16,9 +16,13 @@ export default function SceneCanvas({ game, theme }) {
     // Animation du tirage : envoyée par la carte résultat (GameResults > DrawCard)
     const onDraw = (e) => scene.playDraw(e.detail)
     window.addEventListener('lottery:draw', onDraw)
+    // Pluie de pièces d'or : envoyée par le bandeau du prochain tirage (NextDrawHero)
+    const onJackpot = (e) => scene.burst(e.detail?.el)
+    window.addEventListener('lottery:jackpot', onJackpot)
 
     return () => {
       window.removeEventListener('lottery:draw', onDraw)
+      window.removeEventListener('lottery:jackpot', onJackpot)
       root.classList.remove('has-3d')
       scene.dispose()
       sceneRef.current = null
