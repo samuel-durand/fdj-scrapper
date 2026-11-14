@@ -5,6 +5,13 @@ Application web pour consulter les résultats de tous les jeux de tirage FDJ —
 + MongoDB. Les tirages sont récupérés automatiquement depuis le site de la FDJ (requêtes HTTP,
 sans navigateur) et stockés en base.
 
+## 🌐 Démo en ligne
+
+👉 **[loterie-resultats.onrender.com](https://loterie-resultats.onrender.com/#euromillions)**
+
+Hébergée sur l'offre gratuite de Render : après un moment sans visite, le site s'endort et le premier
+chargement peut prendre 30 à 60 secondes.
+
 ## 🎲 Jeux couverts
 
 | Jeu | Tirages | Résultats affichés |
@@ -24,6 +31,10 @@ sans navigateur) et stockés en base.
   **calendrier**, **historique**) : les tirages anciens sont chargés à la demande ; heure affichée pour
   Crescendo et Amigo
 - **Répartition des gains** (nombre de gagnants par rang) ou **barème** pour les jeux à gains fixes
+- **Vérificateur de ticket** (6 jeux, sans compte) : saisie de la grille, choix de n'importe quel
+  tirage depuis 2004 → numéros trouvés, rang et gain réel de ce tirage (2nd tirage du Loto, mise et
+  Multiplicateur pour Keno / Amigo) ; « et sur tout l'historique ? » : nombre de tirages gagnants et
+  meilleurs résultats de la grille
 - **Statistiques** : graphiques Chart.js, numéros chauds / froids et générateur de combinaisons
   (EuroMillions, Loto, EuroDreams) ; fréquences de sortie pour Keno, Crescendo et Amigo ; calcul sur
   les derniers tirages ou sur **tout l'historique officiel** (EuroMillions depuis 2004, Loto depuis 2008)
@@ -142,7 +153,8 @@ python backend/manage.py create-admin "Nom" email@exemple.fr "motdepasse"
 ### Historique officiel FDJ
 
 La FDJ publie l'historique complet de ses jeux en archives CSV (pages « historique » de fdj.fr).
-Elles sont importées automatiquement au premier démarrage du serveur, ou à la main :
+Elles sont importées automatiquement par le serveur, une seule fois, dans la minute qui suit son
+démarrage (y compris sur une base déjà en service), ou à la main :
 
 ```bash
 python backend/manage.py import-archives --check   # analyse sans rien écrire
