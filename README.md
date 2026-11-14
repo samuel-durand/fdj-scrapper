@@ -20,18 +20,26 @@ sans navigateur) et stockés en base.
 
 ### Résultats
 - Dernier tirage, **prochain tirage** avec jackpot et compte à rebours avant la fin des prises de jeu
-- Navigation entre les tirages (flèches, liste, **calendrier**, **historique**), heure affichée pour
+- Navigation entre les tirages (flèches, liste de **toutes les dates depuis 2004** groupées par année,
+  **calendrier**, **historique**) : les tirages anciens sont chargés à la demande ; heure affichée pour
   Crescendo et Amigo
 - **Répartition des gains** (nombre de gagnants par rang) ou **barème** pour les jeux à gains fixes
 - **Statistiques** : graphiques Chart.js, numéros chauds / froids et générateur de combinaisons
-  (EuroMillions, Loto, EuroDreams) ; fréquences de sortie pour Keno, Crescendo et Amigo
+  (EuroMillions, Loto, EuroDreams) ; fréquences de sortie pour Keno, Crescendo et Amigo ; calcul sur
+  les derniers tirages ou sur **tout l'historique officiel** (EuroMillions depuis 2004, Loto depuis 2008)
 
 ### Interface
 - **Scène 3D (three.js)** propre à chaque jeu : ciel étoilé et étoiles dorées (EuroMillions), boules
   qui rebondissent (Loto), boules en verre dans la brume (EuroDreams), etc. Transition animée entre
   les jeux, parallaxe à la souris, la scène recule quand on descend vers les données
-- **Animation du tirage** : les boules quittent la scène et viennent se poser sur les numéros
-- **Interface en verre dépoli** au-dessus de la scène, **thème clair / sombre**, responsive
+- **Animation du tirage** : le boulier tourbillonne, les boules gagnantes s'en échappent et viennent se
+  poser sur les numéros de la carte
+- **Scène interactive** : les boules s'écartent au passage de la souris (ou du doigt) et
+  s'entrechoquent ; pluie de pièces d'or 3D au survol du jackpot ; panneau du jackpot en relief qui
+  suit le curseur ; sur mobile, la scène suit l'inclinaison du téléphone
+- **Interface en verre dépoli** au-dessus de la scène, responsive
+- **Thème clair / sombre** : soleil jaune qui se transforme en croissant de lune, nouveau thème qui se
+  propage en cercle depuis le bouton ; choix mémorisé sur l'appareil et dans le compte
 - Sans WebGL, en mode « réduire les animations » ou économie de données : dégradé statique aux
   couleurs du jeu. three.js n'est chargé qu'à la demande (chunk séparé) et la qualité du rendu
   s'adapte à la puissance de l'appareil
@@ -60,15 +68,17 @@ sans navigateur) et stockés en base.
 ```
 ├── src/                  Front React
 │   ├── components/       Results, Background (scène 3D), Statistics, Auth, Alerts, MyCombinations, Admin…
-│   ├── three/            Scène three.js (lotteryScene.js)
+│   ├── three/            Scène three.js (lotteryScene.js : boulier, physique, pièces, vols)
+│   ├── hooks/            useTheme, useTilt (relief qui suit le curseur)
 │   ├── services/         Appels à l'API (/api)
 │   ├── contexts/         AuthContext
 │   └── games.js          Configuration des 6 jeux
 ├── backend/              API Flask + MongoDB (voir backend/README.md)
 │   ├── app/routes/       auth, users, draws, combinations, alerts, notifications, admin
-│   ├── app/scraper/      Scraper FDJ (games.py : normalisation de chaque jeu)
+│   ├── app/scraper/      Scraper FDJ (games.py : normalisation, archives.py : historique officiel)
+│   ├── app/autoupdate.py Mise à jour automatique dans le serveur web
 │   ├── app/worker.py     Mise à jour automatique après chaque tirage
-│   ├── manage.py         Commandes (run, scrape, worker, create-admin, import-json)
+│   ├── manage.py         Commandes (run, scrape, worker, create-admin, import-archives, import-json)
 │   └── tests/            Tests (MongoDB simulée)
 ├── render.yaml           Déploiement Render
 └── railway.json + nixpacks.toml   Déploiement Railway
@@ -124,13 +134,25 @@ npm run dev         # Front sur http://localhost:5173 (/api est redirigé vers F
 Premier lancement :
 
 ```bash
-npm run scrape                                                      # récupère les tirages
+npm run scrape                                    # tirages récents (≈ 2 derniers mois)
+python backend/manage.py import-archives          # historique officiel FDJ (depuis 2004)
 python backend/manage.py create-admin "Nom" email@exemple.fr "motdepasse"
-python backend/manage.py import-json backend/data/ancien-resultats-cache.json   # historique (une fois)
 ```
 
-La FDJ ne publie qu'environ deux mois de résultats : `import-json` reprend l'historique
-de l'ancien fichier de cache.
+### Historique officiel FDJ
+
+La FDJ publie l'historique complet de ses jeux en archives CSV (pages « historique » de fdj.fr).
+Elles sont importées automatiquement au premier démarrage du serveur, ou à la main :
+
+```bash
+python backend/manage.py import-archives --check   # analyse sans rien écrire
+python backend/manage.py import-archives
+```
+
+Seules les archives aux règles actuelles sont reprises : EuroMillions depuis 2004, Loto depuis 2008
+(5 numéros + numéro chance, Super et Grand Loto compris), EuroDreams depuis 2023, Keno et Crescendo
+depuis novembre 2025. Un tirage déjà en base n'est jamais remplacé, sauf s'il contredit l'archive
+officielle (données erronées de l'ancien cache).
 
 Amigo compte environ 200 tirages par jour : son historique est limité à 7 jours
 (`history_days` dans `backend/app/scraper/games.py`).
