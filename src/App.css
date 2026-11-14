@@ -153,6 +153,41 @@
   transition: border-color .15s, color .15s, transform .3s cubic-bezier(.3, 1.6, .5, 1);
 }
 .icon-btn:hover:not(:disabled) { border-color: var(--c-brand); color: var(--c-brand); }
+
+/* ------------------------------------------------------------- Bouton du thème
+   Soleil jaune (clair) -> croissant de lune jaune (sombre), voir components/ThemeIcon.jsx */
+.theme-toggle { color: #f5b400; }
+.theme-toggle:hover:not(:disabled) { color: #f5b400; border-color: #f5b400; }
+.icon-btn.theme-toggle:hover:not(:disabled) { transform: none; }
+.theme-icon {
+  overflow: visible;
+  transition: transform .7s cubic-bezier(.5, -.4, .3, 1.5);
+}
+.theme-icon__disc,
+.theme-icon__shadow,
+.theme-icon__rays {
+  transform-box: view-box;
+  transform-origin: 12px 12px;
+  transition: transform .6s cubic-bezier(.5, -.3, .3, 1.4), opacity .35s ease;
+}
+/* Clair : petit disque + rayons, l'ombre est hors du disque */
+.theme-icon__shadow { transform: translate(9px, -9px); }
+.theme-toggle:hover .theme-icon__rays { transform: rotate(45deg); }
+/* Sombre : le disque grossit, l'ombre le grignote, les rayons tournent et disparaissent */
+.theme-icon.is-dark { transform: rotate(-25deg); }
+.theme-icon.is-dark .theme-icon__disc { transform: scale(1.7); }
+.theme-icon.is-dark .theme-icon__shadow { transform: none; transition-delay: .12s; }
+.theme-icon.is-dark .theme-icon__rays { transform: rotate(-90deg) scale(.3); opacity: 0; }
+.theme-toggle:hover .theme-icon.is-dark { transform: rotate(-40deg); }
+[data-theme="dark"] .theme-toggle { color: #ffd23f; }
+[data-theme="dark"] .theme-toggle:hover:not(:disabled) { color: #ffd23f; border-color: #ffd23f; }
+
+/* Transition de thème : le nouveau thème recouvre l'ancien en cercle (App.jsx) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
 .icon-btn:disabled { opacity: .35; cursor: default; }
 
 .avatar {

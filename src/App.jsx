@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { flushSync } from 'react-dom'
 import './App.css'
 import GameResults from './components/Results/GameResults'
 import Login from './components/Auth/Login'
@@ -7,9 +8,15 @@ import UserProfile from './components/Auth/UserProfile'
 import NotificationCenter from './components/Alerts/NotificationCenter'
 import AdminPanel from './components/Admin/AdminPanel'
 import Background from './components/Background/Background'
+import ThemeIcon from './components/ThemeIcon'
 import { useAuth } from './contexts/AuthContext'
 import { getUnreadCount } from './services/notificationService'
 import { GAMES, GAME_KEYS } from './games'
+
+/** Un thème a-t-il déjà été choisi sur cet appareil ? */
+const hasLocalTheme = () => {
+  try { return Boolean(localStorage.getItem('theme')) } catch { return false }
+}
 
 const gameFromHash = () => {
   const h = window.location.hash.replace('#', '')
@@ -27,7 +34,7 @@ function Logo() {
 }
 
 function App() {
-  const { user } = useAuth()
+  const { user, updatePreferences } = useAuth()
   const [activeTab, setActiveTab] = useState(() => gameFromHash() || 'euromillions')
   const [theme, setTheme] = useState(() => {
     try { return localStorage.getItem('theme') || 'light' } catch { return 'light' }
@@ -45,7 +52,6 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    try { localStorage.setItem('theme', theme) } catch { /* stockage indisponible */ }
   }, [theme])
 
   // Onglet <-> URL (#euromillions, #loto, #eurodreams)
@@ -59,10 +65,46 @@ function App() {
     history.replaceState(null, '', `#${key}`)
   }
 
+  // Préférences du compte, appliquées une fois par connexion. Le thème choisi sur cet appareil
+  // l'emporte sur celui du compte (sinon le rechargement de la page annulait le mode sombre).
+  const prefsAppliedFor = useRef(null)
   useEffect(() => {
-    if (user?.preferences?.defaultTab && !gameFromHash()) setActiveTab(user.preferences.defaultTab)
-    if (user?.preferences?.theme) setTheme(user.preferences.theme)
+    if (!user?.id || prefsAppliedFor.current === user.id) return
+    prefsAppliedFor.current = user.id
+    if (user.preferences?.defaultTab && !gameFromHash()) setActiveTab(user.preferences.defaultTab)
+    if (user.preferences?.theme && !hasLocalTheme()) setTheme(user.preferences.theme)
   }, [user])
+
+  const toggleTheme = (e) => {
+    const next = theme === 'light' ? 'dark' : 'light'
+    const apply = () => {
+      document.documentElement.setAttribute('data-theme', next)
+      flushSync(() => setTheme(next))
+    }
+    // Le nouveau thème se propage en cercle depuis le bouton (View Transitions API).
+    // Sans prise en charge, ou si l'utilisateur demande moins d'animations : bascule directe.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!document.startViewTransition || reduce) {
+      apply()
+    } else {
+      const r = e.currentTarget.getBoundingClientRect()
+      const x = r.left + r.width / 2
+      const y = r.top + r.height / 2
+      const radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y))
+      const transition = document.startViewTransition(apply)
+      transition.ready.then(() => {
+        document.documentElement.animate(
+          { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+          { duration: 700, easing: 'cubic-bezier(.4, 0, .2, 1)', pseudoElement: '::view-transition-new(root)' },
+        )
+      }).catch(() => { /* transition interrompue : le thème est déjà appliqué */ })
+    }
+    // Choix explicite sur cet appareil (seulement au clic : sinon le thème par défaut serait
+    // mémorisé avant que les préférences du compte aient pu s'appliquer)
+    try { localStorage.setItem('theme', next) } catch { /* stockage indisponible */ }
+    // Mémorisé aussi dans le compte : on le retrouve sur ses autres appareils
+    if (user) updatePreferences({ theme: next }).catch(() => { /* hors ligne : le choix local suffit */ })
+  }
 
   const updateUnreadCount = useCallback(async () => {
     if (!user?.id) return
@@ -109,16 +151,13 @@ function App() {
 
           <div className="topbar__actions">
             <button
-              className="icon-btn"
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              title={`Thème ${theme === 'light' ? 'sombre' : 'clair'}`}
+              className="icon-btn theme-toggle"
+              onClick={toggleTheme}
+              title={`Passer en thème ${theme === 'light' ? 'sombre' : 'clair'}`}
               aria-label="Changer de thème"
+              aria-pressed={theme === 'dark'}
             >
-              {theme === 'light' ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor" /></svg>
-              ) : (
-                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor" /><g stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 1v3M12 20v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M1 12h3M20 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" /></g></svg>
-              )}
+              <ThemeIcon dark={theme === 'dark'} />
             </button>
 
             {user ? (
