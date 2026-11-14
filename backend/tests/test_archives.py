@@ -157,3 +157,14 @@ def test_api_pagination_and_summary(client, db):
     # Résumé : numéros seulement, pas de répartition des gains ni de champ interne
     summary = client.get("/api/draws/crescendo?summary=1&limit=5000").get_json()["data"]
     assert len(summary) == 7 and set(summary[0]) <= set(("id", "date", "time", "drawTime", "numbers", "letter"))
+
+
+def test_api_one_draw_by_time(client, db):
+    g = GAMES["crescendo"]
+    hours = [{"date": f"2026-11-07T{h}:00:01.000+01:00", "numbers": [str(h)], "complementariesNumbers": ["E"]}
+             for h in (13, 14, 15)]
+    DrawRepository(db).upsert("crescendo", [g.parse(r) for r in hours])
+    assert client.get("/api/draws/crescendo/2026-11-07").get_json()["data"]["time"] == "15:00"  # dernier du jour
+    assert client.get("/api/draws/crescendo/2026-11-07?time=14:00").get_json()["data"]["numbers"] == [14]
+    assert client.get("/api/draws/crescendo/2026-11-07?time=16:00").status_code == 404
+    assert client.get("/api/draws/crescendo/2026-11-07?time=14h").status_code == 400

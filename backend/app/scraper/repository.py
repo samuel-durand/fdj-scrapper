@@ -49,9 +49,13 @@ class DrawRepository:
             cur = cur.limit(limit)
         return list(cur)
 
-    def get(self, game: str, date: str) -> dict | None:
-        """Tirage d'une date (le dernier de la journée pour les jeux à plusieurs tirages)."""
-        return next(iter(self.db.draws.find({"game": game, "date": date}, INTERNAL).sort(self.ORDER).limit(1)), None)
+    def get(self, game: str, date: str, time: str | None = None) -> dict | None:
+        """Tirage d'une date ; time ("HH:MM") pour un tirage précis de Crescendo / Amigo
+        (sinon le dernier de la journée)."""
+        query: dict[str, Any] = {"game": game, "date": date}
+        if time:
+            query["time"] = time
+        return next(iter(self.db.draws.find(query, INTERNAL).sort(self.ORDER).limit(1)), None)
 
     def known(self, game: str) -> dict[str, bool]:
         """id -> True si la répartition (ou le barème) des gains est connue."""

@@ -1,9 +1,9 @@
 import { GAMES, complementaryValues } from '../../games'
 
-export function Ball({ value, variant = 'main', size = 'md', index = 0 }) {
+export function Ball({ value, variant = 'main', size = 'md', index = 0, className = '' }) {
   return (
     <span
-      className={`ball ball--${variant} ball--${size}`}
+      className={`ball ball--${variant} ball--${size} ${className}`}
       style={{ '--i': index }}
       aria-label={String(value)}
     >

@@ -5,6 +5,7 @@ import { Ball, DrawBalls } from './Balls'
 import NextDrawHero from './NextDrawHero'
 import WinningsTable, { PayoutTable } from './WinningsTable'
 import FrequencyStats from './FrequencyStats'
+import TicketChecker from './TicketChecker'
 import Calendar from '../Calendar'
 import Statistics from '../Statistics'
 import GameStatistics from '../GameStatistics'
@@ -16,6 +17,7 @@ const VIEWS = [
   { id: 'calendar', label: 'Calendrier' },
   { id: 'stats', label: 'Statistiques' },
   { id: 'charts', label: 'Graphiques' },
+  { id: 'ticket', label: 'Vérifier mon ticket' },
 ]
 // Keno, Crescendo, Amigo : statistiques de fréquence simples (pas de générateur ni de graphiques par grille)
 const SIMPLE_VIEWS = [
@@ -23,6 +25,7 @@ const SIMPLE_VIEWS = [
   { id: 'history', label: 'Historique' },
   { id: 'calendar', label: 'Calendrier' },
   { id: 'freq', label: 'Statistiques' },
+  { id: 'ticket', label: 'Vérifier mon ticket' },
 ]
 const viewsFor = (game) => (GAMES[game].simple ? SIMPLE_VIEWS : VIEWS)
 
@@ -316,7 +319,7 @@ function GameResults({ game }) {
   // Statistiques sur tout l'historique : numéros seulement, téléchargés une fois par jeu
   const historyGame = useRef(null) // jeu dont l'historique est chargé ou en cours de chargement
   useEffect(() => {
-    if (!(statsScope === 'all' || view === 'results') || loading || historyGame.current === game) return
+    if (!(statsScope === 'all' || view === 'results' || view === 'ticket') || loading || historyGame.current === game) return
     historyGame.current = game
     setFullHistory({ game, draws: null, loading: true, error: null })
     getHistorySummary(game)
@@ -403,6 +406,11 @@ function GameResults({ game }) {
             {view === 'stats' && <div className="card"><Statistics draws={statsDraws || draws} gameType={game} /></div>}
             {view === 'freq' && <div className="card"><FrequencyStats game={game} draws={statsDraws || draws} /></div>}
             {view === 'charts' && <div className="card"><GameStatistics gameType={game} draws={statsDraws} /></div>}
+            {view === 'ticket' && (
+              <div className="card">
+                <TicketChecker game={game} draws={draws} allDraws={fullHistory.game === game ? fullHistory.draws : null} />
+              </div>
+            )}
           </div>
         )}
 

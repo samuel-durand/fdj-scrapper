@@ -33,6 +33,15 @@ export function getGameData(game, options) {
   return load(game, options)
 }
 
+/** Un tirage précis (date, et heure pour Crescendo / Amigo). */
+export async function getDraw(game, date, time = null) {
+  const query = time ? `?${new URLSearchParams({ time })}` : ''
+  const response = await fetch(`${API_URL}/draws/${game}/${date}${query}`)
+  if (response.status === 404) return null
+  if (!response.ok) throw new Error(`HTTP ${response.status}`)
+  return (await response.json()).data || null
+}
+
 /** Tirages plus anciens qu'un tirage donné (pagination de l'historique et du calendrier). */
 export async function getOlderDraws(game, beforeDrawTime, limit = 200) {
   const params = new URLSearchParams({ before: beforeDrawTime, limit: String(limit) })

@@ -19,6 +19,7 @@ from . import DRAW_GAME_KEYS, fail, int_arg
 bp = Blueprint("draws", __name__, url_prefix="/api/draws")
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+TIME_RE = re.compile(r"^\d{2}:\d{2}$")
 DATETIME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?([+-]\d{2}:\d{2}|Z)?$")
 # Champs renvoyés avec summary=1
 SUMMARY_FIELDS = ("id", "date", "time", "drawTime", "numbers", "stars", "luckyNumber", "dreamNumber",
@@ -79,8 +80,11 @@ def one_game(game):
 def one_draw(game, date):
     if game not in DRAW_GAME_KEYS or not DATE_RE.match(date):
         return fail("Tirage introuvable", 404)
+    time = request.args.get("time")
+    if time and not TIME_RE.match(time):
+        return fail("Paramètre 'time' invalide (HH:MM)")
     repo = DrawRepository(get_db())
-    draw = repo.get(game, date)
+    draw = repo.get(game, date, time)
     if not draw:
         return fail("Tirage introuvable", 404)
     return _cached({"success": True, "data": draw}, repo.meta())
