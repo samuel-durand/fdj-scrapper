@@ -38,7 +38,7 @@ def test_lock_expires(db):
 def test_first_run_is_full_then_nothing_due(db, calls):
     # Démarrage (ou réveil après la veille) : passage complet
     assert autoupdate.refresh(db, NOW) == list(GAMES)
-    assert calls == [None, "archives"]           # + historique officiel, une seule fois
+    assert calls == [None]
     state = db.meta.find_one({"_id": autoupdate.STATE_ID})
     assert set(state["lastRun"]) == set(GAMES) and state["lastFull"]
 
@@ -92,9 +92,31 @@ def test_archives_imported_once(db, calls):
 
 
 def test_archives_retry_after_failure(db, monkeypatch):
+    attempts = []
+
     def boom(db):
+        attempts.append(1)
         raise RuntimeError("fdj.fr indisponible")
     monkeypatch.setattr(autoupdate, "import_archives", boom)
-    assert autoupdate.import_archives_once(db) is False
+    now = datetime.now(timezone.utc)
+    assert autoupdate.import_archives_once(db, now) is False
     state = db.meta.find_one({"_id": autoupdate.STATE_ID}) or {}
-    assert "archivesImported" not in state                 # sera retenté au prochain passage complet
+    assert "archivesImported" not in state
+    # Pas de nouvel essai à chaque minute…
+    assert autoupdate.import_archives_once(db, now + timedelta(minutes=1)) is False and len(attempts) == 1
+    # …mais après 30 min
+    autoupdate.import_archives_once(db, now + timedelta(minutes=31))
+    assert len(attempts) == 2
+
+
+def test_running_db_gets_archives_without_waiting_full_pass(db, calls):
+    """Base déjà en service (passage complet récent, déployée avant l'import des archives) :
+    l'historique est importé dès le cycle suivant, sans attendre le prochain passage complet."""
+    recent = datetime.now(timezone.utc) - timedelta(minutes=5)
+    db.meta.insert_one({"_id": autoupdate.STATE_ID, "lastFull": recent,
+                        "lastRun": {k: recent for k in GAMES}})
+    autoupdate.tick(db, "web-1")
+    assert "archives" in calls and None not in calls      # pas de passage complet, mais l'import
+    calls.clear()
+    autoupdate.tick(db, "web-1")
+    assert "archives" not in calls                         # une seule fois

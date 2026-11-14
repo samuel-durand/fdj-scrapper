@@ -10,7 +10,7 @@ Pensé pour les hébergements gratuits où il n'y a qu'un service web, qui peut 
     publié pendant la veille ; il est renouvelé toutes les 12 h ;
   * plusieurs processus gunicorn : un verrou dans MongoDB garantit un seul scraping à la fois ;
   * l'état (dernier passage par jeu) est stocké en base : il survit aux redémarrages.
-  * au premier passage complet, l'historique officiel FDJ (archives CSV) est importé une fois.
+  * l'historique officiel FDJ (archives CSV) est importé une fois, dès le premier cycle.
 """
 
 from __future__ import annotations
@@ -37,6 +37,7 @@ LOCK_ID = "autoupdate-lock"
 STATE_ID = "autoupdate"
 LOCK_TTL = timedelta(minutes=10)    # un scraping bloqué ne bloque pas les suivants indéfiniment
 FULL_EVERY = timedelta(hours=12)    # passage complet (rattrapage, répartitions publiées tard)
+ARCHIVES_RETRY = timedelta(minutes=30)  # import de l'historique FDJ : délai avant un nouvel essai
 CHECK_EVERY = 60                    # secondes entre deux vérifications
 
 
@@ -90,14 +91,22 @@ def due_games(db: Database, now: datetime | None = None) -> tuple[list[str] | No
     return due, False
 
 
-def import_archives_once(db: Database) -> bool:
-    """Historique officiel FDJ (archives CSV) : importé une seule fois, au premier passage complet.
+def import_archives_once(db: Database, now: datetime | None = None) -> bool:
+    """Historique officiel FDJ (archives CSV) : importé une seule fois, dès que possible
+    (vérifié à chaque cycle, pas seulement aux passages complets : une base déjà en service
+    l'obtient sans attendre). En cas d'échec, nouvel essai après ARCHIVES_RETRY.
     Retourne True si l'import a eu lieu."""
-    if (db.meta.find_one({"_id": STATE_ID}) or {}).get("archivesImported"):
+    now = now or _utc()
+    state = db.meta.find_one({"_id": STATE_ID}) or {}
+    if state.get("archivesImported"):
         return False
+    last_try = state.get("archivesAttempt")
+    if last_try and now - last_try < ARCHIVES_RETRY:
+        return False
+    db.meta.update_one({"_id": STATE_ID}, {"$set": {"archivesAttempt": now}}, upsert=True)
     try:
         report = import_archives(db)
-    except Exception:  # noqa: BLE001 — réessayé au prochain passage complet
+    except Exception:  # noqa: BLE001 — nouvel essai plus tard
         log.exception("Import des archives FDJ impossible pour le moment")
         return False
     log.info("📚 Historique FDJ importé : %s", ", ".join(f"{GAMES[k].label} +{n}" for k, n in report.added.items()))
@@ -112,8 +121,6 @@ def refresh(db: Database, now: datetime | None = None) -> list[str]:
         return []
     log.info("🔄 Mise à jour %s", "complète" if full else "de " + ", ".join(GAMES[g].label for g in games))
     run_once(db, games)
-    if full:
-        import_archives_once(db)
     stamp = _utc()
     updated = list(GAMES) if full else games
     fields = {f"lastRun.{g}": stamp for g in updated}
@@ -128,7 +135,9 @@ def tick(db: Database, owner: str) -> list[str]:
     if not acquire(db, owner):
         return []
     try:
-        return refresh(db)
+        updated = refresh(db)
+        import_archives_once(db)  # historique officiel, si ce n'est pas encore fait
+        return updated
     finally:
         release(db, owner)
 
