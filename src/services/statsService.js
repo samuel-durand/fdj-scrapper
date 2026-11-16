@@ -5,6 +5,72 @@
 
 import { getAllResults } from './lotteryService.js'
 
+// Complémentaire(s) d'un tirage normalisé en tableau (étoiles, n° chance, n° Dream)
+function drawComplements(draw, gameType) {
+  const raw = gameType === 'euromillions' ? draw.stars
+    : gameType === 'loto' ? draw.luckyNumber
+    : draw.dreamNumber
+  const list = Array.isArray(raw) ? raw : (raw == null || raw === '' ? [] : [raw])
+  return list.map(n => parseInt(n)).filter(n => !isNaN(n)).sort((a, b) => a - b)
+}
+
+// Toutes les sous-combinaisons de taille k d'un tableau trié
+function subsets(arr, k, start = 0, prefix = [], out = []) {
+  if (prefix.length === k) {
+    out.push(prefix)
+    return out
+  }
+  for (let i = start; i <= arr.length - (k - prefix.length); i++) {
+    subsets(arr, k, i + 1, [...prefix, arr[i]], out)
+  }
+  return out
+}
+
+// Compte les occurrences d'une clé par tirage et renvoie les plus fréquentes (>= minCount)
+function rankCombos(draws, keysOf, { minCount = 2, limit = 10 } = {}) {
+  const map = new Map()
+  draws.forEach(draw => {
+    keysOf(draw).forEach(({ numbers, complements = [] }) => {
+      const key = `${numbers.join('-')}|${complements.join('-')}`
+      const entry = map.get(key) || { numbers, complements, count: 0, dates: [] }
+      entry.count++
+      entry.dates.push(draw.date)
+      map.set(key, entry)
+    })
+  })
+  return [...map.values()]
+    .filter(e => e.count >= minCount)
+    .sort((a, b) => b.count - a.count || (b.dates[0] || '').localeCompare(a.dates[0] || ''))
+    .slice(0, limit)
+}
+
+/**
+ * Grilles / combinaisons les plus sorties.
+ * - fullGrids : grille complète identique (numéros + complémentaires)
+ * - numbersOnly : mêmes numéros principaux (complémentaires ignorés)
+ * - bySize : combinaisons de 4, 3 et 2 numéros sortis ensemble
+ * - complementPairs : paires d'étoiles (Euromillions)
+ */
+function analyzeCombinations(draws, gameType) {
+  const sortedNums = draw => (draw.numbers || draw.balls || [])
+    .map(n => parseInt(n)).filter(n => !isNaN(n)).sort((a, b) => a - b)
+
+  const fullGrids = rankCombos(draws, d => [{ numbers: sortedNums(d), complements: drawComplements(d, gameType) }])
+  const numbersOnly = rankCombos(draws, d => [{ numbers: sortedNums(d) }])
+  const bySize = [4, 3, 2].map(size => ({
+    size,
+    combos: rankCombos(draws, d => subsets(sortedNums(d), size).map(numbers => ({ numbers })))
+  }))
+  const complementPairs = gameType === 'euromillions'
+    ? rankCombos(draws, d => {
+      const c = drawComplements(d, gameType)
+      return c.length === 2 ? [{ numbers: [], complements: c }] : []
+    })
+    : []
+
+  return { fullGrids, numbersOnly, bySize, complementPairs }
+}
+
 /**
  * Analyse les statistiques d'un jeu
  */
@@ -149,7 +215,8 @@ function analyzeGameStats(draws, gameType) {
     topStars: starArray.slice(0, 6),
     bottomStars: starArray.slice(-6).reverse(),
     topLucky: luckyArray.slice(0, 5),
-    topDream: dreamArray.slice(0, 5)
+    topDream: dreamArray.slice(0, 5),
+    combinations: analyzeCombinations(draws, gameType)
   }
 }
 

@@ -191,6 +191,76 @@
   background: var(--fdj-dark-blue);
 }
 
+/* Grilles les plus sorties */
+.combos-card {
+  margin-top: 24px;
+}
+
+.combos-card h4 {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin: 22px 0 10px;
+  font-weight: 600;
+}
+
+.combos-card h4:first-of-type {
+  margin-top: 4px;
+}
+
+.combo-table .balls {
+  flex-wrap: wrap;
+}
+
+.combo-dates {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.combo-empty {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.combo-size-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.combo-size-header h4 {
+  margin: 0;
+}
+
+.combo-size-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.combo-size-tab {
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.combo-size-tab.active {
+  background: var(--accent, var(--c-brand));
+  border-color: transparent;
+  color: #fff;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .game-statistics-container {
@@ -207,6 +277,16 @@
 
   .chart-wrapper {
     height: 300px;
+  }
+
+  .combo-table th:nth-child(4),
+  .combo-table td:nth-child(4) {
+    display: none;
+  }
+
+  .combo-table th,
+  .combo-table td {
+    padding: 8px 6px;
   }
 
   .stats-summary {

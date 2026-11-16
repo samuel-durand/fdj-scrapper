@@ -4398,1027 +4398,1280 @@
       "myMillionCode": "GX 069 8683"
     },
     {
-      "id": "em-15",
+      "id": "em-2025-08-29",
       "date": "2025-08-29",
-      "day": "Vendredi",
-      "formattedDate": "29 août 2025",
+      "drawTime": "2025-08-29T21:00:00+02:00",
+      "formattedDate": "vendredi 29 août 2025",
+      "day": "vendredi",
+      "drawNumber": "25069",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        6,
+        9,
+        10,
+        13,
+        37
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        1,
+        7
+      ],
+      "myMillionCode": "IA 474 1654",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
-          "winners": "0",
-          "amount": "Non disponible"
+          "winners": "1",
+          "winnersEurope": "5",
+          "amount": "138 979,10 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "0",
+          "winnersEurope": "2",
+          "amount": "81 204,30 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "22",
+          "winnersEurope": "65",
+          "amount": "778,20 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "238",
+          "winnersEurope": "910",
+          "amount": "102,40 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "667",
+          "winnersEurope": "2 147",
+          "amount": "45,80 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "512",
+          "winnersEurope": "1 893",
+          "amount": "36,50 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "9 002",
+          "winnersEurope": "32 086",
+          "amount": "10,70 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "10 961",
+          "winnersEurope": "41 690",
+          "amount": "9,20 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "21 806",
+          "winnersEurope": "87 909",
+          "amount": "8,10 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "39 308",
+          "winnersEurope": "150 987",
+          "amount": "5,70 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "142 083",
+          "winnersEurope": "574 759",
+          "amount": "4,70 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "282 781",
+          "winnersEurope": "1 208 430",
+          "amount": "3,60 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-16",
+      "id": "em-2025-08-26",
       "date": "2025-08-26",
-      "day": "Mardi",
-      "formattedDate": "26 août 2025",
+      "drawTime": "2025-08-26T21:00:00+02:00",
+      "formattedDate": "mardi 26 août 2025",
+      "day": "mardi",
+      "drawNumber": "25068",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        2,
+        14,
+        38,
+        42,
+        45
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        10,
+        11
+      ],
+      "myMillionCode": "QW 618 1429",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
           "winners": "0",
-          "amount": "Non disponible"
+          "winnersEurope": "2",
+          "amount": "255 796,20 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "1",
+          "winnersEurope": "4",
+          "amount": "29 891,90 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "4",
+          "winnersEurope": "19",
+          "amount": "1 960,10 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "93",
+          "winnersEurope": "468",
+          "amount": "146,50 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "175",
+          "winnersEurope": "832",
+          "amount": "87,10 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "235",
+          "winnersEurope": "1 079",
+          "amount": "47,20 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "2 483",
+          "winnersEurope": "12 514",
+          "amount": "20,30 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "4 320",
+          "winnersEurope": "20 246",
+          "amount": "14 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "11 142",
+          "winnersEurope": "50 826",
+          "amount": "10,40 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "13 365",
+          "winnersEurope": "68 046",
+          "amount": "9,40 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "63 919",
+          "winnersEurope": "295 080",
+          "amount": "6,80 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "171 850",
+          "winnersEurope": "770 372",
+          "amount": "4,20 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-17",
+      "id": "em-2025-08-22",
       "date": "2025-08-22",
-      "day": "Vendredi",
-      "formattedDate": "22 août 2025",
+      "drawTime": "2025-08-22T21:00:00+02:00",
+      "formattedDate": "vendredi 22 août 2025",
+      "day": "vendredi",
+      "drawNumber": "25067",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        6,
+        9,
+        12,
+        30,
+        39
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        4,
+        10
+      ],
+      "myMillionCode": "BO 496 3223",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
-          "winners": "0",
-          "amount": "Non disponible"
+          "winners": "1",
+          "winnersEurope": "2",
+          "amount": "330 801,20 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "1",
+          "winnersEurope": "11",
+          "amount": "14 057 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "5",
+          "winnersEurope": "36",
+          "amount": "1 337,80 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "179",
+          "winnersEurope": "823",
+          "amount": "107,80 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "389",
+          "winnersEurope": "1 602",
+          "amount": "58,50 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "519",
+          "winnersEurope": "2 100",
+          "amount": "31,30 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "5 091",
+          "winnersEurope": "21 707",
+          "amount": "15,10 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "8 213",
+          "winnersEurope": "34 752",
+          "amount": "10,50 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "22 643",
+          "winnersEurope": "91 081",
+          "amount": "7,50 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "24 634",
+          "winnersEurope": "109 421",
+          "amount": "7,50 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "108 318",
+          "winnersEurope": "465 401",
+          "amount": "5,60 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "277 193",
+          "winnersEurope": "1 170 392",
+          "amount": "3,50 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-18",
+      "id": "em-2025-08-19",
       "date": "2025-08-19",
-      "day": "Mardi",
-      "formattedDate": "19 août 2025",
+      "drawTime": "2025-08-19T21:00:00+02:00",
+      "formattedDate": "mardi 19 août 2025",
+      "day": "mardi",
+      "drawNumber": "25066",
       "numbers": [
-        5,
         24,
-        29,
-        40,
-        42
+        31,
+        34,
+        41,
+        43
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        6,
+        8
+      ],
+      "myMillionCode": "VK 747 8211",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
-          "winners": "0",
-          "amount": "Non disponible"
+          "winners": "1",
+          "winnersEurope": "1",
+          "amount": "250 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
-          "winners": "0",
-          "amount": "Non disponible"
+          "winners": "4",
+          "winnersEurope": "7",
+          "amount": "270 238,90 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "2",
+          "winnersEurope": "7",
+          "amount": "38 515,60 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "26",
+          "winnersEurope": "78",
+          "amount": "1 076,60 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "313",
+          "winnersEurope": "1 150",
+          "amount": "134,50 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "622",
+          "winnersEurope": "2 489",
+          "amount": "65,70 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "583",
+          "winnersEurope": "2 286",
+          "amount": "50,20 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "9 855",
+          "winnersEurope": "38 081",
+          "amount": "15 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "11 635",
+          "winnersEurope": "47 427",
+          "amount": "13,50 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "25 966",
+          "winnersEurope": "105 829",
+          "amount": "11,20 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "56 596",
+          "winnersEurope": "214 362",
+          "amount": "6,70 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "183 800",
+          "winnersEurope": "734 877",
+          "amount": "6,10 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "407 128",
+          "winnersEurope": "1 622 924",
+          "amount": "4,50 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-19",
+      "id": "em-2025-08-15",
       "date": "2025-08-15",
-      "day": "Vendredi",
-      "formattedDate": "15 août 2025",
+      "drawTime": "2025-08-15T21:00:00+02:00",
+      "formattedDate": "vendredi 15 août 2025",
+      "day": "vendredi",
+      "drawNumber": "25065",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        13,
+        30,
+        35,
+        36,
+        40
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        2,
+        6
+      ],
+      "myMillionCode": "JZ 186 6062",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
           "winners": "0",
-          "amount": "Non disponible"
+          "winnersEurope": "2",
+          "amount": "592 222,90 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "2",
+          "winnersEurope": "13",
+          "amount": "21 294,10 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
           "winners": "16",
-          "amount": "2 299,80 €"
+          "winnersEurope": "63",
+          "amount": "1 368,60 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "203",
+          "winnersEurope": "1 023",
+          "amount": "155,20 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "540",
+          "winnersEurope": "2 481",
+          "amount": "67,60 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "485",
+          "winnersEurope": "2 339",
+          "amount": "50,40 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "8 978",
+          "winnersEurope": "40 120",
+          "amount": "14,70 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "10 232",
+          "winnersEurope": "48 421",
+          "amount": "13,50 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "23 213",
+          "winnersEurope": "109 005",
+          "amount": "11,20 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "55 801",
+          "winnersEurope": "234 111",
+          "amount": "6,30 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "168 516",
+          "winnersEurope": "759 032",
+          "amount": "6,10 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "366 018",
+          "winnersEurope": "1 688 844",
+          "amount": "4,40 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-20",
+      "id": "em-2025-08-12",
       "date": "2025-08-12",
-      "day": "Mardi",
-      "formattedDate": "12 août 2025",
+      "drawTime": "2025-08-12T21:00:00+02:00",
+      "formattedDate": "mardi 12 août 2025",
+      "day": "mardi",
+      "drawNumber": "25064",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        18,
+        28,
+        42,
+        46,
+        48
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        3,
+        9
+      ],
+      "myMillionCode": "IT 232 9034",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
           "winners": "0",
-          "amount": "Non disponible"
+          "winnersEurope": "1",
+          "amount": "970 058,30 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "1",
+          "winnersEurope": "6",
+          "amount": "37 786,40 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "15",
+          "winnersEurope": "58",
+          "amount": "1 217,50 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "190",
+          "winnersEurope": "839",
+          "amount": "155 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "557",
+          "winnersEurope": "2 359",
+          "amount": "58,20 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "418",
+          "winnersEurope": "1 914",
+          "amount": "50,40 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "9 028",
+          "winnersEurope": "36 957",
+          "amount": "13 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "9 876",
+          "winnersEurope": "42 492",
+          "amount": "12,60 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "21 681",
+          "winnersEurope": "92 517",
+          "amount": "10,80 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "54 129",
+          "winnersEurope": "215 719",
+          "amount": "5,60 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "152 183",
+          "winnersEurope": "640 893",
+          "amount": "5,90 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "325 985",
+          "winnersEurope": "1 364 969",
+          "amount": "4,50 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-21",
+      "id": "em-2025-08-08",
       "date": "2025-08-08",
-      "day": "Vendredi",
-      "formattedDate": "8 août 2025",
+      "drawTime": "2025-08-08T21:00:00+02:00",
+      "formattedDate": "vendredi 8 août 2025",
+      "day": "vendredi",
+      "drawNumber": "25063",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        2,
+        12,
+        19,
+        34,
+        44
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        6,
+        10
+      ],
+      "myMillionCode": "FU 501 2143",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
-          "winners": "0",
-          "amount": "Non disponible"
+          "winners": "2",
+          "winnersEurope": "6",
+          "amount": "183 180,90 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "8",
+          "winnersEurope": "21",
+          "amount": "12 232,10 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "26",
+          "winnersEurope": "72",
+          "amount": "1 111,20 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "510",
+          "winnersEurope": "1 464",
+          "amount": "100,60 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "576",
+          "winnersEurope": "2 636",
+          "amount": "59,10 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "1 629",
+          "winnersEurope": "4 276",
+          "amount": "25,60 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "8 400",
+          "winnersEurope": "36 400",
+          "amount": "15 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "13 746",
+          "winnersEurope": "54 367",
+          "amount": "11,20 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "35 836",
+          "winnersEurope": "136 121",
+          "amount": "8,30 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "41 930",
+          "winnersEurope": "185 239",
+          "amount": "7,40 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "185 421",
+          "winnersEurope": "761 556",
+          "amount": "5,60 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "448 412",
+          "winnersEurope": "1 883 537",
+          "amount": "3,70 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-22",
+      "id": "em-2025-08-05",
       "date": "2025-08-05",
-      "day": "Mardi",
-      "formattedDate": "5 août 2025",
+      "drawTime": "2025-08-05T21:00:00+02:00",
+      "formattedDate": "mardi 5 août 2025",
+      "day": "mardi",
+      "drawNumber": "25062",
       "numbers": [
+        1,
+        3,
         5,
-        24,
-        29,
-        40,
-        42
+        42,
+        47
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        5,
+        10
+      ],
+      "myMillionCode": "DL 585 0537",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
           "winners": "0",
-          "amount": "Non disponible"
+          "winnersEurope": "3",
+          "amount": "281 225,80 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "1",
+          "winnersEurope": "5",
+          "amount": "39 436,20 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "5",
+          "winnersEurope": "28",
+          "amount": "2 193,40 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "132",
+          "winnersEurope": "736",
+          "amount": "153,70 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "419",
+          "winnersEurope": "1 848",
+          "amount": "64,70 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "363",
+          "winnersEurope": "1 683",
+          "amount": "49,90 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "6 465",
+          "winnersEurope": "27 758",
+          "amount": "15,10 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "8 786",
+          "winnersEurope": "38 712",
+          "amount": "12,10 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "20 396",
+          "winnersEurope": "89 293",
+          "amount": "9,70 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "35 589",
+          "winnersEurope": "154 890",
+          "amount": "6,80 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "135 205",
+          "winnersEurope": "579 368",
+          "amount": "5,70 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "307 433",
+          "winnersEurope": "1 303 797",
+          "amount": "4,10 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-23",
+      "id": "em-2025-08-01",
       "date": "2025-08-01",
-      "day": "Vendredi",
-      "formattedDate": "1 août 2025",
+      "drawTime": "2025-08-01T21:00:00+02:00",
+      "formattedDate": "vendredi 1 août 2025",
+      "day": "vendredi",
+      "drawNumber": "25061",
       "numbers": [
-        5,
-        24,
+        4,
+        16,
+        25,
         29,
-        40,
-        42
+        30
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        2,
+        10
+      ],
+      "myMillionCode": "AX 511 9972",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
           "winners": "0",
-          "amount": "Non disponible"
+          "winnersEurope": "3",
+          "amount": "331 615,70 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
           "winners": "4",
-          "amount": "155 906,70 €"
+          "winnersEurope": "14",
+          "amount": "16 608 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "17",
+          "winnersEurope": "68",
+          "amount": "1 065 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "269",
+          "winnersEurope": "1 313",
+          "amount": "101,60 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "546",
+          "winnersEurope": "2 461",
+          "amount": "57,30 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "786",
+          "winnersEurope": "3 201",
+          "amount": "30,90 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "7 385",
+          "winnersEurope": "34 085",
+          "amount": "14,50 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "11 864",
+          "winnersEurope": "52 194",
+          "amount": "10,50 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "28 725",
+          "winnersEurope": "126 467",
+          "amount": "8,10 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "38 234",
+          "winnersEurope": "172 275",
+          "amount": "7,20 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "156 572",
+          "winnersEurope": "704 224",
+          "amount": "5,50 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "375 741",
+          "winnersEurope": "1 683 554",
+          "amount": "3,70 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-24",
+      "id": "em-2025-07-29",
       "date": "2025-07-29",
-      "day": "Mardi",
-      "formattedDate": "29 juillet 2025",
+      "drawTime": "2025-07-29T21:00:00+02:00",
+      "formattedDate": "mardi 29 juillet 2025",
+      "day": "mardi",
+      "drawNumber": "25060",
       "numbers": [
         5,
-        24,
-        29,
-        40,
-        42
+        6,
+        42,
+        44,
+        46
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        4,
+        8
+      ],
+      "myMillionCode": "RE 350 7487",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
           "winners": "0",
-          "amount": "Non disponible"
+          "winnersEurope": "4",
+          "amount": "193 669 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "1",
+          "winnersEurope": "5",
+          "amount": "36 210,90 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "6",
+          "winnersEurope": "25",
+          "amount": "2 255,70 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "114",
+          "winnersEurope": "582",
+          "amount": "178,40 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "285",
+          "winnersEurope": "1 651",
+          "amount": "66,50 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "273",
+          "winnersEurope": "1 380",
+          "amount": "55,90 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "5 594",
+          "winnersEurope": "28 236",
+          "amount": "13,60 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "5 655",
+          "winnersEurope": "30 308",
+          "amount": "14,20 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "12 523",
+          "winnersEurope": "66 114",
+          "amount": "12,10 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "37 906",
+          "winnersEurope": "174 670",
+          "amount": "5,50 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "99 074",
+          "winnersEurope": "500 434",
+          "amount": "6,10 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "224 250",
+          "winnersEurope": "1 121 436",
+          "amount": "4,30 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     },
     {
-      "id": "em-25",
+      "id": "em-2025-07-25",
       "date": "2025-07-25",
-      "day": "Vendredi",
-      "formattedDate": "25 juillet 2025",
+      "drawTime": "2025-07-25T21:00:00+02:00",
+      "formattedDate": "vendredi 25 juillet 2025",
+      "day": "vendredi",
+      "drawNumber": "25059",
       "numbers": [
-        5,
-        24,
-        29,
-        40,
-        42
+        6,
+        7,
+        23,
+        32,
+        36
       ],
-      "jackpot": "52 000 000 €",
+      "jackpotAmount": null,
+      "stars": [
+        11,
+        12
+      ],
+      "myMillionCode": "LF 343 4676",
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
           "combination": "5 numéros + 2 étoiles",
           "winners": "0",
+          "winnersEurope": "0",
           "amount": "Non disponible"
         },
         {
           "rank": 2,
           "combination": "5 numéros + 1 étoile",
-          "winners": "0",
-          "amount": "Non disponible"
+          "winners": "1",
+          "winnersEurope": "5",
+          "amount": "180 631,10 €"
         },
         {
           "rank": 3,
           "combination": "5 numéros",
-          "winners": "4",
-          "amount": "155 906,70 €"
+          "winners": "2",
+          "winnersEurope": "9",
+          "amount": "23 453,50 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros + 2 étoiles",
-          "winners": "16",
-          "amount": "2 299,80 €"
+          "winners": "6",
+          "winnersEurope": "27",
+          "amount": "2 435 €"
         },
         {
           "rank": 5,
           "combination": "4 numéros + 1 étoile",
-          "winners": "443",
-          "amount": "153 €"
-        },
-        {
-          "rank": 7,
-          "combination": "3 numéros + 2 étoiles",
-          "winners": "977",
-          "amount": "73,30 €"
+          "winners": "153",
+          "winnersEurope": "854",
+          "amount": "141,80 €"
         },
         {
           "rank": 6,
-          "combination": "4 numéros",
-          "winners": "1 097",
-          "amount": "45,90 €"
+          "combination": "3 numéros + 2 étoiles",
+          "winners": "291",
+          "winnersEurope": "1 611",
+          "amount": "79,40 €"
         },
         {
-          "rank": 10,
-          "combination": "2 numéros + 2 étoiles",
-          "winners": "14 683",
-          "amount": "17,10 €"
+          "rank": 7,
+          "combination": "4 numéros",
+          "winners": "393",
+          "winnersEurope": "2 261",
+          "amount": "39,70 €"
         },
         {
           "rank": 8,
-          "combination": "3 numéros + 1 étoile",
-          "winners": "20 790",
-          "amount": "13,50 €"
+          "combination": "2 numéros + 2 étoiles",
+          "winners": "4 232",
+          "winnersEurope": "23 762",
+          "amount": "18,90 €"
         },
         {
           "rank": 9,
+          "combination": "3 numéros + 1 étoile",
+          "winners": "7 132",
+          "winnersEurope": "39 057",
+          "amount": "12,80 €"
+        },
+        {
+          "rank": 10,
           "combination": "3 numéros",
-          "winners": "53 264",
-          "amount": "9,80 €"
+          "winners": "21 840",
+          "winnersEurope": "109 645",
+          "amount": "8,50 €"
         },
         {
           "rank": 11,
-          "combination": "2 numéros + 1 étoile",
-          "winners": "317 298",
-          "amount": "6,20 €"
+          "combination": "1 numéro + 2 étoiles",
+          "winners": "23 064",
+          "winnersEurope": "126 862",
+          "amount": "8,90 €"
         },
         {
           "rank": 12,
+          "combination": "2 numéros + 1 étoile",
+          "winners": "107 613",
+          "winnersEurope": "568 250",
+          "amount": "6,20 €"
+        },
+        {
+          "rank": 13,
           "combination": "2 numéros",
-          "winners": "812 936",
-          "amount": "3,90 €"
+          "winners": "325 664",
+          "winnersEurope": "1 597 566",
+          "amount": "3,50 €"
         }
       ],
-      "stars": [
-        6,
-        12
-      ],
-      "myMillionCode": "OA 155 5726"
+      "etoilePlusDistribution": []
     }
   ],
   "loto": [
@@ -10360,1109 +10613,2061 @@
       "luckyNumber": 4
     },
     {
-      "id": "loto-23",
+      "id": "loto-2025-08-30",
       "date": "2025-08-30",
-      "day": "Samedi",
-      "formattedDate": "30 août 2025",
+      "drawTime": "2025-08-30T20:55:00+02:00",
+      "formattedDate": "samedi 30 août 2025",
+      "day": "samedi",
+      "drawNumber": "25104",
       "numbers": [
         4,
-        29,
-        31,
-        39,
-        49
+        15,
+        23,
+        34,
+        39
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 4000000.0,
+      "luckyNumber": 10,
+      "secondDraw": [
+        2,
+        23,
+        24,
+        36,
+        39
+      ],
+      "jokerPlus": "7 070 054",
+      "codesGagnants": [
+        "O 6542 3284",
+        "S 0178 3301",
+        "P 1753 2809",
+        "G 6059 9527",
+        "S 7234 3342",
+        "H 5716 3355",
+        "B 6764 7487",
+        "J 4870 5052",
+        "V 5540 3600",
+        "Q 4688 3274"
+      ],
+      "lotoType": "loto",
+      "jackpot": "4 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "4 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "4",
+          "amount": "62 560,90 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "36",
+          "amount": "1 696,60 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "436",
+          "amount": "505,20 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 790",
+          "amount": "73,50 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "19 594",
+          "amount": "24,10 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "26 139",
+          "amount": "14 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "292 640",
+          "amount": "4,90 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "382 780",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "171 196 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "235",
+          "amount": "823,90 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "11 561",
+          "amount": "43 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "187 266",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-24",
+      "id": "loto-2025-08-27",
       "date": "2025-08-27",
-      "day": "Mercredi",
-      "formattedDate": "27 août 2025",
+      "drawTime": "2025-08-27T20:55:00+02:00",
+      "formattedDate": "mercredi 27 août 2025",
+      "day": "mercredi",
+      "drawNumber": "25103",
       "numbers": [
-        4,
-        29,
+        7,
+        12,
+        20,
         31,
-        39,
+        40
+      ],
+      "jackpotAmount": 3000000.0,
+      "luckyNumber": 6,
+      "secondDraw": [
+        14,
+        20,
+        25,
+        38,
         49
       ],
-      "jackpot": "3 000 000 €",
+      "jokerPlus": "8 431 837",
+      "codesGagnants": [
+        "O 9085 0328",
+        "M 8317 1477",
+        "S 5384 8124",
+        "T 9353 4043",
+        "H 8591 8411",
+        "U 2708 0519",
+        "C 0968 2970",
+        "Q 3777 1348",
+        "M 4995 0901",
+        "W 8267 8678"
+      ],
+      "lotoType": "loto",
+      "jackpot": "3 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "3 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "4",
+          "amount": "43 091,40 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "48",
+          "amount": "876,40 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "483",
+          "amount": "314,10 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 908",
+          "amount": "47,50 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "20 172",
+          "amount": "16,10 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "24 965",
+          "amount": "10,10 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "259 779",
+          "amount": "3,80 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "298 733",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "120 955 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "175",
+          "amount": "749,30 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "8 994",
+          "amount": "37,40 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "139 060",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-25",
+      "id": "loto-2025-08-25",
       "date": "2025-08-25",
-      "day": "Lundi",
-      "formattedDate": "25 août 2025",
+      "drawTime": "2025-08-25T20:55:00+02:00",
+      "formattedDate": "lundi 25 août 2025",
+      "day": "lundi",
+      "drawNumber": "25102",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
+        14,
+        21,
+        22,
+        32,
+        42
+      ],
+      "jackpotAmount": 2000000.0,
+      "luckyNumber": 2,
+      "secondDraw": [
+        8,
+        18,
+        27,
+        47,
         49
       ],
-      "jackpot": "3 000 000 €",
+      "jokerPlus": "5 878 796",
+      "codesGagnants": [
+        "Q 2237 0370",
+        "D 6395 6415",
+        "O 7786 7531",
+        "M 5784 1443",
+        "M 6543 7186",
+        "P 6415 3843",
+        "T 0431 7796",
+        "G 6612 6713",
+        "V 5997 3572",
+        "O 7839 9853"
+      ],
+      "lotoType": "loto",
+      "jackpot": "2 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "2 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "3",
+          "amount": "47 295 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
+          "combination": "4 numéros + numéro chance",
           "winners": "20",
-          "amount": "2 098,60 €"
+          "amount": "1 731,50 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "225",
+          "amount": "555,10 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 266",
+          "amount": "58,90 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "11 395",
+          "amount": "23,50 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "16 908",
+          "amount": "12,30 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "168 868",
+          "amount": "4,80 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "234 432",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "0",
+          "amount": "101 004 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "219",
+          "amount": "461,10 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "8 867",
+          "amount": "29,20 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "126 242",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-26",
+      "id": "loto-2025-08-23",
       "date": "2025-08-23",
-      "day": "Samedi",
-      "formattedDate": "23 août 2025",
+      "drawTime": "2025-08-23T20:55:00+02:00",
+      "formattedDate": "samedi 23 août 2025",
+      "day": "samedi",
+      "drawNumber": "25101",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
+        15,
+        20,
+        23,
+        30,
         49
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 10000000.0,
+      "luckyNumber": 9,
+      "secondDraw": [
+        4,
+        10,
+        26,
+        33,
+        45
+      ],
+      "jokerPlus": "6 742 792",
+      "codesGagnants": [
+        "O 5712 4808",
+        "D 7114 1841",
+        "J 1563 5470",
+        "L 6529 5804",
+        "L 3920 5737",
+        "F 6274 5144",
+        "D 7679 7164",
+        "H 6935 7202",
+        "B 1183 3297",
+        "V 4381 9295"
+      ],
+      "lotoType": "loto",
+      "jackpot": "10 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
-          "winners": "0",
-          "amount": "Non disponible"
+          "combination": "5 numéros + numéro chance",
+          "winners": "1",
+          "amount": "10 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "3",
+          "amount": "84 470,60 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "67",
+          "amount": "923,10 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "608",
+          "amount": "366,90 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "2 899",
+          "amount": "45,90 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "25 642",
+          "amount": "18,70 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "40 131",
+          "amount": "9,20 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "349 134",
+          "amount": "4,20 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "526 290",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "6",
+          "amount": "30 376 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "388",
+          "amount": "491,40 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "14 941",
+          "amount": "32,80 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "217 755",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-27",
+      "id": "loto-2025-08-20",
       "date": "2025-08-20",
-      "day": "Mercredi",
-      "formattedDate": "20 août 2025",
+      "drawTime": "2025-08-20T20:55:00+02:00",
+      "formattedDate": "mercredi 20 août 2025",
+      "day": "mercredi",
+      "drawNumber": "25100",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        1,
+        2,
+        27,
+        36,
+        40
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 9000000.0,
+      "luckyNumber": 7,
+      "secondDraw": [
+        1,
+        12,
+        14,
+        19,
+        43
+      ],
+      "jokerPlus": "8 564 710",
+      "codesGagnants": [
+        "D 4545 8377",
+        "M 2954 6852",
+        "S 7923 2321",
+        "A 8630 2066",
+        "S 2180 2034",
+        "U 7822 7236",
+        "H 1466 8978",
+        "T 8457 3639",
+        "Q 8740 8655",
+        "L 0854 6077"
+      ],
+      "lotoType": "loto",
+      "jackpot": "9 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "9 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "0",
+          "amount": "167 407,80 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "35",
+          "amount": "5 950,50 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "255",
+          "amount": "577,90 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 845",
+          "amount": "47,70 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "12 557",
+          "amount": "25,20 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "32 599",
+          "amount": "7,50 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "212 321",
+          "amount": "4,50 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "523 501",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "2",
+          "amount": "68 058 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "245",
+          "amount": "502,40 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "13 020",
+          "amount": "24,30 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "185 593",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-28",
+      "id": "loto-2025-08-18",
       "date": "2025-08-18",
-      "day": "Lundi",
-      "formattedDate": "18 août 2025",
+      "drawTime": "2025-08-18T20:55:00+02:00",
+      "formattedDate": "lundi 18 août 2025",
+      "day": "lundi",
+      "drawNumber": "25099",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        2,
+        8,
+        21,
+        26,
+        27
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 8000000.0,
+      "luckyNumber": 6,
+      "secondDraw": [
+        14,
+        22,
+        36,
+        43,
+        46
+      ],
+      "jokerPlus": "3 469 760",
+      "codesGagnants": [
+        "N 9097 3391",
+        "L 6298 2618",
+        "B 0167 0864",
+        "M 2440 5275",
+        "O 1431 2287",
+        "S 2114 5928",
+        "B 2889 8995",
+        "E 4588 4445",
+        "T 4308 8891",
+        "E 3207 8529"
+      ],
+      "lotoType": "loto",
+      "jackpot": "8 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "8 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "2",
+          "amount": "76 845 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "52",
+          "amount": "721,30 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "519",
+          "amount": "260,60 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 850",
+          "amount": "43,70 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "18 197",
+          "amount": "15,90 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "24 121",
+          "amount": "9,30 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "232 416",
+          "amount": "3,80 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "273 277",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "2",
+          "amount": "54 929 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "161",
+          "amount": "824,70 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "7 508",
+          "amount": "45,40 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "110 009",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-29",
+      "id": "loto-2025-08-16",
       "date": "2025-08-16",
-      "day": "Samedi",
-      "formattedDate": "16 août 2025",
+      "drawTime": "2025-08-16T20:55:00+02:00",
+      "formattedDate": "samedi 16 août 2025",
+      "day": "samedi",
+      "drawNumber": "25098",
       "numbers": [
         4,
-        29,
+        5,
+        18,
         31,
-        39,
-        49
+        45
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 7000000.0,
+      "luckyNumber": 7,
+      "secondDraw": [
+        4,
+        10,
+        25,
+        40,
+        47
+      ],
+      "jokerPlus": "4 938 039",
+      "codesGagnants": [
+        "Q 6285 6789",
+        "W 8214 1187",
+        "J 1274 0008",
+        "A 1443 5921",
+        "U 0961 6995",
+        "J 2946 3941",
+        "M 8582 1842",
+        "R 5744 7974",
+        "M 7805 1096",
+        "R 9544 2945"
+      ],
+      "lotoType": "loto",
+      "jackpot": "7 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "7 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "2",
+          "amount": "99 349,10 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "71",
+          "amount": "683 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "458",
+          "amount": "381,90 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "3 126",
+          "amount": "33,40 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "20 738",
+          "amount": "18,10 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "47 393",
+          "amount": "6,10 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "300 989",
+          "amount": "3,80 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "621 962",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "165 805 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "281",
+          "amount": "632,80 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "12 943",
+          "amount": "35,30 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "192 900",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-30",
+      "id": "loto-2025-08-13",
       "date": "2025-08-13",
-      "day": "Mercredi",
-      "formattedDate": "13 août 2025",
+      "drawTime": "2025-08-13T20:55:00+02:00",
+      "formattedDate": "mercredi 13 août 2025",
+      "day": "mercredi",
+      "drawNumber": "25097",
       "numbers": [
-        4,
-        29,
+        9,
         31,
-        39,
-        49
+        36,
+        42,
+        47
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 6000000.0,
+      "luckyNumber": 1,
+      "secondDraw": [
+        27,
+        38,
+        41,
+        42,
+        45
+      ],
+      "jokerPlus": "5 676 675",
+      "codesGagnants": [
+        "R 4283 7776",
+        "H 1374 2898",
+        "Q 3477 0835",
+        "I 1935 5215",
+        "I 2728 9196",
+        "Q 6352 5889",
+        "H 4312 9786",
+        "I 8928 8146",
+        "Q 9945 1251",
+        "I 6489 2689"
+      ],
+      "lotoType": "loto",
+      "jackpot": "6 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "6 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "190 993,60 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "18",
+          "amount": "2 589,80 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "250",
+          "amount": "672,50 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 009",
+          "amount": "99,50 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "12 158",
+          "amount": "29,70 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "16 215",
+          "amount": "17,30 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "196 968",
+          "amount": "5,60 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "265 084",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "127 058 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "187",
+          "amount": "815,10 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "9 099",
+          "amount": "43 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "128 576",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-31",
+      "id": "loto-2025-08-11",
       "date": "2025-08-11",
-      "day": "Lundi",
-      "formattedDate": "11 août 2025",
+      "drawTime": "2025-08-11T20:55:00+02:00",
+      "formattedDate": "lundi 11 août 2025",
+      "day": "lundi",
+      "drawNumber": "25096",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        1,
+        10,
+        30,
+        40,
+        44
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 5000000.0,
+      "luckyNumber": 2,
+      "secondDraw": [
+        27,
+        32,
+        33,
+        35,
+        40
+      ],
+      "jokerPlus": "7 268 243",
+      "codesGagnants": [
+        "U 6205 1693",
+        "P 1077 7837",
+        "J 0904 9757",
+        "A 9290 9549",
+        "L 9936 2601",
+        "M 4149 8558",
+        "M 4454 4038",
+        "W 8052 8383",
+        "I 4135 1697",
+        "S 6885 7267"
+      ],
+      "lotoType": "loto",
+      "jackpot": "5 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "5 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "150 677,90 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "35",
+          "amount": "1 050,70 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "419",
+          "amount": "316,50 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 144",
+          "amount": "69,20 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "12 802",
+          "amount": "22,20 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "16 688",
+          "amount": "13,20 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "178 563",
+          "amount": "4,90 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "248 142",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "0",
+          "amount": "107 070 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "154",
+          "amount": "871,50 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "6 584",
+          "amount": "52,40 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "101 507",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-32",
+      "id": "loto-2025-08-09",
       "date": "2025-08-09",
-      "day": "Samedi",
-      "formattedDate": "9 août 2025",
+      "drawTime": "2025-08-09T20:55:00+02:00",
+      "formattedDate": "samedi 9 août 2025",
+      "day": "samedi",
+      "drawNumber": "25095",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        6,
+        15,
+        19,
+        21,
+        38
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 4000000.0,
+      "luckyNumber": 8,
+      "secondDraw": [
+        12,
+        15,
+        24,
+        30,
+        43
+      ],
+      "jokerPlus": "0 243 872",
+      "codesGagnants": [
+        "T 1592 8445",
+        "S 3318 7111",
+        "N 3048 9209",
+        "A 2501 6768",
+        "F 4641 6140",
+        "P 9839 0408",
+        "P 6880 6437",
+        "K 3996 3281",
+        "A 0926 2312",
+        "P 6233 8943"
+      ],
+      "lotoType": "loto",
+      "jackpot": "4 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "4 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "227 916,10 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "78",
+          "amount": "713,10 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "542",
+          "amount": "370,10 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "2 818",
+          "amount": "42,50 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "25 369",
+          "amount": "17 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "38 760",
+          "amount": "8,60 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "339 627",
+          "amount": "3,90 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "466 993",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "168 776 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "385",
+          "amount": "416,20 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "16 677",
+          "amount": "24,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "221 064",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-33",
+      "id": "loto-2025-08-06",
       "date": "2025-08-06",
-      "day": "Mercredi",
-      "formattedDate": "6 août 2025",
+      "drawTime": "2025-08-06T20:55:00+02:00",
+      "formattedDate": "mercredi 6 août 2025",
+      "day": "mercredi",
+      "drawNumber": "25094",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
+        5,
+        18,
+        19,
+        23,
         49
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 3000000.0,
+      "luckyNumber": 8,
+      "secondDraw": [
+        6,
+        26,
+        27,
+        34,
+        42
+      ],
+      "jokerPlus": "2 553 353",
+      "codesGagnants": [
+        "K 2995 8206",
+        "G 2882 2352",
+        "E 2597 3669",
+        "F 9494 5348",
+        "C 5276 9908",
+        "B 9952 1685",
+        "G 9033 9400",
+        "G 9506 1387",
+        "R 0883 7699",
+        "O 8149 0736"
+      ],
+      "lotoType": "loto",
+      "jackpot": "3 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "3 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "165 158,50 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "50",
+          "amount": "806,20 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "511",
+          "amount": "284,50 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "2 339",
+          "amount": "37,10 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "19 742",
+          "amount": "15,80 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "29 656",
+          "amount": "8,20 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "258 659",
+          "amount": "3,70 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "334 189",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "0",
+          "amount": "121 865 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "224",
+          "amount": "584,40 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "9 513",
+          "amount": "35,30 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "141 528",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-34",
+      "id": "loto-2025-08-04",
       "date": "2025-08-04",
-      "day": "Lundi",
-      "formattedDate": "4 août 2025",
+      "drawTime": "2025-08-04T20:55:00+02:00",
+      "formattedDate": "lundi 4 août 2025",
+      "day": "lundi",
+      "drawNumber": "25093",
       "numbers": [
-        4,
-        29,
+        6,
+        10,
         31,
-        39,
-        49
+        34,
+        43
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 2000000.0,
+      "luckyNumber": 5,
+      "secondDraw": [
+        2,
+        8,
+        16,
+        27,
+        37
+      ],
+      "jokerPlus": "5 538 533",
+      "codesGagnants": [
+        "O 9420 9727",
+        "U 0593 5516",
+        "V 0898 4070",
+        "F 0710 3177",
+        "T 8465 1767",
+        "T 7324 4817",
+        "I 2852 4855",
+        "O 3143 0384",
+        "H 1844 0855",
+        "U 7573 2951"
+      ],
+      "lotoType": "loto",
+      "jackpot": "2 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "2 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "0",
+          "amount": "127 705,20 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "26",
+          "amount": "6 110,50 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "221",
+          "amount": "508,70 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 236",
+          "amount": "54,30 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "10 447",
+          "amount": "23,10 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "20 623",
+          "amount": "9,10 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "164 261",
+          "amount": "4,50 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "308 342",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "102 053 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "232",
+          "amount": "423,10 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "9 735",
+          "amount": "25,90 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "132 183",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-35",
+      "id": "loto-2025-08-02",
       "date": "2025-08-02",
-      "day": "Samedi",
-      "formattedDate": "2 août 2025",
+      "drawTime": "2025-08-02T20:55:00+02:00",
+      "formattedDate": "samedi 2 août 2025",
+      "day": "samedi",
+      "drawNumber": "25092",
       "numbers": [
-        4,
-        29,
+        14,
+        15,
+        22,
         31,
-        39,
-        49
+        48
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 3000000.0,
+      "luckyNumber": 2,
+      "secondDraw": [
+        5,
+        42,
+        43,
+        44,
+        47
+      ],
+      "jokerPlus": "6 183 416",
+      "codesGagnants": [
+        "G 0389 4563",
+        "O 5327 7318",
+        "I 2201 3220",
+        "L 5802 2386",
+        "P 9085 8389",
+        "A 7230 9232",
+        "I 0359 3549",
+        "G 9342 9775",
+        "L 8762 8360",
+        "C 8389 4635"
+      ],
+      "lotoType": "loto",
+      "jackpot": "3 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
-          "winners": "0",
-          "amount": "Non disponible"
+          "combination": "5 numéros + numéro chance",
+          "winners": "1",
+          "amount": "3 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "240 614,20 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "52",
+          "amount": "1 129,30 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "502",
+          "amount": "421,90 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "2 017",
+          "amount": "62,70 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "21 855",
+          "amount": "20,80 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "29 287",
+          "amount": "12 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "309 549",
+          "amount": "4,50 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "400 090",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "0",
+          "amount": "169 626 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "214",
+          "amount": "969,50 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "10 735",
+          "amount": "49,60 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "166 938",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-36",
+      "id": "loto-2025-07-30",
       "date": "2025-07-30",
-      "day": "Mercredi",
-      "formattedDate": "30 juillet 2025",
+      "drawTime": "2025-07-30T20:55:00+02:00",
+      "formattedDate": "mercredi 30 juillet 2025",
+      "day": "mercredi",
+      "drawNumber": "25091",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        3,
+        13,
+        20,
+        37,
+        41
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 2000000.0,
+      "luckyNumber": 3,
+      "secondDraw": [
+        17,
+        18,
+        24,
+        35,
+        43
+      ],
+      "jokerPlus": "8 168 148",
+      "codesGagnants": [
+        "I 0042 4433",
+        "S 4966 1983",
+        "F 6193 9784",
+        "J 7777 7859",
+        "K 2979 1957",
+        "B 7266 8425",
+        "C 0247 9370",
+        "O 4207 7100",
+        "B 5331 4726",
+        "M 5092 1896"
+      ],
+      "lotoType": "loto",
+      "jackpot": "2 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "2 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "2",
+          "amount": "79 683,50 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "53",
+          "amount": "733,90 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "285",
+          "amount": "492,20 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 988",
+          "amount": "42,10 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "14 616",
+          "amount": "20,60 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "27 773",
+          "amount": "8,40 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "213 204",
+          "amount": "4,30 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "330 356",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "0",
+          "amount": "118 178 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "195",
+          "amount": "658,40 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "8 990",
+          "amount": "36,70 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "135 540",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-37",
+      "id": "loto-2025-07-28",
       "date": "2025-07-28",
-      "day": "Lundi",
-      "formattedDate": "28 juillet 2025",
+      "drawTime": "2025-07-28T20:55:00+02:00",
+      "formattedDate": "lundi 28 juillet 2025",
+      "day": "lundi",
+      "drawNumber": "25090",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        6,
+        22,
+        25,
+        27,
+        30
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 16000000.0,
+      "luckyNumber": 5,
+      "secondDraw": [
+        2,
+        14,
+        17,
+        29,
+        34
+      ],
+      "jokerPlus": "0 187 346",
+      "codesGagnants": [
+        "J 9501 8002",
+        "Q 0173 1612",
+        "G 6451 5271",
+        "E 8679 4848",
+        "I 4350 1485",
+        "D 9327 8432",
+        "I 9607 2780",
+        "Q 7744 2433",
+        "P 3810 9211",
+        "E 1444 3228"
+      ],
+      "lotoType": "loto",
+      "jackpot": "16 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
-          "winners": "0",
-          "amount": "Non disponible"
+          "combination": "5 numéros + numéro chance",
+          "winners": "1",
+          "amount": "16 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "166 117,10 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "72",
+          "amount": "563,10 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "509",
+          "amount": "287,30 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "2 753",
+          "amount": "31,70 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "19 880",
+          "amount": "15,80 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "34 847",
+          "amount": "7 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "258 712",
+          "amount": "3,70 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "408 685",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "3",
+          "amount": "41 666 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "252",
+          "amount": "510,40 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "10 819",
+          "amount": "30,50 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "151 908",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-38",
+      "id": "loto-2025-07-26",
       "date": "2025-07-26",
-      "day": "Samedi",
-      "formattedDate": "26 juillet 2025",
+      "drawTime": "2025-07-26T20:55:00+02:00",
+      "formattedDate": "samedi 26 juillet 2025",
+      "day": "samedi",
+      "drawNumber": "25089",
       "numbers": [
-        4,
-        29,
-        31,
-        39,
-        49
+        1,
+        9,
+        19,
+        32,
+        44
       ],
-      "jackpot": "3 000 000 €",
+      "jackpotAmount": 15000000.0,
+      "luckyNumber": 3,
+      "secondDraw": [
+        14,
+        15,
+        42,
+        44,
+        48
+      ],
+      "jokerPlus": "1 834 297",
+      "codesGagnants": [
+        "B 3138 0506",
+        "G 4931 4359",
+        "A 9006 3676",
+        "G 3985 8122",
+        "E 3432 5276",
+        "V 0268 5163",
+        "O 8373 0550",
+        "U 0291 5965",
+        "S 9420 1135",
+        "D 2341 3851"
+      ],
+      "lotoType": "loto",
+      "jackpot": "15 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "15 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
-          "winners": "1",
-          "amount": "171 963,40 €"
+          "winners": "2",
+          "amount": "128 469,20 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "79",
+          "amount": "793,80 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "617",
+          "amount": "366,50 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "2 939",
+          "amount": "45,90 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "26 155",
+          "amount": "18,50 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "42 556",
+          "amount": "8,80 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "357 607",
+          "amount": "4,10 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "536 135",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "186 272 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "254",
+          "amount": "846,20 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "12 480",
+          "amount": "44,20 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "198 674",
+          "amount": "3 €"
+        }
+      ]
     },
     {
-      "id": "loto-39",
+      "id": "loto-2025-07-23",
       "date": "2025-07-23",
-      "day": "Mercredi",
-      "formattedDate": "23 juillet 2025",
+      "drawTime": "2025-07-23T20:55:00+02:00",
+      "formattedDate": "mercredi 23 juillet 2025",
+      "day": "mercredi",
+      "drawNumber": "25088",
       "numbers": [
-        4,
+        5,
+        18,
         29,
-        31,
-        39,
+        30,
+        43
+      ],
+      "jackpotAmount": 14000000.0,
+      "luckyNumber": 2,
+      "secondDraw": [
+        2,
+        6,
+        27,
+        41,
         49
       ],
-      "jackpot": "3 000 000 €",
+      "jokerPlus": "4 511 951",
+      "codesGagnants": [
+        "P 2149 4921",
+        "M 5652 9238",
+        "I 8128 6024",
+        "C 0899 3362",
+        "A 3102 3311",
+        "B 0310 3182",
+        "P 5478 3708",
+        "Q 3096 8428",
+        "Q 9835 0083",
+        "I 4682 8800"
+      ],
+      "lotoType": "loto",
+      "jackpot": "14 millions €",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "5 numéros + N° Chance",
+          "combination": "5 numéros + numéro chance",
           "winners": "0",
-          "amount": "Non disponible"
+          "amount": "14 000 000 €"
         },
         {
           "rank": 2,
           "combination": "5 numéros",
           "winners": "1",
-          "amount": "171 963,40 €"
+          "amount": "203 018,20 €"
         },
         {
           "rank": 3,
-          "combination": "4 numéros + N° Chance",
-          "winners": "20",
-          "amount": "2 098,60 €"
+          "combination": "4 numéros + numéro chance",
+          "winners": "35",
+          "amount": "1 415,70 €"
         },
         {
           "rank": 4,
           "combination": "4 numéros",
-          "winners": "214",
-          "amount": "707,40 €"
+          "winners": "418",
+          "amount": "427,50 €"
         },
         {
           "rank": 5,
-          "combination": "3 numéros + N° Chance",
-          "winners": "1 035",
-          "amount": "87,40 €"
+          "combination": "3 numéros + numéro chance",
+          "winners": "1 695",
+          "amount": "63 €"
         },
         {
           "rank": 6,
           "combination": "3 numéros",
-          "winners": "12 195",
-          "amount": "26,60 €"
+          "winners": "18 593",
+          "amount": "20,60 €"
         },
         {
           "rank": 7,
-          "combination": "2 numéros + N° Chance",
-          "winners": "15 078",
-          "amount": "16,70 €"
+          "combination": "2 numéros + numéro chance",
+          "winners": "24 801",
+          "amount": "12 €"
         },
         {
           "rank": 8,
           "combination": "2 numéros",
-          "winners": "181 939",
-          "amount": "5,50 €"
+          "winners": "262 882",
+          "amount": "4,50 €"
+        },
+        {
+          "rank": 9,
+          "combination": "0 ou 1 numéro + numéro chance",
+          "winners": "334 790",
+          "amount": "2,20 €"
         }
       ],
-      "luckyNumber": 1
+      "secondDrawDistribution": [
+        {
+          "rank": 1,
+          "combination": "5 numéros",
+          "winners": "1",
+          "amount": "137 094 €"
+        },
+        {
+          "rank": 2,
+          "combination": "4 numéros",
+          "winners": "210",
+          "amount": "690,10 €"
+        },
+        {
+          "rank": 3,
+          "combination": "3 numéros",
+          "winners": "10 479",
+          "amount": "35,50 €"
+        },
+        {
+          "rank": 4,
+          "combination": "2 numéros",
+          "winners": "162 011",
+          "amount": "3 €"
+        }
+      ]
     }
   ],
   "eurodreams": [
@@ -12709,10 +13914,12 @@
       ]
     },
     {
-      "id": "ed-0",
+      "id": "ed-2025-10-20",
       "date": "2025-10-20",
-      "day": "Lundi",
-      "formattedDate": "20 octobre 2025",
+      "drawTime": "2025-10-20T21:00:00+02:00",
+      "formattedDate": "lundi 20 octobre 2025",
+      "day": "lundi",
+      "drawNumber": "25084",
       "numbers": [
         8,
         18,
@@ -12721,51 +13928,61 @@
         32,
         33
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "54",
+          "winnersEurope": "155",
+          "amount": "471,70 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 717",
+          "winnersEurope": "5 942",
+          "amount": "34,40 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "24 983",
+          "winnersEurope": "82 680",
+          "amount": "5,20 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "148 527",
+          "winnersEurope": "479 532",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-1",
+      "id": "ed-2025-10-16",
       "date": "2025-10-16",
-      "day": "Jeudi",
-      "formattedDate": "16 octobre 2025",
+      "drawTime": "2025-10-16T21:00:00+02:00",
+      "formattedDate": "jeudi 16 octobre 2025",
+      "day": "jeudi",
+      "drawNumber": "25083",
       "numbers": [
         1,
         4,
@@ -12774,51 +13991,61 @@
         34,
         38
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 5,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "111",
-          "amount": "43"
+          "combination": "5 numéros",
+          "winners": "43",
+          "winnersEurope": "111",
+          "amount": "758,70 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 581",
-          "amount": "1 965"
+          "combination": "4 numéros",
+          "winners": "1 965",
+          "winnersEurope": "5 581",
+          "amount": "42,30 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "86 445",
-          "amount": "30 739"
+          "combination": "3 numéros",
+          "winners": "30 739",
+          "winnersEurope": "86 445",
+          "amount": "5,70 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "527 003",
-          "amount": "185 117"
+          "combination": "2 numéros",
+          "winners": "185 117",
+          "winnersEurope": "527 003",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-2",
+      "id": "ed-2025-10-13",
       "date": "2025-10-13",
-      "day": "Lundi",
-      "formattedDate": "13 octobre 2025",
+      "drawTime": "2025-10-13T21:00:00+02:00",
+      "formattedDate": "lundi 13 octobre 2025",
+      "day": "lundi",
+      "drawNumber": "25082",
       "numbers": [
         1,
         5,
@@ -12827,51 +14054,61 @@
         22,
         25
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "168",
-          "amount": "75"
+          "combination": "5 numéros",
+          "winners": "75",
+          "winnersEurope": "168",
+          "amount": "412 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "6 784",
-          "amount": "2 174"
+          "combination": "4 numéros",
+          "winners": "2 174",
+          "winnersEurope": "6 784",
+          "amount": "28,60 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "88 839",
-          "amount": "27 667"
+          "combination": "3 numéros",
+          "winners": "27 667",
+          "winnersEurope": "88 839",
+          "amount": "4,50 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "493 128",
-          "amount": "148 823"
+          "combination": "2 numéros",
+          "winners": "148 823",
+          "winnersEurope": "493 128",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-3",
+      "id": "ed-2025-10-09",
       "date": "2025-10-09",
-      "day": "Jeudi",
-      "formattedDate": "9 octobre 2025",
+      "drawTime": "2025-10-09T21:00:00+02:00",
+      "formattedDate": "jeudi 9 octobre 2025",
+      "day": "jeudi",
+      "drawNumber": "25081",
       "numbers": [
         1,
         3,
@@ -12880,51 +14117,61 @@
         20,
         30
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 3,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "171",
-          "amount": "65"
+          "combination": "5 numéros",
+          "winners": "65",
+          "winnersEurope": "171",
+          "amount": "474,50 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "7 097",
-          "amount": "2 382"
+          "combination": "4 numéros",
+          "winners": "2 382",
+          "winnersEurope": "7 097",
+          "amount": "32 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "99 403",
-          "amount": "34 108"
+          "combination": "3 numéros",
+          "winners": "34 108",
+          "winnersEurope": "99 403",
+          "amount": "4,80 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "564 313",
-          "amount": "190 624"
+          "combination": "2 numéros",
+          "winners": "190 624",
+          "winnersEurope": "564 313",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-4",
+      "id": "ed-2025-10-06",
       "date": "2025-10-06",
-      "day": "Lundi",
-      "formattedDate": "6 octobre 2025",
+      "drawTime": "2025-10-06T21:00:00+02:00",
+      "formattedDate": "lundi 6 octobre 2025",
+      "day": "lundi",
+      "drawNumber": "25080",
       "numbers": [
         18,
         26,
@@ -12933,51 +14180,61 @@
         36,
         40
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 4,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "125",
-          "amount": "25"
+          "combination": "5 numéros",
+          "winners": "25",
+          "winnersEurope": "125",
+          "amount": "668,10 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 229",
-          "amount": "1 393"
+          "combination": "4 numéros",
+          "winners": "1 393",
+          "winnersEurope": "5 229",
+          "amount": "44,70 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "78 322",
-          "amount": "21 346"
+          "combination": "3 numéros",
+          "winners": "21 346",
+          "winnersEurope": "78 322",
+          "amount": "6,20 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "478 791",
-          "amount": "132 658"
+          "combination": "2 numéros",
+          "winners": "132 658",
+          "winnersEurope": "478 791",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-5",
+      "id": "ed-2025-10-02",
       "date": "2025-10-02",
-      "day": "Jeudi",
-      "formattedDate": "2 octobre 2025",
+      "drawTime": "2025-10-02T21:00:00+02:00",
+      "formattedDate": "jeudi 2 octobre 2025",
+      "day": "jeudi",
+      "drawNumber": "25079",
       "numbers": [
         4,
         7,
@@ -12986,51 +14243,61 @@
         22,
         29
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
-          "winners": "2",
-          "amount": "1"
+          "combination": "6 numéros",
+          "winners": "1",
+          "winnersEurope": "2",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "244",
-          "amount": "90"
+          "combination": "5 numéros",
+          "winners": "90",
+          "winnersEurope": "244",
+          "amount": "363,20 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "10 369",
-          "amount": "4 058"
+          "combination": "4 numéros",
+          "winners": "4 058",
+          "winnersEurope": "10 369",
+          "amount": "23,90 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "132 483",
-          "amount": "52 436"
+          "combination": "3 numéros",
+          "winners": "52 436",
+          "winnersEurope": "132 483",
+          "amount": "3,90 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "721 389",
-          "amount": "284 072"
+          "combination": "2 numéros",
+          "winners": "284 072",
+          "winnersEurope": "721 389",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-6",
+      "id": "ed-2025-09-29",
       "date": "2025-09-29",
-      "day": "Lundi",
-      "formattedDate": "29 septembre 2025",
+      "drawTime": "2025-09-29T21:00:00+02:00",
+      "formattedDate": "lundi 29 septembre 2025",
+      "day": "lundi",
+      "drawNumber": "25078",
       "numbers": [
         9,
         10,
@@ -13039,51 +14306,61 @@
         35,
         40
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 2,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
-          "winners": "1",
-          "amount": "0"
+          "combination": "6 numéros",
+          "winners": "0",
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "90",
-          "amount": "24"
+          "combination": "5 numéros",
+          "winners": "24",
+          "winnersEurope": "90",
+          "amount": "132,30 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "4 303",
-          "amount": "1 062"
+          "combination": "4 numéros",
+          "winners": "1 062",
+          "winnersEurope": "4 303",
+          "amount": "44,50 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "65 046",
-          "amount": "16 398"
+          "combination": "3 numéros",
+          "winners": "16 398",
+          "winnersEurope": "65 046",
+          "amount": "5,40 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "380 900",
-          "amount": "98 692"
+          "combination": "2 numéros",
+          "winners": "98 692",
+          "winnersEurope": "380 900",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-7",
+      "id": "ed-2025-09-25",
       "date": "2025-09-25",
-      "day": "Jeudi",
-      "formattedDate": "25 septembre 2025",
+      "drawTime": "2025-09-25T21:00:00+02:00",
+      "formattedDate": "jeudi 25 septembre 2025",
+      "day": "jeudi",
+      "drawNumber": "25077",
       "numbers": [
         5,
         9,
@@ -13092,51 +14369,61 @@
         28,
         30
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 2,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "1",
-          "amount": "1"
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "164",
-          "amount": "68"
+          "combination": "5 numéros",
+          "winners": "68",
+          "winnersEurope": "164",
+          "amount": "66,20 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 292",
-          "amount": "1 805"
+          "combination": "4 numéros",
+          "winners": "1 805",
+          "winnersEurope": "5 292",
+          "amount": "32,90 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "71 309",
-          "amount": "22 921"
+          "combination": "3 numéros",
+          "winners": "22 921",
+          "winnersEurope": "71 309",
+          "amount": "4,50 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "391 390",
-          "amount": "119 713"
+          "combination": "2 numéros",
+          "winners": "119 713",
+          "winnersEurope": "391 390",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-8",
+      "id": "ed-2025-09-22",
       "date": "2025-09-22",
-      "day": "Lundi",
-      "formattedDate": "22 septembre 2025",
+      "drawTime": "2025-09-22T21:00:00+02:00",
+      "formattedDate": "lundi 22 septembre 2025",
+      "day": "lundi",
+      "drawNumber": "25076",
       "numbers": [
         2,
         5,
@@ -13145,51 +14432,61 @@
         26,
         38
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 5,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "133",
-          "amount": "41"
+          "combination": "5 numéros",
+          "winners": "41",
+          "winnersEurope": "133",
+          "amount": "80,50 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "4 374",
-          "amount": "1 213"
+          "combination": "4 numéros",
+          "winners": "1 213",
+          "winnersEurope": "4 374",
+          "amount": "39,30 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "60 646",
-          "amount": "16 986"
+          "combination": "3 numéros",
+          "winners": "16 986",
+          "winnersEurope": "60 646",
+          "amount": "5,20 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "352 287",
-          "amount": "97 483"
+          "combination": "2 numéros",
+          "winners": "97 483",
+          "winnersEurope": "352 287",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-9",
+      "id": "ed-2025-09-18",
       "date": "2025-09-18",
-      "day": "Jeudi",
-      "formattedDate": "18 septembre 2025",
+      "drawTime": "2025-09-18T21:00:00+02:00",
+      "formattedDate": "jeudi 18 septembre 2025",
+      "day": "jeudi",
+      "drawNumber": "25075",
       "numbers": [
         11,
         17,
@@ -13198,51 +14495,61 @@
         36,
         37
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "1",
-          "amount": "1"
+          "winnersEurope": "1",
+          "amount": "20 000 € par mois pendant 30 ans"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "88",
-          "amount": "25"
+          "combination": "5 numéros",
+          "winners": "25",
+          "winnersEurope": "88",
+          "amount": "149,30 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "3 933",
-          "amount": "1 075"
+          "combination": "4 numéros",
+          "winners": "1 075",
+          "winnersEurope": "3 933",
+          "amount": "53,70 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "56 861",
-          "amount": "16 384"
+          "combination": "3 numéros",
+          "winners": "16 384",
+          "winnersEurope": "56 861",
+          "amount": "6,90 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "347 635",
-          "amount": "101 098"
+          "combination": "2 numéros",
+          "winners": "101 098",
+          "winnersEurope": "347 635",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-10",
+      "id": "ed-2025-09-15",
       "date": "2025-09-15",
-      "day": "Lundi",
-      "formattedDate": "15 septembre 2025",
+      "drawTime": "2025-09-15T21:00:00+02:00",
+      "formattedDate": "lundi 15 septembre 2025",
+      "day": "lundi",
+      "drawNumber": "25074",
       "numbers": [
         4,
         7,
@@ -13251,51 +14558,61 @@
         33,
         35
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "126",
-          "amount": "35"
+          "combination": "5 numéros",
+          "winners": "35",
+          "winnersEurope": "126",
+          "amount": "83,70 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 131",
-          "amount": "1 382"
+          "combination": "4 numéros",
+          "winners": "1 382",
+          "winnersEurope": "5 131",
+          "amount": "33 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "67 555",
-          "amount": "19 276"
+          "combination": "3 numéros",
+          "winners": "19 276",
+          "winnersEurope": "67 555",
+          "amount": "4,60 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "374 382",
-          "amount": "107 824"
+          "combination": "2 numéros",
+          "winners": "107 824",
+          "winnersEurope": "374 382",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-11",
+      "id": "ed-2025-09-11",
       "date": "2025-09-11",
-      "day": "Jeudi",
-      "formattedDate": "11 septembre 2025",
+      "drawTime": "2025-09-11T21:00:00+02:00",
+      "formattedDate": "jeudi 11 septembre 2025",
+      "day": "jeudi",
+      "drawNumber": "25073",
       "numbers": [
         1,
         9,
@@ -13304,51 +14621,61 @@
         19,
         37
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 2,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
-          "winners": "1",
-          "amount": "0"
+          "combination": "6 numéros",
+          "winners": "0",
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "91",
-          "amount": "31"
+          "combination": "5 numéros",
+          "winners": "31",
+          "winnersEurope": "91",
+          "amount": "128,20 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "4 544",
-          "amount": "1 381"
+          "combination": "4 numéros",
+          "winners": "1 381",
+          "winnersEurope": "4 544",
+          "amount": "41,20 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "68 755",
-          "amount": "21 226"
+          "combination": "3 numéros",
+          "winners": "21 226",
+          "winnersEurope": "68 755",
+          "amount": "5 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "400 712",
-          "amount": "125 191"
+          "combination": "2 numéros",
+          "winners": "125 191",
+          "winnersEurope": "400 712",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-12",
+      "id": "ed-2025-09-08",
       "date": "2025-09-08",
-      "day": "Lundi",
-      "formattedDate": "8 septembre 2025",
+      "drawTime": "2025-09-08T21:00:00+02:00",
+      "formattedDate": "lundi 8 septembre 2025",
+      "day": "lundi",
+      "drawNumber": "25072",
       "numbers": [
         1,
         3,
@@ -13357,51 +14684,61 @@
         20,
         31
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 5,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
-          "winners": "2",
-          "amount": "1"
+          "combination": "6 numéros + dream number",
+          "winners": "1",
+          "winnersEurope": "2",
+          "amount": "20 000 € par mois pendant 30 ans"
         },
         {
           "rank": 2,
-          "combination": "6",
-          "winners": "2",
-          "amount": "0"
+          "combination": "6 numéros",
+          "winners": "0",
+          "winnersEurope": "2",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "107",
-          "amount": "27"
+          "combination": "5 numéros",
+          "winners": "27",
+          "winnersEurope": "107",
+          "amount": "102,20 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "4 861",
-          "amount": "1 564"
+          "combination": "4 numéros",
+          "winners": "1 564",
+          "winnersEurope": "4 861",
+          "amount": "36,10 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "66 164",
-          "amount": "19 684"
+          "combination": "3 numéros",
+          "winners": "19 684",
+          "winnersEurope": "66 164",
+          "amount": "4,90 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "361 922",
-          "amount": "105 270"
+          "combination": "2 numéros",
+          "winners": "105 270",
+          "winnersEurope": "361 922",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-13",
+      "id": "ed-2025-09-04",
       "date": "2025-09-04",
-      "day": "Jeudi",
-      "formattedDate": "4 septembre 2025",
+      "drawTime": "2025-09-04T21:00:00+02:00",
+      "formattedDate": "jeudi 4 septembre 2025",
+      "day": "jeudi",
+      "drawNumber": "25071",
       "numbers": [
         10,
         14,
@@ -13410,51 +14747,61 @@
         37,
         40
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 4,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "104",
-          "amount": "26"
+          "combination": "5 numéros",
+          "winners": "26",
+          "winnersEurope": "104",
+          "amount": "116,70 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "4 427",
-          "amount": "1 264"
+          "combination": "4 numéros",
+          "winners": "1 264",
+          "winnersEurope": "4 427",
+          "amount": "44,10 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "66 359",
-          "amount": "20 329"
+          "combination": "3 numéros",
+          "winners": "20 329",
+          "winnersEurope": "66 359",
+          "amount": "5,40 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "395 476",
-          "amount": "124 825"
+          "combination": "2 numéros",
+          "winners": "124 825",
+          "winnersEurope": "395 476",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-14",
+      "id": "ed-2025-09-01",
       "date": "2025-09-01",
-      "day": "Lundi",
-      "formattedDate": "1 septembre 2025",
+      "drawTime": "2025-09-01T21:00:00+02:00",
+      "formattedDate": "lundi 1 septembre 2025",
+      "day": "lundi",
+      "drawNumber": "25070",
       "numbers": [
         6,
         22,
@@ -13463,626 +14810,744 @@
         32,
         33
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 4,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "80",
-          "amount": "12"
+          "combination": "5 numéros",
+          "winners": "12",
+          "winnersEurope": "80",
+          "amount": "162,80 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "3 587",
-          "amount": "1 071"
+          "combination": "4 numéros",
+          "winners": "1 071",
+          "winnersEurope": "3 587",
+          "amount": "58,40 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "56 673",
-          "amount": "16 955"
+          "combination": "3 numéros",
+          "winners": "16 955",
+          "winnersEurope": "56 673",
+          "amount": "6,80 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "360 811",
-          "amount": "109 724"
+          "combination": "2 numéros",
+          "winners": "109 724",
+          "winnersEurope": "360 811",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-15",
+      "id": "ed-2025-08-28",
       "date": "2025-08-28",
-      "day": "Jeudi",
-      "formattedDate": "28 août 2025",
+      "drawTime": "2025-08-28T21:00:00+02:00",
+      "formattedDate": "jeudi 28 août 2025",
+      "day": "jeudi",
+      "drawNumber": "25069",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
-        32,
-        33
+        6,
+        7,
+        11,
+        15,
+        16,
+        35
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 5,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "31",
+          "winnersEurope": "83",
+          "amount": "132,40 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 438",
+          "winnersEurope": "4 255",
+          "amount": "41,50 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "22 896",
+          "winnersEurope": "67 906",
+          "amount": "4,80 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "134 286",
+          "winnersEurope": "409 453",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-16",
+      "id": "ed-2025-08-25",
       "date": "2025-08-25",
-      "day": "Lundi",
-      "formattedDate": "25 août 2025",
+      "drawTime": "2025-08-25T21:00:00+02:00",
+      "formattedDate": "lundi 25 août 2025",
+      "day": "lundi",
+      "drawNumber": "25068",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
+        5,
+        6,
+        19,
         32,
-        33
+        35,
+        37
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "15",
+          "winnersEurope": "62",
+          "amount": "191,80 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "982",
+          "winnersEurope": "3 633",
+          "amount": "52,60 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "15 330",
+          "winnersEurope": "55 397",
+          "amount": "6,40 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "98 386",
+          "winnersEurope": "343 288",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-17",
+      "id": "ed-2025-08-21",
       "date": "2025-08-21",
-      "day": "Jeudi",
-      "formattedDate": "21 août 2025",
+      "drawTime": "2025-08-21T21:00:00+02:00",
+      "formattedDate": "jeudi 21 août 2025",
+      "day": "jeudi",
+      "drawNumber": "25067",
       "numbers": [
-        8,
-        18,
-        21,
+        4,
+        16,
+        17,
         25,
-        32,
-        33
+        29,
+        39
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 3,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "40",
+          "winnersEurope": "116",
+          "amount": "109,30 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 366",
+          "winnersEurope": "4 343",
+          "amount": "46,90 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "20 653",
+          "winnersEurope": "64 129",
+          "amount": "5,90 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "123 490",
+          "winnersEurope": "383 182",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-18",
+      "id": "ed-2025-08-18",
       "date": "2025-08-18",
-      "day": "Lundi",
-      "formattedDate": "18 août 2025",
+      "drawTime": "2025-08-18T21:00:00+02:00",
+      "formattedDate": "lundi 18 août 2025",
+      "day": "lundi",
+      "drawNumber": "25066",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
-        32,
-        33
+        1,
+        31,
+        33,
+        35,
+        36,
+        40
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 4,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "25",
+          "winnersEurope": "84",
+          "amount": "151,80 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "813",
+          "winnersEurope": "3 177",
+          "amount": "64,50 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "12 439",
+          "winnersEurope": "48 112",
+          "amount": "7,90 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "84 011",
+          "winnersEurope": "307 057",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-19",
+      "id": "ed-2025-08-14",
       "date": "2025-08-14",
-      "day": "Jeudi",
-      "formattedDate": "14 août 2025",
+      "drawTime": "2025-08-14T21:00:00+02:00",
+      "formattedDate": "jeudi 14 août 2025",
+      "day": "jeudi",
+      "drawNumber": "25065",
       "numbers": [
-        8,
-        18,
+        14,
+        15,
         21,
-        25,
+        22,
         32,
-        33
+        38
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "22",
+          "winnersEurope": "90",
+          "amount": "145,50 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 238",
+          "winnersEurope": "4 017",
+          "amount": "52,40 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "19 215",
+          "winnersEurope": "64 398",
+          "amount": "6 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "121 751",
+          "winnersEurope": "388 033",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-20",
+      "id": "ed-2025-08-11",
       "date": "2025-08-11",
-      "day": "Lundi",
-      "formattedDate": "11 août 2025",
+      "drawTime": "2025-08-11T21:00:00+02:00",
+      "formattedDate": "lundi 11 août 2025",
+      "day": "lundi",
+      "drawNumber": "25064",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
-        32,
-        33
+        10,
+        11,
+        15,
+        20,
+        27,
+        38
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 3,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "35",
+          "winnersEurope": "109",
+          "amount": "103 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 276",
+          "winnersEurope": "4 354",
+          "amount": "41,40 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "19 302",
+          "winnersEurope": "63 581",
+          "amount": "5,20 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "113 226",
+          "winnersEurope": "370 978",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-21",
+      "id": "ed-2025-08-07",
       "date": "2025-08-07",
-      "day": "Jeudi",
-      "formattedDate": "7 août 2025",
+      "drawTime": "2025-08-07T21:00:00+02:00",
+      "formattedDate": "jeudi 7 août 2025",
+      "day": "jeudi",
+      "drawNumber": "25063",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
-        32,
-        33
+        3,
+        14,
+        23,
+        28,
+        33,
+        34
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "32",
+          "winnersEurope": "116",
+          "amount": "108,30 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 457",
+          "winnersEurope": "4 738",
+          "amount": "42,60 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "20 361",
+          "winnersEurope": "67 570",
+          "amount": "5,50 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "123 119",
+          "winnersEurope": "398 334",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-22",
+      "id": "ed-2025-08-04",
       "date": "2025-08-04",
-      "day": "Lundi",
-      "formattedDate": "4 août 2025",
+      "drawTime": "2025-08-04T21:00:00+02:00",
+      "formattedDate": "lundi 4 août 2025",
+      "day": "lundi",
+      "drawNumber": "25062",
       "numbers": [
+        2,
         8,
-        18,
-        21,
-        25,
-        32,
-        33
+        13,
+        14,
+        15,
+        17
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 5,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "1",
+          "amount": "2 000 € par mois pendant 5 ans"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "19",
+          "winnersEurope": "77",
+          "amount": "135,60 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 381",
+          "winnersEurope": "4 361",
+          "amount": "38,50 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "21 359",
+          "winnersEurope": "67 334",
+          "amount": "4,60 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "124 594",
+          "winnersEurope": "396 142",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-23",
+      "id": "ed-2025-07-31",
       "date": "2025-07-31",
-      "day": "Jeudi",
-      "formattedDate": "31 juillet 2025",
+      "drawTime": "2025-07-31T21:00:00+02:00",
+      "formattedDate": "jeudi 31 juillet 2025",
+      "day": "jeudi",
+      "drawNumber": "25061",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
-        32,
-        33
+        4,
+        15,
+        19,
+        23,
+        34,
+        37
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 5,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "45",
+          "winnersEurope": "143",
+          "amount": "86,50 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 551",
+          "winnersEurope": "5 194",
+          "amount": "38,20 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "20 905",
+          "winnersEurope": "68 818",
+          "amount": "5,30 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "121 377",
+          "winnersEurope": "388 028",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-24",
+      "id": "ed-2025-07-28",
       "date": "2025-07-28",
-      "day": "Lundi",
-      "formattedDate": "28 juillet 2025",
+      "drawTime": "2025-07-28T21:00:00+02:00",
+      "formattedDate": "lundi 28 juillet 2025",
+      "day": "lundi",
+      "drawNumber": "25060",
       "numbers": [
-        8,
-        18,
-        21,
+        4,
+        19,
         25,
-        32,
-        33
+        26,
+        38,
+        40
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 3,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "25",
+          "winnersEurope": "120",
+          "amount": "93 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "1 168",
+          "winnersEurope": "4 239",
+          "amount": "42,30 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "16 885",
+          "winnersEurope": "60 223",
+          "amount": "5,50 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "101 247",
+          "winnersEurope": "357 614",
+          "amount": "2,50 €"
         }
       ]
     },
     {
-      "id": "ed-25",
+      "id": "ed-2025-07-24",
       "date": "2025-07-24",
-      "day": "Jeudi",
-      "formattedDate": "24 juillet 2025",
+      "drawTime": "2025-07-24T21:00:00+02:00",
+      "formattedDate": "jeudi 24 juillet 2025",
+      "day": "jeudi",
+      "drawNumber": "25059",
       "numbers": [
-        8,
-        18,
-        21,
-        25,
-        32,
-        33
+        1,
+        2,
+        5,
+        6,
+        15,
+        38
       ],
-      "jackpot": "20 000 € par mois",
+      "jackpotAmount": null,
+      "dreamNumber": 1,
+      "jackpot": "Non disponible",
       "winningsDistribution": [
         {
           "rank": 1,
-          "combination": "61",
+          "combination": "6 numéros + dream number",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 2,
-          "combination": "6",
+          "combination": "6 numéros",
           "winners": "0",
-          "amount": "0"
+          "winnersEurope": "0",
+          "amount": "Non disponible"
         },
         {
           "rank": 3,
-          "combination": "5",
-          "winners": "155",
-          "amount": "54"
+          "combination": "5 numéros",
+          "winners": "57",
+          "winnersEurope": "120",
+          "amount": "135,50 €"
         },
         {
           "rank": 4,
-          "combination": "4",
-          "winners": "5 942",
-          "amount": "1 717"
+          "combination": "4 numéros",
+          "winners": "2 555",
+          "winnersEurope": "5 536",
+          "amount": "47,20 €"
         },
         {
           "rank": 5,
-          "combination": "3",
-          "winners": "82 680",
-          "amount": "24 983"
+          "combination": "3 numéros",
+          "winners": "37 838",
+          "winnersEurope": "80 062",
+          "amount": "6 €"
         },
         {
           "rank": 6,
-          "combination": "2",
-          "winners": "479 532",
-          "amount": "148 527"
+          "combination": "2 numéros",
+          "winners": "232 692",
+          "winnersEurope": "492 967",
+          "amount": "2,50 €"
         }
       ]
     }

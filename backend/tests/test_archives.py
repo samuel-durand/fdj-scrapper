@@ -168,3 +168,13 @@ def test_api_one_draw_by_time(client, db):
     assert client.get("/api/draws/crescendo/2026-11-07?time=14:00").get_json()["data"]["numbers"] == [14]
     assert client.get("/api/draws/crescendo/2026-11-07?time=16:00").status_code == 404
     assert client.get("/api/draws/crescendo/2026-11-07?time=14h").status_code == 400
+
+
+def test_compare_flags_missing_complementary():
+    official = {"numbers": [5, 10, 15, 18, 19, 37], "dreamNumber": 1}
+    # ancien cache : bons numéros mais numéro Dream absent -> à corriger
+    assert "dreamNumber" in archives._compare({"numbers": [5, 10, 15, 18, 19, 37], "dreamNumber": None}, official)
+    assert "dreamNumber" in archives._compare({"numbers": [5, 10, 15, 18, 19, 37], "dreamNumber": []}, official)
+    assert archives._compare({"numbers": [5, 10, 15, 18, 19, 37], "dreamNumber": 1}, official) is None
+    # rien d'officiel pour ce champ -> pas de différence
+    assert archives._compare({"numbers": [1, 2], "letter": "A"}, {"numbers": [1, 2], "letter": None}) is None

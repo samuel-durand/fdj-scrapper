@@ -345,7 +345,10 @@ def _norm(v) -> str:
 def _compare(db_draw: dict, draw: dict) -> str | None:
     """Différence entre un tirage en base et l'archive officielle (None si identiques)."""
     for key in ("numbers", "stars", "luckyNumber", "dreamNumber", "letter"):
-        if key in draw and db_draw.get(key) not in (None, []) and db_draw.get(key) != draw[key]:
+        if draw.get(key) in (None, []):
+            continue  # rien d'officiel à comparer
+        # une valeur absente en base (ex. numéro Dream non récupéré par l'ancien cache) compte aussi
+        if db_draw.get(key) != draw[key]:
             return f"{key} : base {db_draw.get(key)} / archive {draw[key]}"
     ours = db_draw.get("winningsDistribution") or []
     theirs = draw.get("winningsDistribution") or []

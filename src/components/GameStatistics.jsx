@@ -14,6 +14,8 @@ import {
 } from 'chart.js'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import { getGameStats } from '../services/statsService'
+import { Ball } from './Results/Balls'
+import { GAMES } from '../games'
 import useTheme from '../hooks/useTheme'
 import './GameStatistics.css'
 
@@ -522,7 +524,123 @@ export default function GameStatistics({ gameType, draws = null }) {
           </table>
         </div>
       )}
+      {stats.combinations && (
+        <CombinationsSection
+          gameType={gameType}
+          combinations={stats.combinations}
+          totalDraws={stats.totalDraws}
+        />
+      )}
     </div>
   )
 }
 
+// Nombre de grilles possibles par jeu (pour expliquer pourquoi une grille ne ressort quasi jamais)
+const POSSIBLE_GRIDS = {
+  euromillions: 139838160,
+  loto: 19068840,
+  eurodreams: 19191900,
+}
+
+const SIZE_LABELS = { 4: 'Quadruplets', 3: 'Triplets', 2: 'Paires' }
+
+function formatDate(date) {
+  return date ? new Date(`${date.slice(0, 10)}T12:00:00`).toLocaleDateString('fr-FR') : ''
+}
+
+function ComboBalls({ gameType, numbers, complements = [] }) {
+  const variant = GAMES[gameType]?.complementary.variant
+  return (
+    <div className="balls balls--sm">
+      {numbers.map((n, i) => <Ball key={`n${i}`} value={n} size="sm" />)}
+      {numbers.length > 0 && complements.length > 0 && <span className="balls__sep" aria-hidden="true" />}
+      {complements.map((n, i) => <Ball key={`c${i}`} value={n} variant={variant} size="sm" />)}
+    </div>
+  )
+}
+
+function ComboTable({ gameType, combos, emptyText }) {
+  if (!combos.length) return <p className="combo-empty">{emptyText}</p>
+  return (
+    <table className="stats-table combo-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Combinaison</th>
+          <th>Sorties</th>
+          <th>Dates</th>
+        </tr>
+      </thead>
+      <tbody>
+        {combos.map((c, idx) => (
+          <tr key={`${c.numbers.join('-')}|${c.complements.join('-')}`} className={idx < 3 ? 'top-three' : ''}>
+            <td>{idx + 1}</td>
+            <td><ComboBalls gameType={gameType} numbers={c.numbers} complements={c.complements} /></td>
+            <td><strong>{c.count}×</strong></td>
+            <td className="combo-dates">{c.dates.map(formatDate).join(' · ')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function CombinationsSection({ gameType, combinations, totalDraws }) {
+  const [size, setSize] = useState(3)
+  const { fullGrids, numbersOnly, bySize, complementPairs } = combinations
+  const compLabel = GAMES[gameType]?.complementary.label.toLowerCase()
+  const current = bySize.find(b => b.size === size)
+  const possible = POSSIBLE_GRIDS[gameType]
+
+  return (
+    <div className="stats-table-card combos-card">
+      <h3>🎯 Grilles les plus sorties</h3>
+
+      <h4>Grille complète identique (numéros + {compLabel})</h4>
+      <ComboTable
+        gameType={gameType}
+        combos={fullGrids}
+        emptyText={`Aucune grille complète n'est sortie deux fois sur les ${totalDraws} tirages analysés. ` +
+          `C'est normal : il existe ${possible.toLocaleString('fr-FR')} grilles possibles, ` +
+          'une même grille ne ressort pratiquement jamais.'}
+      />
+
+      {numbersOnly.length > 0 && (
+        <>
+          <h4>Mêmes numéros (sans {compLabel})</h4>
+          <ComboTable gameType={gameType} combos={numbersOnly} emptyText="" />
+        </>
+      )}
+
+      <div className="combo-size-header">
+        <h4>Numéros qui sortent le plus souvent ensemble</h4>
+        <div className="combo-size-tabs" role="tablist">
+          {bySize.map(b => (
+            <button
+              key={b.size}
+              type="button"
+              role="tab"
+              aria-selected={b.size === size}
+              className={`combo-size-tab ${b.size === size ? 'active' : ''}`}
+              onClick={() => setSize(b.size)}
+            >
+              {SIZE_LABELS[b.size]} ({b.size})
+            </button>
+          ))}
+        </div>
+      </div>
+      <ComboTable
+        gameType={gameType}
+        combos={current?.combos || []}
+        emptyText={`Aucune combinaison de ${size} numéros n'est sortie plus d'une fois.`}
+      />
+
+      {gameType === 'euromillions' && (
+        <>
+          <h4>Paires d'étoiles les plus sorties</h4>
+          <ComboTable gameType={gameType} combos={complementPairs} emptyText="Aucune paire d'étoiles répétée." />
+        </>
+      )}
+    </div>
+  )
+}
