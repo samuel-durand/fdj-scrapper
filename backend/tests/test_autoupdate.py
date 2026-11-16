@@ -120,3 +120,20 @@ def test_running_db_gets_archives_without_waiting_full_pass(db, calls):
     calls.clear()
     autoupdate.tick(db, "web-1")
     assert "archives" not in calls                         # une seule fois
+
+
+def test_archives_reimported_after_version_bump(db, calls):
+    # base importée avec l'ancienne version (archives manquantes) -> réimport une fois
+    db.meta.insert_one({"_id": autoupdate.STATE_ID, "archivesImported": datetime.now(timezone.utc)})
+    assert autoupdate.import_archives_once(db) is True
+    assert db.meta.find_one({"_id": autoupdate.STATE_ID})["archivesVersion"] == autoupdate.ARCHIVES_VERSION
+    assert autoupdate.import_archives_once(db) is False and calls == ["archives"]
+
+
+def test_partial_archive_import_is_retried(db, monkeypatch):
+    report = type("R", (), {"added": {}, "failed": ["loto2017 : HTTP 500"]})()
+    monkeypatch.setattr(autoupdate, "import_archives", lambda db: report)
+    now = datetime.now(timezone.utc)
+    assert autoupdate.import_archives_once(db, now) is True
+    assert "archivesVersion" not in db.meta.find_one({"_id": autoupdate.STATE_ID})
+    assert autoupdate.import_archives_once(db, now + timedelta(minutes=31)) is True   # retenté

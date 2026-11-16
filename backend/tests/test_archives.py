@@ -116,7 +116,7 @@ class FakeHttp:
     def __init__(self, files):
         self.files = files
 
-    def get(self, url):
+    def get(self, url, headers=None):
         if url.endswith("/historique"):
             links = "".join(f'<a class="block" download="{n}" title="Historique {n}" href="https://x/{n}">' for n in self.files)
             return type("R", (), {"status_code": 200, "text": links, "raise_for_status": lambda s: None})()
@@ -178,3 +178,21 @@ def test_compare_flags_missing_complementary():
     assert archives._compare({"numbers": [5, 10, 15, 18, 19, 37], "dreamNumber": 1}, official) is None
     # rien d'officiel pour ce champ -> pas de différence
     assert archives._compare({"numbers": [1, 2], "letter": "A"}, {"numbers": [1, 2], "letter": None}) is None
+
+
+def test_download_retries_and_reports_failures(monkeypatch):
+    monkeypatch.setattr(archives.time_mod, "sleep", lambda s: None)
+    seen = []
+
+    class Flaky:
+        def __init__(self, codes):
+            self.codes = codes
+
+        def get(self, url, headers=None):
+            seen.append(headers)
+            code = self.codes.pop(0)
+            return type("R", (), {"status_code": code, "content": b"PKzip" if code == 200 else b"Error"})()
+
+    assert archives.download(Flaky([500, 200]), "https://x/a") == (b"PKzip", None)
+    assert seen[0] == {"Accept": "*/*"}       # sinon le serveur FDJ répond 500
+    assert archives.download(Flaky([500, 500, 500]), "https://x/a") == (None, "HTTP 500")

@@ -17,6 +17,7 @@ import html
 import io
 import logging
 import re
+import time as time_mod
 import zipfile
 from dataclasses import dataclass, field
 from datetime import date, datetime, time
@@ -55,6 +56,7 @@ class ImportReport:
     checked: dict[str, int] = field(default_factory=dict)       # tirages déjà en base comparés
     mismatches: dict[str, list[str]] = field(default_factory=dict)
     fixed: dict[str, int] = field(default_factory=dict)             # tirages en base corrigés
+    failed: list[str] = field(default_factory=list)  # archives non téléchargées (à retenter plus tard)
 
 
 # --------------------------------------------------------------------------- lecture des valeurs
@@ -301,6 +303,26 @@ def discover(http: httpx.Client, game: Game) -> list[Archive]:
     return out
 
 
+def download(http: httpx.Client, url: str, retries: int = 3) -> tuple[bytes | None, str | None]:
+    """Archive ZIP -> (contenu, erreur).
+
+    `Accept: */*` est indispensable : avec l'en-tête des pages HTML (text/html), le serveur
+    d'archives FDJ répond 500 au lieu du fichier pour la plupart des archives."""
+    error = None
+    for attempt in range(1, retries + 1):
+        try:
+            r = http.get(url, headers={"Accept": "*/*"})
+            content = getattr(r, "content", b"")
+            if r.status_code == 200 and content[:2] == b"PK":
+                return content, None
+            error = f"HTTP {r.status_code}" if r.status_code != 200 else "fichier ZIP invalide"
+        except httpx.HTTPError as exc:
+            error = str(exc)
+        if attempt < retries:
+            time_mod.sleep(attempt)
+    return None, error
+
+
 def read_csv(content: bytes) -> list[tuple[str, list[dict]]]:
     """Contenu d'une archive ZIP -> [(nom du fichier, lignes)]."""
     out = []
@@ -373,11 +395,12 @@ def import_archives(db: Database, games: Iterable[str] = ARCHIVE_GAMES, check: b
             new: dict[str, dict] = {}
             fixes: dict[str, dict] = {}
             for archive in discover(http, game):
-                r = http.get(archive.url)
-                if r.status_code != 200:
-                    report.skipped.append(f"{archive.name} : HTTP {r.status_code}")
+                content, error = download(http, archive.url)
+                if content is None:
+                    report.failed.append(f"{archive.name} : {error}")
+                    log.warning("%-12s archive %s non téléchargée : %s", game.label, archive.name, error)
                     continue
-                for filename, rows in read_csv(r.content):
+                for filename, rows in read_csv(content):
                     draws = parse_archive(game, archive.name or filename, rows)
                     if draws is None:
                         report.skipped.append(f"{archive.title} (règles différentes)")

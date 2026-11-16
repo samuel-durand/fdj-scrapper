@@ -38,6 +38,9 @@ STATE_ID = "autoupdate"
 LOCK_TTL = timedelta(minutes=10)    # un scraping bloqué ne bloque pas les suivants indéfiniment
 FULL_EVERY = timedelta(hours=12)    # passage complet (rattrapage, répartitions publiées tard)
 ARCHIVES_RETRY = timedelta(minutes=30)  # import de l'historique FDJ : délai avant un nouvel essai
+# À incrémenter pour relancer l'import sur les bases existantes (v2 : archives jusque-là refusées
+# par le serveur FDJ — Loto 2017-2019, Super/Grand Loto… — et complémentaires manquants corrigés)
+ARCHIVES_VERSION = 2
 CHECK_EVERY = 60                    # secondes entre deux vérifications
 
 
@@ -98,7 +101,8 @@ def import_archives_once(db: Database, now: datetime | None = None) -> bool:
     Retourne True si l'import a eu lieu."""
     now = now or _utc()
     state = db.meta.find_one({"_id": STATE_ID}) or {}
-    if state.get("archivesImported"):
+    done = state.get("archivesVersion", 1 if state.get("archivesImported") else 0)
+    if done >= ARCHIVES_VERSION:
         return False
     last_try = state.get("archivesAttempt")
     if last_try and now - last_try < ARCHIVES_RETRY:
@@ -110,7 +114,12 @@ def import_archives_once(db: Database, now: datetime | None = None) -> bool:
         log.exception("Import des archives FDJ impossible pour le moment")
         return False
     log.info("📚 Historique FDJ importé : %s", ", ".join(f"{GAMES[k].label} +{n}" for k, n in report.added.items()))
-    db.meta.update_one({"_id": STATE_ID}, {"$set": {"archivesImported": _utc()}}, upsert=True)
+    failed = getattr(report, "failed", [])
+    if failed:  # import partiel : on garde ce qui a été importé et on retente plus tard le reste
+        log.warning("Archives FDJ non téléchargées (nouvel essai plus tard) : %s", ", ".join(failed))
+        return True
+    db.meta.update_one({"_id": STATE_ID}, {"$set": {"archivesImported": _utc(), "archivesVersion": ARCHIVES_VERSION}},
+                       upsert=True)
     return True
 
 

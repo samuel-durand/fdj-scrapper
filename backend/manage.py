@@ -107,7 +107,9 @@ def cmd_import_archives(args) -> int:
             log.warning("   ≠ %s", m)
         if len(report.mismatches.get(key, [])) > 5:
             log.warning("   … %d différences au total", len(report.mismatches[key]))
-    return 0
+    for f in report.failed:
+        log.error("❌ archive non téléchargée : %s", f)
+    return 1 if report.failed else 0
 
 
 def cmd_import_json(args) -> int:
