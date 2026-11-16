@@ -13,7 +13,8 @@ import {
   Filler
 } from 'chart.js'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
-import { getGameStats } from '../services/statsService'
+import { getGameStats, analyzeCombinations } from '../services/statsService'
+import { getHistorySummary } from '../services/lotteryService'
 import { Ball } from './Results/Balls'
 import { GAMES } from '../games'
 import useTheme from '../hooks/useTheme'
@@ -41,6 +42,7 @@ export default function GameStatistics({ gameType, draws = null }) {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [analyzedDraws, setAnalyzedDraws] = useState([])
 
   const gameLabels = {
     euromillions: 'Euromillions',
@@ -57,9 +59,19 @@ export default function GameStatistics({ gameType, draws = null }) {
     try {
       setLoading(true)
       setError(null)
-      const response = await getGameStats(gameType, draws)
+      // Sans tirages fournis : tout l'historique en base (téléchargé une fois par jeu)
+      let list = draws
+      if (!list) {
+        try {
+          list = await getHistorySummary(gameType)
+        } catch {
+          list = null // repli : derniers tirages
+        }
+      }
+      const response = await getGameStats(gameType, list)
       if (response.success) {
         setStats(response.data)
+        setAnalyzedDraws(list || [])
       } else {
         setError(response.message || 'Erreur lors du chargement')
       }
@@ -529,6 +541,8 @@ export default function GameStatistics({ gameType, draws = null }) {
           gameType={gameType}
           combinations={stats.combinations}
           totalDraws={stats.totalDraws}
+          dateRange={stats.dateRange}
+          draws={analyzedDraws}
         />
       )}
     </div>
@@ -585,7 +599,42 @@ function ComboTable({ gameType, combos, emptyText }) {
   )
 }
 
-function CombinationsSection({ gameType, combinations, totalDraws }) {
+const csvCell = (v) => {
+  const text = String(v ?? '')
+  return /[";\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
+}
+
+// Palmarès complet (toutes les combinaisons sorties au moins 2 fois) au format CSV pour Excel
+function downloadRanking(gameType, draws) {
+  const all = analyzeCombinations(draws, gameType, Infinity)
+  const compLabel = GAMES[gameType]?.complementary.label || 'Complémentaires'
+  const sections = [
+    ['Grille complète', all.fullGrids],
+    [`Mêmes numéros (sans ${compLabel.toLowerCase()})`, all.numbersOnly],
+    ...all.bySize.map(b => [`${SIZE_LABELS[b.size]} (${b.size} numéros)`, b.combos]),
+    ...(gameType === 'euromillions' ? [["Paire d'étoiles", all.complementPairs]] : []),
+  ]
+  const lines = [['Catégorie', 'Rang', 'Numéros', compLabel, 'Sorties', '% des tirages', 'Dernière sortie',
+    'Première sortie', 'Dates'].join(';')]
+  sections.forEach(([label, combos]) => combos.forEach((c, i) => {
+    const dates = [...c.dates].sort().reverse()
+    lines.push([label, i + 1, c.numbers.join('-'), c.complements.join('-'), c.count,
+      ((c.count / draws.length) * 100).toFixed(2).replace('.', ','), formatDate(dates[0]),
+      formatDate(dates[dates.length - 1]), dates.map(formatDate).join(' ')].map(csvCell).join(';'))
+  }))
+  // BOM UTF-8 pour qu'Excel affiche correctement les accents
+  const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `palmares-${gameType}-${new Date().toISOString().slice(0, 10)}.csv`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
+function CombinationsSection({ gameType, combinations, totalDraws, dateRange, draws }) {
   const [size, setSize] = useState(3)
   const { fullGrids, numbersOnly, bySize, complementPairs } = combinations
   const compLabel = GAMES[gameType]?.complementary.label.toLowerCase()
@@ -594,7 +643,23 @@ function CombinationsSection({ gameType, combinations, totalDraws }) {
 
   return (
     <div className="stats-table-card combos-card">
-      <h3>🎯 Grilles les plus sorties</h3>
+      <div className="combo-title">
+        <div>
+          <h3>🎯 Grilles les plus sorties</h3>
+          <p className="combo-scope">
+            Sur {totalDraws.toLocaleString('fr-FR')} tirages
+            {dateRange?.first && ` (du ${formatDate(dateRange.first)} au ${formatDate(dateRange.last)})`}
+          </p>
+        </div>
+        <button
+          type="button"
+          className="combo-csv-btn"
+          disabled={!draws.length}
+          onClick={() => downloadRanking(gameType, draws)}
+        >
+          ⬇️ Palmarès complet (CSV)
+        </button>
+      </div>
 
       <h4>Grille complète identique (numéros + {compLabel})</h4>
       <ComboTable

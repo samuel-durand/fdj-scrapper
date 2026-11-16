@@ -192,6 +192,45 @@
 }
 
 /* Grilles les plus sorties */
+.combo-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.combo-title h3 {
+  margin-bottom: 4px;
+}
+
+.combo-scope {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0;
+}
+
+.combo-csv-btn {
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.combo-csv-btn:hover:not(:disabled) {
+  border-color: var(--accent, var(--c-brand));
+}
+
+.combo-csv-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 .combos-card {
   margin-top: 24px;
 }

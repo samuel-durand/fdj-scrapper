@@ -51,21 +51,21 @@ function rankCombos(draws, keysOf, { minCount = 2, limit = 10 } = {}) {
  * - bySize : combinaisons de 4, 3 et 2 numéros sortis ensemble
  * - complementPairs : paires d'étoiles (Euromillions)
  */
-function analyzeCombinations(draws, gameType) {
+export function analyzeCombinations(draws, gameType, limit = 10) {
   const sortedNums = draw => (draw.numbers || draw.balls || [])
     .map(n => parseInt(n)).filter(n => !isNaN(n)).sort((a, b) => a - b)
 
-  const fullGrids = rankCombos(draws, d => [{ numbers: sortedNums(d), complements: drawComplements(d, gameType) }])
-  const numbersOnly = rankCombos(draws, d => [{ numbers: sortedNums(d) }])
+  const fullGrids = rankCombos(draws, d => [{ numbers: sortedNums(d), complements: drawComplements(d, gameType) }], { limit })
+  const numbersOnly = rankCombos(draws, d => [{ numbers: sortedNums(d) }], { limit })
   const bySize = [4, 3, 2].map(size => ({
     size,
-    combos: rankCombos(draws, d => subsets(sortedNums(d), size).map(numbers => ({ numbers })))
+    combos: rankCombos(draws, d => subsets(sortedNums(d), size).map(numbers => ({ numbers })), { limit })
   }))
   const complementPairs = gameType === 'euromillions'
     ? rankCombos(draws, d => {
       const c = drawComplements(d, gameType)
       return c.length === 2 ? [{ numbers: [], complements: c }] : []
-    })
+    }, { limit })
     : []
 
   return { fullGrids, numbersOnly, bySize, complementPairs }

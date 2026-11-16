@@ -259,7 +259,7 @@ function GameResults({ game }) {
   const [hasMore, setHasMore] = useState(false)
   const [loadingOlder, setLoadingOlder] = useState(false)
   const [calendarMonth, setCalendarMonth] = useState(null)
-  const [statsScope, setStatsScope] = useState('recent') // 'recent' | 'all'
+  const [statsScope, setStatsScope] = useState('all') // 'recent' | 'all'
   const [fullHistory, setFullHistory] = useState({ game: null, draws: null, loading: false, error: null })
 
   useEffect(() => {
@@ -269,7 +269,7 @@ function GameResults({ game }) {
     setView('results')
     setHasMore(false)
     setCalendarMonth(null)
-    setStatsScope('recent')
+    setStatsScope('all')
     getGameData(game)
       .then(({ draws, nextDraw }) => {
         if (!alive) return
@@ -405,7 +405,7 @@ function GameResults({ game }) {
             )}
             {view === 'stats' && <div className="card"><Statistics draws={statsDraws || draws} gameType={game} /></div>}
             {view === 'freq' && <div className="card"><FrequencyStats game={game} draws={statsDraws || draws} /></div>}
-            {view === 'charts' && <div className="card"><GameStatistics gameType={game} draws={statsDraws} /></div>}
+            {view === 'charts' && <div className="card"><GameStatistics gameType={game} draws={statsScope === 'all' ? statsDraws : draws} /></div>}
             {view === 'ticket' && (
               <div className="card">
                 <TicketChecker game={game} draws={draws} allDraws={fullHistory.game === game ? fullHistory.draws : null} />
